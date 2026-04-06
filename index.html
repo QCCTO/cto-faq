@@ -486,13 +486,13 @@ footer { background:rgba(255,244,243,.8); border-top:1px solid var(--outv); padd
   <div class="login-card">
     <div class="login-logo">CTO FAQ</div>
     <div class="login-sub">SPX Express · Internal Use Only</div>
-    <label class="login-label">อีเมล SPX Express ของคุณ</label>
+    <label class="login-label">กรอกอีเมล @spxexpress.com หรือ @shopee.com ของท่าน</label>
     <input class="login-input" id="login-email" type="email"
       placeholder="yourname@spxexpress.com"
       onkeydown="if(event.key==='Enter')doLogin()"/>
     <div class="login-err" id="login-err"></div>
     <button class="login-btn" onclick="doLogin()">เข้าสู่ระบบ</button>
-    <div class="login-footer">เฉพาะบุคลากร SPX Express เท่านั้น</div>
+    <div class="login-footer">เฉพาะบุคลากร SPX Express และ Shopee เท่านั้น</div>
   </div>
 </div>
 
@@ -1074,7 +1074,7 @@ function closeImgModal() {
 /* ── APPS SCRIPT CONFIG ── */
 // วาง URL ของ Apps Script Web App ที่ Deploy แล้วที่นี่
 // ตัวอย่าง: 'https://script.google.com/macros/s/AKfycb.../exec'
-const APPS_SCRIPT_URL = 'https://script.google.com/a/macros/spxexpress.com/s/AKfycbyPAKRQfOH4eRCgWVPZycgXe55-IrONHecbNd3HWJGq4Cn7MWriwEtfM7KX1wCDK789FA/exec';
+const APPS_SCRIPT_URL = 'https://script.google.com/a/macros/spxexpress.com/s/AKfycbxinmy1IoxfhvKwmhrRCHtvFi064aG52cVJfadQJ5NEYibEkmhQ84mfskApDjln1BDZ7g/exec';
 
 /* ── REPORT MODAL ── */
 let _reportCtx = { tid:'', q:'', btnId:'' };
@@ -1139,20 +1139,41 @@ function doLogin() {
     errEl.textContent = 'กรุณากรอกอีเมล';
     inputEl.classList.add('error'); return;
   }
-  if (!email.endsWith('@spxexpress.com')) {
-    errEl.textContent = 'กรุณาใช้อีเมล @spxexpress.com เท่านั้น';
+  const allowedDomains = ['@spxexpress.com', '@shopee.com'];
+  if (!allowedDomains.some(d => email.endsWith(d))) {
+    errEl.textContent = 'กรุณาใช้อีเมล @spxexpress.com หรือ @shopee.com เท่านั้น';
     inputEl.classList.add('error'); return;
   }
   errEl.textContent = '';
   inputEl.classList.remove('error');
   try { sessionStorage.setItem('spx_user', email); } catch(e) {}
+
+  // Log login to Apps Script
+  if (APPS_SCRIPT_URL) {
+    const now = new Date();
+    const loginPayload = {
+      type: 'login_log',
+      email: email,
+      timestamp: now.toISOString(),
+      localTime: now.toLocaleString('th-TH', { timeZone: 'Asia/Bangkok' }),
+      userAgent: navigator.userAgent.substring(0, 120)
+    };
+    fetch(APPS_SCRIPT_URL, {
+      method: 'POST', mode: 'no-cors',
+      credentials: 'include',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(loginPayload)
+    }).catch(() => {});
+  }
+
   document.getElementById('login-page').classList.remove('active');
 }
 
 function checkLogin() {
   try {
     const u = sessionStorage.getItem('spx_user');
-    if (u && u.endsWith('@spxexpress.com')) {
+    const allowedDomains = ['@spxexpress.com', '@shopee.com'];
+    if (u && allowedDomains.some(d => u.endsWith(d))) {
       document.getElementById('login-page').classList.remove('active');
       return;
     }
