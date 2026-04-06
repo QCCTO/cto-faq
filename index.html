@@ -750,7 +750,10 @@ function buildFaqList(items, tid, showTeamBadge) {
             </div>
           </div>
           ${fmtA(item.a)}
-          ${item.imgs && item.imgs.length ? item.imgs.map(url => `<div class="ans-img-wrap"><img src="${url}" alt="รูปประกอบ" class="ans-img" onclick="openImgModal('${url}')" onerror="this.parentElement.style.display='none'"></div>`).join('') : ''}
+          ${item.imgs && item.imgs.length ? item.imgs.map(url => {
+            const embedUrl = url.replace(/\/uc\?export=view&id=([^&]+)/, '/thumbnail?id=$1&sz=w800');
+            return `<div class="ans-img-wrap"><img src="${embedUrl}" alt="รูปประกอบ" class="ans-img" onclick="openImgModal('${embedUrl}')" onerror="this.parentElement.style.display='none'"></div>`;
+          }).join('') : ''}
         </div>
       </div>
     </div>`;
