@@ -445,9 +445,56 @@ footer { background:rgba(255,244,243,.8); border-top:1px solid var(--outv); padd
 .sc:nth-child(1){animation-delay:.04s;} .sc:nth-child(2){animation-delay:.08s;}
 .sc:nth-child(3){animation-delay:.12s;} .sc:nth-child(4){animation-delay:.16s;}
 .sc:nth-child(5){animation-delay:.2s;} .sc:nth-child(6){animation-delay:.24s;}
+/* ── LOGIN PAGE ── */
+#login-page {
+  display:none; position:fixed; inset:0; z-index:1000;
+  background:var(--bg); align-items:center; justify-content:center;
+}
+#login-page.active { display:flex; }
+.login-card {
+  background:var(--surf); border-radius:24px; padding:44px 40px;
+  width:100%; max-width:420px; margin:16px;
+  box-shadow:0 20px 60px rgba(172,44,0,.12);
+  border:1.5px solid var(--outv); text-align:center;
+  animation:pfi .35s ease;
+}
+.login-logo { font-family:'Plus Jakarta Sans',sans-serif; font-weight:900; font-size:1.6rem; color:var(--primary); margin-bottom:4px; }
+.login-sub { font-size:.82rem; color:var(--osv); margin-bottom:32px; }
+.login-label { font-size:.8rem; font-weight:600; color:var(--os); text-align:left; display:block; margin-bottom:6px; }
+.login-input {
+  width:100%; padding:12px 16px; border:1.5px solid var(--outv);
+  border-radius:12px; font-family:inherit; font-size:.9rem; color:var(--os);
+  background:var(--bg); outline:none; transition:border-color .2s;
+  margin-bottom:10px;
+}
+.login-input:focus { border-color:var(--primary); }
+.login-input.error { border-color:#e24b4b; }
+.login-err { font-size:.78rem; color:#e24b4b; text-align:left; margin-bottom:14px; min-height:18px; }
+.login-btn {
+  width:100%; padding:13px; border-radius:12px; border:none;
+  background:var(--primary); color:#fff; font-family:inherit;
+  font-size:.95rem; font-weight:700; cursor:pointer; transition:all .2s;
+}
+.login-btn:hover { background:var(--pd); }
+.login-footer { font-size:.72rem; color:var(--out); margin-top:20px; }
 </style>
 </head>
 <body>
+
+<!-- ── LOGIN PAGE ── -->
+<div id="login-page" class="active">
+  <div class="login-card">
+    <div class="login-logo">CTO FAQ</div>
+    <div class="login-sub">SPX Express · Internal Use Only</div>
+    <label class="login-label">อีเมล SPX Express ของคุณ</label>
+    <input class="login-input" id="login-email" type="email"
+      placeholder="yourname@spxexpress.com"
+      onkeydown="if(event.key==='Enter')doLogin()"/>
+    <div class="login-err" id="login-err"></div>
+    <button class="login-btn" onclick="doLogin()">เข้าสู่ระบบ</button>
+    <div class="login-footer">เฉพาะบุคลากร SPX Express เท่านั้น</div>
+  </div>
+</div>
 
 <!-- ── NAV ── -->
 <nav class="topnav">
@@ -1083,8 +1130,39 @@ async function submitReport() {
   }
 }
 
+/* ── LOGIN ── */
+function doLogin() {
+  const email = document.getElementById('login-email').value.trim().toLowerCase();
+  const errEl = document.getElementById('login-err');
+  const inputEl = document.getElementById('login-email');
+  if (!email) {
+    errEl.textContent = 'กรุณากรอกอีเมล';
+    inputEl.classList.add('error'); return;
+  }
+  if (!email.endsWith('@spxexpress.com')) {
+    errEl.textContent = 'กรุณาใช้อีเมล @spxexpress.com เท่านั้น';
+    inputEl.classList.add('error'); return;
+  }
+  errEl.textContent = '';
+  inputEl.classList.remove('error');
+  try { sessionStorage.setItem('spx_user', email); } catch(e) {}
+  document.getElementById('login-page').classList.remove('active');
+}
+
+function checkLogin() {
+  try {
+    const u = sessionStorage.getItem('spx_user');
+    if (u && u.endsWith('@spxexpress.com')) {
+      document.getElementById('login-page').classList.remove('active');
+      return;
+    }
+  } catch(e) {}
+  document.getElementById('login-page').classList.add('active');
+}
+
 /* ── TILT ── */
 document.addEventListener('DOMContentLoaded', () => {
+  checkLogin();
   buildHomeGrid();
   buildFilters();
   ds('');
