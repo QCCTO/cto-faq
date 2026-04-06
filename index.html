@@ -1,0 +1,1086 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>CTO FAQ | Shopee Express</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=IBM+Plex+Sans+Thai:wght@400;500;600;700&family=Kanit:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --primary:#ac2c00; --pl:#ff7852; --pd:#7a1f00;
+  --bg:#fff4f3; --surf:#fff; --sl:#ffedeb; --sm2:#ffe1e0; --sh:#ffdad8; --shh:#ffd2d0;
+  --os:#4e2121; --osv:#834c4b; --out:#a26765; --outv:#e09c99;
+  --ter:#00618f; --sec:#5c5b5b; --nh:60px;
+  --cqc:#ac2c00; --crp:#00618f; --csm:#5c6600; --csub:#6b21a8; --csub2:#7c3aed; --csub3:#0369a1;
+}
+* { box-sizing:border-box; margin:0; padding:0; }
+body { font-family:'Kanit','Plus Jakarta Sans',sans-serif; background:var(--bg); color:var(--os); overflow-x:hidden; }
+.mi { font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24; vertical-align:middle; line-height:1; }
+
+/* ── PAGE SYSTEM ── */
+.page { display:none; min-height:100vh; }
+.page.active { display:block; animation:pfi .3s ease; }
+@keyframes pfi { from{opacity:0;transform:translateY(10px);} to{opacity:1;transform:none;} }
+
+/* ── NAV ── */
+nav.topnav { position:fixed; top:0; width:100%; z-index:200; background:rgba(255,244,243,.95); backdrop-filter:blur(16px); border-bottom:1px solid var(--outv); height:var(--nh); }
+.ni { display:flex; align-items:center; justify-content:space-between; padding:0 28px; height:100%; max-width:1400px; margin:0 auto; }
+.logo { font-family:'Plus Jakarta Sans',sans-serif; font-weight:900; font-size:1.25rem; color:var(--primary); cursor:pointer; transition:opacity .2s; user-select:none; }
+.logo:hover { opacity:.8; }
+.nlinks { display:flex; gap:2px; }
+.nl { padding:6px 14px; border-radius:8px; font-size:.85rem; font-weight:500; color:var(--osv); cursor:pointer; transition:all .2s; border:none; background:none; font-family:inherit; }
+.nl:hover { background:var(--sl); color:var(--primary); }
+.nl.active { color:var(--primary); font-weight:700; border-bottom:2px solid var(--primary); border-radius:0; }
+.ibtn { width:34px; height:34px; border-radius:50%; border:none; background:none; cursor:pointer; display:flex; align-items:center; justify-content:center; color:var(--osv); transition:all .2s; }
+.ibtn:hover { background:var(--sl); color:var(--primary); }
+.ndot { position:relative; }
+.ndot::after { content:''; position:absolute; top:5px; right:5px; width:7px; height:7px; border-radius:50%; background:var(--primary); animation:pls 2s infinite; }
+@keyframes pls { 0%,100%{transform:scale(1);opacity:1;} 50%{transform:scale(1.4);opacity:.7;} }
+
+/* ── SIDEBAR LAYOUT ── */
+.lws { display:flex; padding-top:var(--nh); min-height:100vh; }
+aside.snav { width:220px; flex-shrink:0; background:var(--surf); border-right:1px solid var(--outv); padding:20px 12px; position:sticky; top:var(--nh); height:calc(100vh - var(--nh)); overflow-y:auto; display:flex; flex-direction:column; gap:2px; }
+.sbrand { padding:8px 6px; margin-bottom:12px; }
+.sbrand h3 { font-family:'Plus Jakarta Sans',sans-serif; font-weight:700; font-size:.9rem; }
+.sbrand p { font-size:.68rem; color:var(--sec); margin-top:2px; }
+.snav-section { font-size:.65rem; font-weight:800; text-transform:uppercase; letter-spacing:1.5px; color:var(--out); padding:10px 6px 4px; }
+.si { display:flex; align-items:center; gap:10px; padding:9px 10px; border-radius:8px; font-size:.84rem; font-weight:500; color:var(--osv); cursor:pointer; transition:all .18s; border:none; background:none; width:100%; text-align:left; font-family:inherit; }
+.si:hover { background:var(--sl); color:var(--primary); transform:translateX(3px); }
+.si.active { background:var(--primary); color:#fff; box-shadow:0 3px 12px rgba(172,44,0,.22); }
+.si.active:hover { transform:none; }
+.si-sub { padding-left:18px; font-size:.8rem; }
+.si .mi { font-size:1.1rem; flex-shrink:0; }
+
+/* ── HOME ── */
+.hmain { padding:calc(var(--nh) + 36px) 28px 56px; max-width:1400px; margin:0 auto; }
+.hero { position:relative; border-radius:24px; overflow:hidden; padding:64px 40px; text-align:center; margin-bottom:52px; background:var(--surf); box-shadow:0 6px 40px rgba(172,44,0,.08); }
+.hbg { position:absolute; inset:0; z-index:0; background:linear-gradient(135deg,rgba(172,44,0,.06),rgba(255,120,82,.08)); animation:hbp 8s ease-in-out infinite; }
+.hblob { position:absolute; border-radius:50%; filter:blur(60px); animation:bf 12s ease-in-out infinite; }
+.hb1 { width:360px; height:360px; background:rgba(255,120,82,.12); top:-90px; right:-70px; }
+.hb2 { width:260px; height:260px; background:rgba(172,44,0,.08); bottom:-70px; left:-50px; animation-delay:-4s; }
+@keyframes bf { 0%,100%{transform:translateY(0);} 50%{transform:translateY(-16px);} }
+@keyframes hbp { 0%,100%{opacity:1;} 50%{opacity:.7;} }
+.hcon { position:relative; z-index:1; }
+.hero h1 { font-family:'Plus Jakarta Sans','IBM Plex Sans Thai',sans-serif; font-size:clamp(2rem,5vw,4rem); font-weight:900; letter-spacing:-1.5px; line-height:1.1; color:var(--primary); margin-bottom:16px; }
+.hero h1 span { color:var(--os); }
+.hero p { font-size:1rem; color:var(--osv); max-width:500px; margin:0 auto 36px; line-height:1.7; }
+.stags { margin-top:18px; display:flex; gap:10px; justify-content:center; flex-wrap:wrap; }
+.stag { font-size:.8rem; color:var(--primary); font-weight:600; cursor:pointer; transition:all .2s; padding:2px 0; }
+.stag:hover { text-decoration:underline; }
+
+/* ── SEARCH CARD (unified) ── */
+.search-container { position:relative; max-width:640px; margin:0 auto; z-index:10; }
+.search-card { background:var(--surf); border-radius:24px; border:1.5px solid rgba(172,44,0,.2); box-shadow:0 6px 28px rgba(172,44,0,.1); transition:border-radius .2s, border-color .2s, box-shadow .2s; overflow:hidden; }
+.search-card.has-drop { border-radius:18px; border-color:var(--primary); box-shadow:0 6px 36px rgba(172,44,0,.2), 0 0 0 3px rgba(172,44,0,.06); }
+.search-box { display:flex; align-items:center; background:transparent; }
+.search-ico { padding:0 14px 0 20px; color:var(--primary); font-size:1.35rem; flex-shrink:0; }
+.search-inp { flex:1; padding:16px 0; font-size:1rem; font-family:inherit; border:none; outline:none; background:transparent; color:var(--os); }
+.search-inp::placeholder { color:#b0907c; }
+.search-inp-clear { width:36px; height:36px; border-radius:50%; border:none; background:none; cursor:pointer; color:var(--osv); display:none; align-items:center; justify-content:center; flex-shrink:0; margin-right:4px; transition:all .2s; }
+.search-inp-clear:hover { background:var(--sl); }
+.search-inp-clear.visible { display:flex; }
+.search-go { background:var(--primary); color:#fff; padding:9px 20px; border-radius:18px; border:none; font-weight:700; font-size:.85rem; cursor:pointer; transition:all .2s; font-family:inherit; margin:8px 10px 8px 0; white-space:nowrap; flex-shrink:0; }
+.search-go:hover { background:var(--pd); }
+.suggest-drop { display:none; border-top:1px solid rgba(172,44,0,.1); background:var(--surf); overflow:hidden; max-height:340px; overflow-y:auto; }
+.suggest-drop.open { display:block; }
+.suggest-item { display:flex; align-items:center; gap:10px; padding:9px 18px; cursor:pointer; transition:background .12s; }
+.suggest-item:hover,.suggest-item.focused { background:var(--sl); }
+.sug-ico { color:var(--osv); font-size:1rem; flex-shrink:0; }
+.sug-text { flex:1; min-width:0; }
+.sug-main { font-size:.88rem; font-weight:500; color:var(--os); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.sug-main em { font-style:normal; font-weight:700; color:var(--primary); }
+.sug-sub { font-size:.7rem; color:var(--osv); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.sug-team { font-size:.65rem; font-weight:700; padding:2px 7px; border-radius:20px; flex-shrink:0; white-space:nowrap; }
+
+/* ── TEAM GRID (home) ── */
+.sh2 { display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:20px; }
+.sh2 h2 { font-family:'Plus Jakarta Sans',sans-serif; font-size:1.6rem; font-weight:800; }
+.sh2 p { color:var(--osv); font-size:.88rem; margin-top:3px; }
+.tgrid { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-bottom:48px; }
+.tcard { background:var(--surf); border-radius:18px; padding:24px; cursor:pointer; transition:all .28s; border:1.5px solid var(--outv); position:relative; overflow:hidden; }
+.tcard::after { content:''; position:absolute; bottom:0; left:0; right:0; height:3px; transition:height .25s; }
+.tcard.qc::after { background:var(--cqc); }
+.tcard.rp::after { background:var(--crp); }
+.tcard.sm::after { background:var(--csm); }
+.tcard.sub::after { background:var(--csub); }
+.tcard.sub_ic::after { background:var(--csub2); }
+.tcard.sub_fm::after { background:var(--csub3); }
+.tcard:hover { transform:translateY(-4px); box-shadow:0 14px 36px rgba(0,0,0,.09); }
+.tcard:hover::after { height:5px; }
+.tch { display:flex; align-items:center; gap:12px; margin-bottom:14px; }
+.tico { width:44px; height:44px; border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:1.3rem; flex-shrink:0; }
+.tico.qc { background:rgba(172,44,0,.1); color:var(--cqc); }
+.tico.rp { background:rgba(0,97,143,.1); color:var(--crp); }
+.tico.sm { background:rgba(92,102,0,.1); color:var(--csm); }
+.tico.sub { background:rgba(107,33,168,.1); color:var(--csub); }
+.tico.sub_ic { background:rgba(124,58,237,.1); color:var(--csub2); }
+.tico.sub_fm { background:rgba(3,105,161,.1); color:var(--csub3); }
+.tname { font-family:'Plus Jakarta Sans',sans-serif; font-size:1.05rem; font-weight:800; }
+.tname.qc{color:var(--cqc);} .tname.rp{color:var(--crp);} .tname.sm{color:var(--csm);}
+.tname.sub{color:var(--csub);} .tname.sub_ic{color:var(--csub2);} .tname.sub_fm{color:var(--csub3);}
+.tfull { font-size:.72rem; color:var(--osv); margin-top:1px; }
+.tcount { font-size:.7rem; font-weight:700; margin-top:10px; }
+.tcount.qc{color:var(--cqc);} .tcount.rp{color:var(--crp);} .tcount.sm{color:var(--csm);}
+.tcount.sub{color:var(--csub);} .tcount.sub_ic{color:var(--csub2);} .tcount.sub_fm{color:var(--csub3);}
+.tcard-footer { display:flex; justify-content:space-between; align-items:center; margin-top:14px; }
+.carr { width:30px; height:30px; border-radius:50%; border:1px solid var(--outv); display:flex; align-items:center; justify-content:center; transition:all .2s; color:var(--osv); font-size:.9rem; }
+.tcard:hover .carr { color:#fff; }
+.tcard.qc:hover .carr{background:var(--cqc);border-color:var(--cqc);}
+.tcard.rp:hover .carr{background:var(--crp);border-color:var(--crp);}
+.tcard.sm:hover .carr{background:var(--csm);border-color:var(--csm);}
+.tcard.sub:hover .carr{background:var(--csub);border-color:var(--csub);}
+.tcard.sub_ic:hover .carr{background:var(--csub2);border-color:var(--csub2);}
+.tcard.sub_fm:hover .carr{background:var(--csub3);border-color:var(--csub3);}
+
+/* ── TEAM DETAIL (FAQ page) ── */
+.cmain { flex:1; padding:32px 36px; overflow-y:auto; }
+.bcrumb { display:flex; align-items:center; gap:5px; font-size:.8rem; color:var(--osv); margin-bottom:22px; flex-wrap:wrap; }
+.bcrumb a { color:var(--osv); cursor:pointer; transition:color .2s; }
+.bcrumb a:hover { color:var(--primary); }
+.bcrumb .act { color:var(--primary); font-weight:600; }
+.team-header { margin-bottom:28px; }
+.taccent { width:40px; height:5px; border-radius:3px; margin-bottom:12px; }
+.taccent.qc{background:var(--cqc);} .taccent.rp{background:var(--crp);} .taccent.sm{background:var(--csm);}
+.taccent.sub{background:var(--csub);} .taccent.sub_ic{background:var(--csub2);} .taccent.sub_fm{background:var(--csub3);}
+.team-header h1 { font-family:'Plus Jakarta Sans',sans-serif; font-size:1.8rem; font-weight:900; margin-bottom:5px; }
+.team-header p { color:var(--osv); font-size:.88rem; }
+
+/* ── GROUP TABS ── */
+.group-tabs { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:24px; }
+.gtab { padding:6px 14px; border-radius:20px; font-size:.78rem; font-weight:600; cursor:pointer; border:1.5px solid var(--outv); background:none; font-family:inherit; color:var(--osv); transition:all .2s; }
+.gtab:hover { border-color:currentColor; }
+.gtab.active { color:#fff !important; }
+.gtab.qc.active{background:var(--cqc);border-color:var(--cqc);}
+.gtab.rp.active{background:var(--crp);border-color:var(--crp);}
+.gtab.sm.active{background:var(--csm);border-color:var(--csm);}
+.gtab.sub.active{background:var(--csub);border-color:var(--csub);}
+.gtab.sub_ic.active{background:var(--csub2);border-color:var(--csub2);}
+.gtab.sub_fm.active{background:var(--csub3);border-color:var(--csub3);}
+
+/* ── FAQ ACCORDION (vertical list) ── */
+.faq-list { display:flex; flex-direction:column; gap:10px; }
+.faq-item {
+  background:var(--surf);
+  border-radius:14px;
+  border:1.5px solid var(--outv);
+  overflow:hidden;
+  transition:all .22s;
+  cursor:pointer;
+}
+.faq-item:hover { box-shadow:0 4px 18px rgba(172,44,0,.1); border-color:rgba(172,44,0,.25); }
+.faq-item.open { box-shadow:0 4px 20px rgba(172,44,0,.13); border-color:rgba(172,44,0,.35); }
+.faq-q { display:flex; align-items:flex-start; gap:10px; padding:15px 16px; }
+.faq-q-left { display:flex; align-items:flex-start; gap:10px; flex:1; min-width:0; }
+.faq-num {
+  width:24px; height:24px; border-radius:7px;
+  display:flex; align-items:center; justify-content:center;
+  font-size:.68rem; font-weight:800; flex-shrink:0; margin-top:1px;
+}
+.faq-q-text { font-size:.9rem; font-weight:600; color:var(--os); line-height:1.45; }
+.faq-item:hover .faq-q-text { color:var(--primary); }
+.faq-item.open .faq-q-text { color:var(--primary); font-weight:700; }
+.faq-group-badge { font-size:.62rem; font-weight:700; padding:2px 7px; border-radius:10px; flex-shrink:0; white-space:nowrap; margin-top:3px; }
+.faq-chevron { transition:transform .25s; color:var(--osv); font-size:1rem; flex-shrink:0; margin-top:3px; }
+.faq-item.open .faq-chevron { transform:rotate(180deg); color:var(--primary); }
+
+/* Answer panel */
+@keyframes fadeIn { from{opacity:0;transform:translateY(-4px);} to{opacity:1;transform:none;} }
+.faq-a { display:none; padding:0 16px 10px 16px; }
+.faq-item.open .faq-a { display:block; animation:fadeIn .22s ease; }
+.faq-a-inner {
+  background:#2d1a10;
+  border-radius:10px;
+  padding:10px 18px 14px;
+  border-left:3px solid var(--primary);
+  font-size:.875rem; line-height:1.8; color:#f5e8e2;
+  word-break:break-word;
+}
+
+/* Override answer text colors for dark bg */
+.faq-a-inner .ans-p { color:#e8d5cb; }
+.faq-a-inner .ans-header { color:#ff9f7a; border-bottom-color:rgba(255,159,122,.25); }
+.faq-a-inner .ans-note { background:rgba(255,193,7,.1); border-left-color:#f59e0b; color:#fde68a; }
+.faq-a-inner .ans-steps li { color:#e8d5cb; }
+.faq-a-inner .ans-steps li::before { background:rgba(172,44,0,.4); color:#ff9f7a; }
+.faq-a-inner .ans-bullets li { color:#e8d5cb; }
+.faq-a-inner .ans-bullets li::before { background:#ff7852; opacity:.7; }
+.faq-a-inner strong { color:#ffc4a8; }
+.faq-a-inner .ans-tag { color:#ffb38a; background:rgba(255,120,82,.2); }
+.faq-a-inner .ans-link { background:rgba(76,185,255,.1); border-color:rgba(76,185,255,.3); color:#7dd3fc; }
+.faq-a-inner .ans-link:hover { background:rgba(76,185,255,.18); }
+.faq-a-inner a { color:#7dd3fc; }
+
+.faq-empty { padding:40px; text-align:center; color:var(--osv); background:var(--surf); border-radius:12px; border:1.5px dashed var(--outv); }
+.faq-empty .mi { font-size:2.5rem; display:block; margin-bottom:10px; opacity:.3; }
+
+/* Search results — same style */
+.rcard .faq-a { padding:0 16px 16px 16px; }
+.rcard.open .faq-a-inner { background:#2d1a10; color:#f5e8e2; }
+
+/* ── SEARCH PAGE ── */
+.spmain { flex:1; padding:32px 36px; overflow-y:auto; }
+.sphdr { max-width:820px; margin:0 auto 36px; }
+.sphdr h1 { font-family:'Plus Jakarta Sans',sans-serif; font-size:2.4rem; font-weight:900; color:var(--primary); margin-bottom:20px; }
+.srcnt { color:var(--sec); font-weight:500; font-size:.88rem; margin-top:10px; }
+.sp-search-container { position:relative; z-index:10; }
+.sp-search-card { background:var(--surf); border-radius:14px; border:1.5px solid rgba(172,44,0,.18); box-shadow:0 2px 14px rgba(172,44,0,.06); transition:border-radius .2s,border-color .2s,box-shadow .2s; overflow:hidden; }
+.sp-search-card.has-drop { border-color:var(--primary); box-shadow:0 4px 24px rgba(172,44,0,.16),0 0 0 3px rgba(172,44,0,.06); }
+.sp-search-box { display:flex; align-items:center; }
+.sp-sico { padding:0 12px 0 16px; color:var(--primary); font-size:1.25rem; flex-shrink:0; }
+.sp-inp { flex:1; padding:13px 0; font-size:.96rem; font-family:inherit; border:none; outline:none; background:transparent; color:var(--os); }
+.sp-inp::placeholder { color:#b0907c; }
+.sp-clear { width:32px; height:32px; border-radius:50%; border:none; background:none; cursor:pointer; color:var(--osv); display:none; align-items:center; justify-content:center; flex-shrink:0; transition:all .2s; }
+.sp-clear:hover { background:var(--sl); }
+.sp-clear.visible { display:flex; }
+.sp-go { background:linear-gradient(135deg,var(--primary),var(--pl)); color:#fff; padding:10px 20px; border-radius:10px; border:none; font-weight:700; font-size:.85rem; cursor:pointer; font-family:inherit; transition:all .2s; white-space:nowrap; margin:6px 6px; flex-shrink:0; }
+.sp-go:hover { filter:brightness(1.08); }
+.sp-drop { display:none; border-top:1px solid rgba(172,44,0,.1); background:var(--surf); overflow:hidden; max-height:300px; overflow-y:auto; }
+.sp-drop.open { display:block; }
+.slay { max-width:820px; margin:0 auto; display:grid; grid-template-columns:180px 1fr; gap:28px; }
+.ftit { font-size:.67rem; font-weight:800; text-transform:uppercase; letter-spacing:1.5px; color:var(--primary); margin-bottom:12px; }
+.fchks { display:flex; flex-direction:column; gap:9px; }
+.fchk { display:flex; align-items:center; gap:8px; cursor:pointer; font-size:.85rem; color:var(--os); }
+.fchk input { accent-color:var(--primary); width:15px; height:15px; cursor:pointer; }
+.rlist { display:flex; flex-direction:column; gap:10px; }
+/* Search results as FAQ-style cards */
+.rcard { background:var(--surf); border-radius:12px; border:1.5px solid var(--outv); overflow:hidden; cursor:pointer; transition:all .22s; }
+.rcard.feat { border-left:5px solid var(--primary); }
+.rcard:hover { box-shadow:0 6px 20px rgba(172,44,0,.09); border-color:rgba(172,44,0,.25); transform:translateX(2px); }
+.rcard .faq-q { padding:13px 16px; }
+.rcard.open .faq-chevron { transform:rotate(180deg); color:var(--primary); }
+.rcard .faq-a { display:none; }
+.rcard.open .faq-a { display:block; animation:fadeIn .2s ease; }
+.rcard.open { border-color:rgba(172,44,0,.35); }
+.rcard.open .faq-q-text { color:var(--primary); }
+
+/* ── FOOTER ── */
+footer { background:rgba(255,244,243,.8); border-top:1px solid var(--outv); padding:18px 32px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; }
+.fbrand { font-family:'Plus Jakarta Sans',sans-serif; font-weight:900; color:var(--primary); font-size:.88rem; }
+.fcopy { font-size:.72rem; color:var(--osv); margin-top:2px; }
+
+/* ── COPY BUTTON ── */
+.ans-toolbar {
+  display:flex; justify-content:space-between; align-items:center;
+  padding:0 0 8px 0; margin-bottom:6px;
+  border-bottom:1px solid rgba(255,255,255,.07);
+}
+.ans-updated {
+  font-size:.68rem; color:rgba(255,255,255,.4);
+  display:flex; align-items:center; gap:4px;
+}
+.copy-btn {
+  display:inline-flex; align-items:center; gap:5px;
+  font-size:.72rem; font-weight:700; color:rgba(255,255,255,.55);
+  background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.12);
+  border-radius:7px; padding:4px 10px; cursor:pointer;
+  transition:all .2s; font-family:inherit;
+}
+.copy-btn:hover { background:rgba(255,255,255,.15); color:#fff; }
+.copy-btn.copied { color:#6ee7b7; border-color:#6ee7b7; background:rgba(110,231,183,.1); }
+
+/* ── REPORT BUTTON ── */
+.report-btn {
+  display:inline-flex; align-items:center; gap:5px;
+  font-size:.72rem; font-weight:700; color:rgba(255,160,120,.7);
+  background:none; border:1px solid rgba(255,160,120,.25);
+  border-radius:7px; padding:4px 10px; cursor:pointer;
+  transition:all .2s; font-family:inherit; margin-left:6px;
+}
+.report-btn:hover { background:rgba(255,100,50,.15); color:#ff9f7a; border-color:rgba(255,120,82,.5); }
+.report-btn.sent { color:#6ee7b7; border-color:#6ee7b7; background:rgba(110,231,183,.08); cursor:default; }
+
+/* ── REPORT MODAL ── */
+.rmodal-bg {
+  display:none; position:fixed; inset:0; z-index:500;
+  background:rgba(30,10,5,.55); backdrop-filter:blur(4px);
+  align-items:center; justify-content:center;
+}
+.rmodal-bg.open { display:flex; }
+.rmodal {
+  background:var(--surf); border-radius:18px; padding:28px;
+  width:100%; max-width:440px; margin:16px;
+  box-shadow:0 20px 60px rgba(172,44,0,.18);
+  border:1.5px solid var(--outv);
+}
+.rmodal h3 { font-family:'Plus Jakarta Sans',sans-serif; font-size:1rem; font-weight:800; margin-bottom:4px; color:var(--primary); }
+.rmodal-q { font-size:.8rem; color:var(--osv); margin-bottom:16px; padding-bottom:12px; border-bottom:1px solid var(--outv); line-height:1.5; }
+.rmodal label { font-size:.78rem; font-weight:600; color:var(--os); display:block; margin-bottom:6px; }
+.rmodal textarea {
+  width:100%; border:1.5px solid var(--outv); border-radius:10px;
+  padding:10px 12px; font-family:inherit; font-size:.85rem; color:var(--os);
+  background:var(--bg); resize:vertical; min-height:90px; outline:none;
+  transition:border-color .2s;
+}
+.rmodal textarea:focus { border-color:var(--primary); }
+.rmodal-actions { display:flex; gap:8px; margin-top:14px; justify-content:flex-end; }
+.rmodal-cancel { padding:8px 18px; border-radius:9px; border:1.5px solid var(--outv); background:none; font-family:inherit; font-size:.85rem; cursor:pointer; color:var(--osv); transition:all .2s; }
+.rmodal-cancel:hover { background:var(--sl); }
+.rmodal-submit { padding:8px 20px; border-radius:9px; border:none; background:var(--primary); color:#fff; font-family:inherit; font-size:.85rem; font-weight:700; cursor:pointer; transition:all .2s; }
+.rmodal-submit:hover { background:var(--pd); }
+.rmodal-submit:disabled { opacity:.5; cursor:default; } */
+.toast {
+  position:fixed; bottom:28px; left:50%; transform:translateX(-50%) translateY(20px);
+  background:#1c1c1c; color:#fff; padding:10px 20px;
+  border-radius:24px; font-size:.82rem; font-weight:600;
+  display:flex; align-items:center; gap:8px;
+  box-shadow:0 8px 32px rgba(0,0,0,.3);
+  opacity:0; transition:all .3s; pointer-events:none; z-index:9999;
+  white-space:nowrap;
+}
+.toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+
+/* ── SHARE BTN ── */
+.share-btn {
+  display:inline-flex; align-items:center; gap:5px;
+  font-size:.72rem; font-weight:700; color:var(--osv);
+  background:none; border:1px solid var(--outv);
+  border-radius:7px; padding:4px 10px; cursor:pointer;
+  transition:all .2s; font-family:inherit; margin-left:auto;
+}
+.share-btn:hover { border-color:var(--primary); color:var(--primary); background:var(--sl); }
+
+/* ── LAST UPDATED BANNER ── */
+.updated-bar {
+  display:flex; align-items:center; gap:6px;
+  font-size:.72rem; color:var(--osv);
+  background:var(--sl); border:1px solid var(--outv);
+  border-radius:8px; padding:6px 12px; margin-bottom:16px;
+  width:fit-content;
+}
+
+/* ── ANSWER BODY ── */
+.ans-body { display:flex; flex-direction:column; gap:5px; }
+.ans-p { font-size:.875rem; line-height:1.8; color:var(--sec); margin:0; }
+.ans-header {
+  font-size:.75rem; font-weight:800; color:var(--primary);
+  text-transform:uppercase; letter-spacing:.7px;
+  margin:10px 0 4px; padding-bottom:5px;
+  border-bottom:1.5px solid rgba(172,44,0,.15);
+}
+.ans-note {
+  font-size:.82rem; line-height:1.65; color:var(--os);
+  background:rgba(255,193,7,.08); border-left:3px solid #f59e0b;
+  border-radius:0 8px 8px 0; padding:8px 12px; margin:4px 0;
+}
+.ans-tag {
+  color:var(--primary); background:rgba(172,44,0,.08);
+  border-radius:4px; padding:1px 5px; font-size:.8em;
+}
+.ans-steps {
+  list-style:none; margin:4px 0; padding:0;
+  display:flex; flex-direction:column; gap:7px;
+  counter-reset:step-ctr;
+}
+.ans-steps li {
+  display:flex; align-items:flex-start; gap:10px;
+  font-size:.875rem; line-height:1.7; color:var(--sec);
+  counter-increment:step-ctr;
+}
+.ans-steps li::before {
+  content:counter(step-ctr);
+  min-width:22px; height:22px; border-radius:6px;
+  background:var(--sh); color:var(--primary);
+  font-weight:800; font-size:.7rem;
+  display:flex; align-items:center; justify-content:center;
+  flex-shrink:0; margin-top:3px;
+}
+.ans-bullets {
+  list-style:none; margin:4px 0; padding:0;
+  display:flex; flex-direction:column; gap:6px;
+}
+.ans-bullets li {
+  display:flex; align-items:flex-start; gap:9px;
+  font-size:.875rem; line-height:1.7; color:var(--sec);
+}
+.ans-bullets li::before {
+  content:'';
+  min-width:6px; height:6px; border-radius:50%;
+  background:var(--primary); opacity:.5;
+  flex-shrink:0; margin-top:8px;
+}
+/* base ans-link (light bg context — not used currently but kept for search page) */
+.ans-link {
+  display:inline-flex; align-items:center; gap:6px;
+  font-size:.78rem; font-weight:700; color:#7dd3fc;
+  background:rgba(76,185,255,.12); border:1px solid rgba(76,185,255,.25);
+  border-radius:8px; padding:7px 12px; text-decoration:none;
+  transition:background .2s; margin:3px 0; max-width:100%; flex-wrap:wrap;
+}
+.ans-link:hover { background:rgba(76,185,255,.22); }
+.ans-link .mi { flex-shrink:0; }
+
+/* Image reference callout */
+.ans-img-ref {
+  display:flex; align-items:flex-start; gap:8px;
+  background:rgba(255,193,7,.08); border:1px solid rgba(255,193,7,.25);
+  border-radius:8px; padding:8px 12px; margin:4px 0;
+  font-size:.85rem; color:#fde68a; line-height:1.6;
+}
+.ans-img-ref .mi { color:#fbbf24; flex-shrink:0; margin-top:2px; }
+
+/* ── ANIM ── */
+.su { animation:su .5s ease both; }
+.su2 { animation:su .5s .08s ease both; }
+.su3 { animation:su .5s .16s ease both; }
+.su4 { animation:su .5s .24s ease both; }
+@keyframes su { from{opacity:0;transform:translateY(18px);} to{opacity:1;transform:none;} }
+.sc { animation:su .45s ease both; }
+.sc:nth-child(1){animation-delay:.04s;} .sc:nth-child(2){animation-delay:.08s;}
+.sc:nth-child(3){animation-delay:.12s;} .sc:nth-child(4){animation-delay:.16s;}
+.sc:nth-child(5){animation-delay:.2s;} .sc:nth-child(6){animation-delay:.24s;}
+</style>
+</head>
+<body>
+
+<!-- ── NAV ── -->
+<nav class="topnav">
+  <div class="ni">
+    <div style="display:flex;align-items:center;gap:24px;">
+      <div class="logo" onclick="sp('home')">CTO FAQ</div>
+      <div class="nlinks" id="nl">
+        <button class="nl active" onclick="sp('home');sna(this)">หน้าแรก</button>
+        <button class="nl" onclick="sp('search');sna(this);ds('')">ค้นหา FAQ</button>
+        <button class="nl" onclick="showTeam('qc');sna(this)">Quality Control</button>
+        <button class="nl" onclick="showTeam('rp');sna(this)">Resource & Planning</button>
+        <button class="nl" onclick="showTeam('sm');sna(this)">Smart Map</button>
+        <button class="nl" onclick="showTeam('sub');sna(this)">Subcon</button>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- ══ HOME ══ -->
+<div class="page active" id="page-home">
+  <main class="hmain">
+    <section class="hero">
+      <div class="hbg"></div><div class="hblob hb1"></div><div class="hblob hb2"></div>
+      <div class="hcon">
+        <h1 class="su">CTO SPX FAQ</h1>
+        <p class="su2">ค้นหาคำถาม-คำตอบจากทีม Quality Control, Resource & Planning, Smart Map และ Subcon</p>
+        <div class="search-container su3" id="hero-sc">
+          <div class="search-card" id="hero-card">
+            <div class="search-box">
+              <span class="mi material-symbols-outlined search-ico">search</span>
+              <input class="search-inp" id="hsi" placeholder="ค้นหา เช่น VPN, Inhouse, OT, Misroute..." type="text"
+                oninput="onHI(this.value)" onkeydown="onHK(event)" onfocus="openDrop('hero')" autocomplete="off"/>
+              <button class="search-inp-clear" id="hsi-clear" onclick="clearH()">
+                <span class="mi material-symbols-outlined" style="font-size:1rem">close</span>
+              </button>
+              <button class="search-go" onclick="gs()">ค้นหา</button>
+            </div>
+            <div class="suggest-drop" id="hero-drop"></div>
+          </div>
+        </div>
+        <div class="stags su4">
+          <span style="color:var(--sec);font-size:.8rem;">ค้นหายอดนิยม:</span>
+          <span class="stag" onclick="gst('VPN')">#VPN</span>
+          <span class="stag" onclick="gst('Inhouse')">#Inhouse</span>
+          <span class="stag" onclick="gst('OT')">#OT</span>
+          <span class="stag" onclick="gst('Misroute')">#Misroute</span>
+          <span class="stag" onclick="gst('Asset')">#Asset</span>
+          <span class="stag" onclick="gst('COD')">#COD</span>
+        </div>
+      </div>
+    </section>
+
+    <section id="ts" style="margin-bottom:52px;">
+      <div class="sh2">
+        <div><h2>6 ทีม CTO</h2><p>คลิกเพื่อดูคำถาม-คำตอบของแต่ละทีม</p></div>
+      </div>
+      <div class="tgrid" id="home-team-grid"></div>
+    </section>
+  </main>
+  <footer><div><div class="fbrand">CTO FAQ</div><div class="fcopy">© 2024 CTO FAQ SPX. Internal Use Only.</div></div></footer>
+</div>
+
+<!-- ══ TEAM FAQ PAGE ══ -->
+<div class="page" id="page-team">
+  <div class="lws">
+    <aside class="snav">
+      <div class="sbrand"><h3>CTO FAQ Portal</h3><p>Shopee Express</p></div>
+      <div class="snav-section">หน้าหลัก</div>
+      <button class="si" onclick="sp('home')"><span class="mi material-symbols-outlined">home</span>หน้าแรก</button>
+      <button class="si" onclick="sp('search');ds('')"><span class="mi material-symbols-outlined">search</span>ค้นหา FAQ</button>
+      <div class="snav-section">ทีม</div>
+      <button class="si" id="sn-qc" onclick="showTeam('qc')"><span class="mi material-symbols-outlined">verified</span>Quality Control</button>
+      <button class="si" id="sn-rp" onclick="showTeam('rp')"><span class="mi material-symbols-outlined">calendar_month</span>Resource & Planning</button>
+      <button class="si" id="sn-sm" onclick="showTeam('sm')"><span class="mi material-symbols-outlined">map</span>Smart Map</button>
+      <button class="si" id="sn-sub" onclick="showTeam('sub')"><span class="mi material-symbols-outlined">handshake</span>Subcon</button>
+      <button class="si si-sub" id="sn-sub_ic" onclick="showTeam('sub_ic')"><span class="mi material-symbols-outlined">person_add</span>Subcon (IC)</button>
+      <button class="si si-sub" id="sn-sub_fm" onclick="showTeam('sub_fm')"><span class="mi material-symbols-outlined">local_shipping</span>Subcon (FM)</button>
+    </aside>
+    <main class="cmain" id="tpc"></main>
+  </div>
+  <footer><div><div class="fbrand">CTO FAQ</div><div class="fcopy">© 2024 CTO FAQ SPX. Internal Use Only.</div></div></footer>
+</div>
+
+<!-- ══ SEARCH PAGE ══ -->
+<div class="page" id="page-search">
+  <div class="lws">
+    <aside class="snav">
+      <div class="sbrand"><h3>CTO FAQ Portal</h3><p>Shopee Express</p></div>
+      <div class="snav-section">หน้าหลัก</div>
+      <button class="si" onclick="sp('home')"><span class="mi material-symbols-outlined">home</span>หน้าแรก</button>
+      <button class="si active"><span class="mi material-symbols-outlined">search</span>ค้นหา FAQ</button>
+      <div class="snav-section">ทีม</div>
+      <button class="si" onclick="showTeam('qc')"><span class="mi material-symbols-outlined">verified</span>Quality Control</button>
+      <button class="si" onclick="showTeam('rp')"><span class="mi material-symbols-outlined">calendar_month</span>Resource & Planning</button>
+      <button class="si" onclick="showTeam('sm')"><span class="mi material-symbols-outlined">map</span>Smart Map</button>
+      <button class="si" onclick="showTeam('sub')"><span class="mi material-symbols-outlined">handshake</span>Subcon</button>
+      <button class="si si-sub" onclick="showTeam('sub_ic')"><span class="mi material-symbols-outlined">person_add</span>Subcon (IC)</button>
+      <button class="si si-sub" onclick="showTeam('sub_fm')"><span class="mi material-symbols-outlined">local_shipping</span>Subcon (FM)</button>
+    </aside>
+    <main class="spmain">
+      <div class="sphdr">
+        <h1>ค้นหา FAQ</h1>
+        <div class="sp-search-container" id="sp-sc">
+          <div class="sp-search-card" id="sp-card">
+            <div class="sp-search-box">
+              <span class="mi material-symbols-outlined sp-sico">search</span>
+              <input class="sp-inp" id="spi" placeholder="พิมพ์คำค้นหา..." type="text"
+                oninput="onSI(this.value)" onkeydown="onSK(event)" onfocus="openDrop('sp')" autocomplete="off"/>
+              <button class="sp-clear" id="spi-clear" onclick="clearSp()">
+                <span class="mi material-symbols-outlined" style="font-size:.95rem">close</span>
+              </button>
+              <button class="sp-go" onclick="ds(document.getElementById('spi').value)">ค้นหา</button>
+            </div>
+            <div class="sp-drop" id="sp-drop"></div>
+          </div>
+        </div>
+        <div class="srcnt" id="src">แสดงทั้งหมด...</div>
+      </div>
+      <div class="slay">
+        <aside>
+          <div style="margin-bottom:20px;">
+            <div class="ftit">กรองตามทีม</div>
+            <div class="fchks" id="team-filters"></div>
+          </div>
+        </aside>
+        <div class="rlist" id="sr"></div>
+      </div>
+    </main>
+  </div>
+  <footer><div><div class="fbrand">CTO FAQ</div><div class="fcopy">© 2024 CTO FAQ SPX. Internal Use Only.</div></div></footer>
+</div>
+
+<script>
+/* ══ DATA ══ */
+const DB = {"qc":{"name":"Quality Control","qa":[{"q":"เชื่อมต่อ VPN ไม่ได้","a":"ติดปัญหาเรื่องการใช้งาน VPN รบกวนสอบถามกับทาง IT \n- thunyapat.h@sea.com\n- mathawat.k@sea.com","g":"VPN"},{"q":"เข้าใช้งาน In house ไม่ได้","a":"ตรวจสอบหน้า In house ว่าหลังจาก Login ขึ้นข้อความใดดังต่อไปนี้\nYour Account was disabled : ไม่ได้เข้าระบบเกิน 7 วัน รบกวนติดต่อทางทีม QC\nRetrict login : รบกวนตรวจสอบสอบการเชื่อมต่อ VPN อีกครั้งก่อนเข้าสู่ระบบ","g":"In house"},{"q":"ระยะเวลาในการปิด Task In house","a":"ระยะเวลาการเปิดและปิด Task ใน In houseมีดังต่อไปนี้\n- Task ที่เปิดในเวลา 9:00-11:59 ต้องตอบภายในเวลา 19:00 ของวันที่เปิด Task\n- Task ที่เปิดในเวลา 12:00-16:59 ต้องตอบภายในเวลา 13:00 ของวันถัดไป\n- Task ที่เปิดในเวลาหลัง 17:00 ต้องตอบภายใน 16:00 ของวันถัดไป","g":"In house"},{"q":"เลขพัสดุใน Task In house ไม่ถูกต้อง","a":"หากตรวจพบว่าเลขพัสดุใน Task ไม่ถูกต้องสามารถแจ้งลงใน Task และอัพเดต Task ได้เลยเพื่อให้ทาง CX ทำการแจ้งเลขพัสดุใหม่","g":"In house"},{"q":"ต้องการเปืดขอสิทธิ์การเข้าใช้งานระบบ In house","a":"หากต้องการเปิดขอสิทธิ์การเข้าใช้งานระบบ In house รบกวนแจ้ง Email ที่ต้องการขอสิทธิ์กับทางทีม QC","g":"In house"},{"q":"ชีท Stuck ไม่อัพเดตข้อมูล","a":"หากชีท Stuck ไม่มีการอัพเดตข้อมูลหลังเวลา 11:00 โปรดตรวจสอบการแจ้งเตือนใน Group SeaTalk SPX : HUBSUP COMMU","g":"Stuck"},{"q":"ตัวเลือก Dropdown ในชีท Stuck ไม่ขึ้น","a":"อาจเกิดจาก 3 สาเหตุ\n1. ชีทมีคนเข้าใช้งานพร้อมกันเป็นจำนวนมากอาจทำให้ตัวชีทต้องใช้เวลาโหลดข้อมูลนาน\n2. การเชื่อมต่ออินเตอร์เน็ตอาจขัดข้อง รบกวนตรวจสอบการเชื่อมต่อทุกครั้ง\n3. ข้อมูลตัวชีทอาจเกิดการ Error กรณีนี้ต้องรอทางทีม REC ทำการแก้ไข","g":"Stuck"},{"q":"พัสดุสถานะ Disposed ทำอย่างไร","a":"ตรวจสอบกระบวนการส่งคืนพัสดุกรณี End Status ตามสไลด์ 59-61\n[SPX-Training] คู่มือการจัดการพัสดุ Return (R1-R7)\nhttps://docs.google.com/presentation/d/1RHxkOatlT-Qe4yC_GT7RbCDs8D9K7VT4rTSEhUGXcSQ/edit?slide=id.g378d55ffb52_86_433#slide=id.g378d55ffb52_86_433","g":"สถานะพัสดุ"},{"q":"พัสดุสถานะ Liquidate ทำอย่างไร","a":"พบพัสดุสถานะ Liquidate ดำเนินการ Pack TO ส่งกลับ SOC ตามสไลด์หน้า 62\n[SPX-Training] คู่มือการจัดการพัสดุ Return (R1-R7)\nhttps://docs.google.com/presentation/d/1RHxkOatlT-Qe4yC_GT7RbCDs8D9K7VT4rTSEhUGXcSQ/edit?slide=id.g378d55ffb52_86_339#slide=id.g378d55ffb52_86_339","g":"สถานะพัสดุ"},{"q":"วิธีเปิด Ticket ขอ VPN","a":"ขั้นตอนการเปิด Ticket ขอ VPN\n- เข้าลิ้งค์ : https://itcenter.sea.com/user/5/my-tickets/service-request/92\n- เลือก My Tickets > System Acces > VPN (Company Device)\n- ช่อง Location เลือก : TH - Hub Station\n- ช่อง VPN Group เลือก : Others\n- ช่อง Operating System เลือก : Windows\n- ช่อง Purpose ใส่ว่า : ขอสิทธ์ VPN เพิ่อเข้าใช้งานระบบ In house : https://cs.shopee.co.th/portal/inhouse/supervisor/items/task-list","g":"VPN"},{"q":"ต้องการเปลี่ยนเครื่องใช้งาน In house","a":"ขั้นตอนการเปลี่ยนเครื่องใช้งาน In house\n- ออกจากระบบ VPN ในเครื่องเก่า กรณีที่เครื่องเก่าเสียไม่สามารถออกจากระบบได้ให้ทำตามขั้นตอนต่อไปได้เลย\n- ติดตั้งตัว VPN ที่เครื่องใหม่และทำการเชื่อมต่อให้เรียบร้อย\n- ทำการปิด Google Chrome ทั้งหมดที่เปิดอยู่ และเข้า In house ใหม่ผ่านลิ้งค์ https://cs.shopee.co.th/portal/inhouse/supervisor/items/task-list","g":"In house"},{"q":"การตั้งค่า Filter ในระบบ In house","a":"การตั้งค่า Filter หรือ ตัวกรอง ในระบบ In house ทำตามขั้นตอนในสไลด์ หน้า 4-6\nคู่มือการตอบเคสร้องเรียนจากลูกค้า  ผ่านระบบ CS In-House Ticket\n: https://docs.google.com/presentation/d/1R-H53B2XpLcgSZ0hEalX3KCFa_UiA2o2PxQbmOvcfeg/edit?slide=id.g26bacc96a5a_4_373#slide=id.g26bacc96a5a_4_373","g":"In house"},{"q":"งาน Buyer Return Pickup (RR) ที่อยู่เข้ารับไม่ใช่พื้นที่ของฮับ","a":"งาน RR ผิดฮับ\n- ประสานงานไปยังฮับที่เป็นพื้นที่เข้ารับและขอ Driver ID เพื่อทำการ assign งานให้\n- หากตรวจสอบว่าเป็นพื้นที่ฮับ AG/LP รบกวนติดต่อแจ้งทางทีม QC ให้ช่วยประสานงานอีกครั้ง","g":"Buyer Return Pickup (RR)"},{"q":"ตรวจสอบงาน Buyer Return Pickup (RR) ค้างประจำวัน","a":"[SPX-CTO] ฮับตรวจสอบงาน RR ค้างประจำวัน (Buyer Return Pickup)\nhttps://docs.google.com/spreadsheets/d/1K7LCJwT1etB4mroIl0ZlNrFCfV162lFaaCVYYN5X4uY/edit?gid=1213326577#gid=1213326577","g":"Buyer Return Pickup (RR)"}]},"rp":{"name":"Resource & Planning","qa":[{"q":"รายชื่อพนักงานที่ยังไม่มีกะงาน (working shift)","a":"Checking on Dashboard","g":"Working Shift WFM"},{"q":"จัดกะเข้าระบบ WFM ไม่ได้ทำยังไง","a":"ตรวจสอบ Status Failed Reason\n>เช็ครหัสพนักงานที่ขึ้น Fail และตรวจสอบStation ของพนักงานปัจจุบันว่าถูกต้องหรือไม่\n  : กรณีพนักงาน Relocation แล้วขึ้น Shift อยู่ที่ Hub เดิม ให้ Hub เดิมลบกะงานทั้งหมดออก่อน\n>เช็ค Slot code shift ว่าใส่ถูกต้องหรือไม่\n  : ฮับที่มี Shift ใหม่จากเดิมที่เคยมีอยู่ต้องทำการแจ้ง Product ให้เพิ่ม Shift เข้าระบบ\n  : mark.leewongp@spxexpress.com\n>ขึ้นว่าไม่พบ Soup Role ในระบบ : หากไม่มีต้องติดให้ทาง HR เพิ่มขึ้นมูลให้\n  : nut.ammawong@spxexpress.com\n>ขึ้น Template should only contain this month\n : Column วันที่ในไฟล์ต้องสอดคล้องกับจำนวนวันจริงของเดือนนั้น ต้องทำการลบ Column ที่เกินออก\n>ขึ้น Driverld/Ops Field param is empty\n : เช็ค Template ว่าเป็น Text ทั้งหมดหรือไม่\n>ขึ้น Invalid Function/Department Name\n: เช็ค Department ว่าใส่ถูกต้องหรือไม่ \n>ไม่สามารถอัพกะหรือไม่แก้ไขไม่ได้\n: เช็คว่ามีการ Add Shift กับ Day-Off ทับซ้อนกันหรือไม่ กรณีที่ Shift กับ Day-Off ซ้ำให้ทำการลบอย่างใดอย่างหนึ่งออก\n>อัพกะงานไม่ติดแค่บางวัน \n:  ให้ทำการ Add กะงานแบบเดี่ยวเฉพาะวันที่ติดปัญหาเข้าไปที่ละวัน","g":"Working Shift WFM"},{"q":"AppSheet ไม่พบรหัสพนักงานไม่สามารถเข้าแก้ไข ATTD พนักงานได้ทำยังไง","a":">ตรวจสอบการเลือกหัวข้อ \n : หากไม่พบรหัสพนักงานให้กดเลือกพนักงานทั้งหมด\n >หากไม่พบรหัสกรอกฟอร์ม \n : กรอกฟอร์ม สอบถามขั้นตอน/แจ้งปัญหา WFM  สอบถามขั้นตอน/แจ้งปัญหา WFM","g":"ATTD D-1"},{"q":"Ops App เข้าสู่ระบบไม่ได้ขึ้นรหัสไม่ถูกต้อง/ผิด/ลืมรหัสผ่าน","a":">Ops App ขึ้นรหัสผิด\n : กรอกฟอร์มขอรีเซทรหัสผ่านของ Ops ID  ขอรีเซตรูปใบหน้าในระบบ, ขอรีเซตรหัสผ่านของ Ops ID, ขอแก้ไขหมุดของฮับ","g":"Reset password / Reset Face ID"},{"q":"ไม่สามารถเก็บใบหน้าพนักงานในระบบได้","a":">พนักงานไม่สามารถเก็บใบหน้าได้\n : กรอกฟอร์มขอรีเซทรูปใบหน้าในระบบ ขอรีเซตรูปใบหน้าในระบบ, ขอรีเซตรหัสผ่านของ Ops ID, ขอแก้ไขหมุดของฮับ","g":"Reset password / Reset Face ID"},{"q":"วิธีการแจ้งขอยกเลิก Ad hoc","a":">ต้องการขอยกเลิก Ad hoc \n: แจ้ง RM ยกเลิก (Reject)","g":"Ad hoc"},{"q":"วิธีการแจ้งขอแก้ไขวันที่ที่ขอ Ad hoc","a":">กรณีกรอกวันที่ผิด\n: แจ้ง RM และ SWP ยกเลิก Ad hoc ที่กรอกขอไปอันแรก และทำการกรอกข้อมูลใหม่ให้ถูกต้อง","g":"Ad hoc"},{"q":"วิธีการแจ้งขอแก้ไขเวลาที่ขอ Ad hoc","a":">กรณีกรอกเวลาเรียกเข้าไม่ตรง/ผิด\n: แจ้ง SWP ขอปรับแก้ไขเวลาเรียกใหม่\n>กรณีที่ในฟอร์มไม่มีเวลาที่ต้องการ\n: ถ้าในฟอร์มไม่มีเวลาที่ต้องการ ให้ระบุเวลา ในช่องรายละเอียดตารางวันทำงานเพิ่มเติมในฟอร์ม","g":"Ad hoc"},{"q":"Asset อยู่ที่ฮับอื่น","a":"ให้ทำการโอนย้ายไปยัง Owner ที่ถือครอง ณ ปัจจุบัน https://docs.google.com/spreadsheets/d/11TvdE8Up79p5v2WRR5kmofAH3aq409lD8YzL6Sh6MVs/edit?gid=1307103611#gid=1307103611","g":"[Asset]-โอนย้าย Asset"},{"q":"Asset เป็นอีเมลของคนเก่าต้องทำยังไง","a":"เปิดอีเมลเพื่อโอนย้ายทรัพย์สิน","g":""},{"q":"โอนย้าย Asset ให้คนอื่นต้องทำยังไง","a":"เปิดอีเมลเพื่อโอนย้ายทรัพย์สิน ดังตัวอย่าง","g":""},{"q":"ขั้นตอนโอนย้าย Asset ทำยังไง","a":"1) Owner asset เปิดอีเมล transfer \n2) Asset เปิด ticket \n3) IT reset mail","g":""},{"q":"อุปกรณ์เสียแจ้งซ่อมที่ไหน","a":"แจ้งซ่อมเข้ามาในฟอร์ม","g":"[Asset]-เครื่องชุดรุด สูญหาย ไม่ต้องการใช้งาน"},{"q":"เครื่องอยู่ฮับแต่ไม่ได้ใช้ จะส่งคืนยังไง","a":"เลือกดรอปดาวน์ในการกรอบแบบฟอร์มผ่านการ Alert Email เลือก \"ต้องการส่งคืน\" ทีมจะดำเนินการเรียกคืนสินทรัพย์ประจำวันศูกร์ทุกสัปดาห์","g":""},{"q":"สินทรัพย์หายต้องทำยังไง","a":"ดำเนินการ เปิดอีเมล แจ้งสูญหายไปยัง Asset team\nhttps://docs.google.com/spreadsheets/d/11TvdE8Up79p5v2WRR5kmofAH3aq409lD8YzL6Sh6MVs/edit?gid=1603311694#gid=1603311694","g":""},{"q":"ส่งซ่อมต้องแนบรูปอะไร","a":"แนบรูปแบบฟอร์มแจ้งส่งซ่อม และสามารถอ่านรายละเอียดได้ที่ Training Asset AI","g":"[Asset]-การแนบหลักฐาน"},{"q":"ต้องการส่งคืนสินทรัพย์-ต้องแนบรูปอะไร","a":"แนบรูป serial number ตัวเครื่องให้ชัดเจนดังภาพ สามารถอ่านรายละเอียดได้ที่Training Asset AI","g":""},{"q":"สินทรัพย์สูญหายต้องแนบรูปอะไรบ้าง","a":"แนบรูปอีเมลแจ้งการสูญหายดังภาพ สามารถอ่านรายละเอียดได้ที่Training Asset AI","g":""},{"q":"Serial number หลังเครื่องไม่ตรงกับในตัวเครื่องทำยังไงดี","a":"เลือกดรอปดาวให้สอดคล้องกับเหตุผล ทำการหมายเหตุและแนบหลักฐาน ทั้งภายในและหน้าตัวเครื่อง","g":"[Asset]-Inactive Alert system"},{"q":"กรอกฟอร์มไปแล้ว ทำไมยังได้รับการแจ้งเตือนในอีเมลเข้ามาซ้ำ","a":"เกิดจาก 1) กรอก sn มี space bar 2) กรอก sn ผิด ไม่ตรงตามการติดตามสามารถอ่านรายละเอียดได้ที่ Training Asset AI","g":""},{"q":"เครื่องใช้งานประจำที่ฮับแต่ข้อมูลขึ้น last seen > 3","a":"1. กรณี PDA เกิดได้จากการที่เครื่องไม่มีแอป ndevor ให้ติดต่อทีม IT ทำการติดตั้งแอป ndevor ลงสู่เครื่อง\n2. Laptop เกิดจากการลง window ที่ไม่ได้ผ่านการตรวจสอบ IT ให้ติดต่อ IT เพื่อดำเนินการในขั้นตอนถัดไป","g":""},{"q":"กรอก inactive ไปแล้วรอบก่อน ต้องกรอกในรอบล่าสุดใหม่อีกไหม","a":"ต้องดำเนินการกรอกตามปกติ เพราะเป็นรอบข้อมูลใหม่","g":""},{"q":"รายละเอียดการ Alert system via Email","a":"สามารถอ่านรายละเอียดได้ที่ Training Asset AI","g":""},{"q":"ตรวจสอบการตอบกลับแบบฟอร์มการติดตาม Last seen > 3 วัน","a":"สามารถตรวจสอบรายละเอียดได้ทีชีทนี้ แทป Check [Check list] Form Response","g":""},{"q":"การแนบหลักฐาน Inactive ในแบบฟอร์มที่ถูกต้อง","a":"กรณีเครื่องสามารถใช้งานได้","g":""},{"q":"สาหตุที่อุปกรณ์ขึ้น ไม่ได้เปิดใช้งานมากกว่า 3 วัน (Last seen > 3 Day)","a":"1. เครื่องไม่ได้เปิดใช้งานมากกว่าสามวัน\n2.ระบบตัวเครื่องมีปัญหา ทำให้ดึงข้อมูล Last seen มาให้ทำการติดต่อทีมไอที หากทางฮับยืนยันว่า เปิดใช้งานเป็นประจำ","g":""},{"q":"วิธีลดการ Alert Inactive ผ่าน Email","a":"สิ่งที่ฮับต้องดำเนินการคือ\nกรณียังต้องการใช้อุปกรณ์ที่ฮับ\n1.เปิดใช้งานตัวเครื่องอย่างต้ำ 3 วัน(แนะนำเปิดใช้งานเป็นประจำทุกวัน)\nกรณีไม่ต้องการใช้อุปกรณ์ที่ฮับแล้ว\n1.ให้ดำเนินการกรอกแบบฟอร์มส่งคืนภายในรอบการติดตาม ทีมจะดำเนินการเรียกคืนทรัพย์สินผ่านอีเมลทุกรอบวันศุกร์ประจำสัปดาห์\n *หากหลังรอบการติดตามไปแล้ว ให้ดำเนินการเปิดส่งคืนสินทรัพย์ไปยังทีม Asset ดังนี้","g":""}]},"sm":{"name":"Smart Map","qa":[{"q":"Create a New Map ต้องทำยังไงบ้าง","a":"Create a New Map\nCreate > สร้างแบบร่างแผนที่\n- เข้าเครื่องมือ Hub Zone managment  แล้วคลิกที่คำว่า Create แล้วเลือกจังหวัดที่ต้องการ ( single เป็นฮับที่อยู่ในจังหวัดเดียว / Multiple ฮับที่อยู่ระหว่างสองจังหวัด) แล้วกด Confrim  และ Create Now \n- เมื่อเข้ามาหน้า Hub Zone แล้ว กด Save to Darft \nCopy to draft > สร้างแบบร่างแผนที่โดยคัดลอกจากแผนที่ที่ใช้งานในปัจจุบัน\n- เข้าเครื่องมือ Hub Zone managment  แล้วไปที่หน้า Active พิมชื่อจังหวัดที่ต้องการในช่อง Province \n- จะมีข้อมูลขึ้มมา ไปตรงมุมขวาคลิกคำว่า More แล้วกด Copy to Darft\nLoad Zone Data > สร้างแบบร่างแผนที่โดยโหลดแผนที่จากเวอร์ชั่นที่ต้องการเข้ามารวมใน version ใหม่\n- เข้าไปหน้า Draft ที่เราสร้างไว้ เลือกใช้เครื่องด้านบนกดคำว่า Load Zone Data แล้วเลือก Draft Version ที่เราต้องการใช้","g":"Hub Zone Managemant"},{"q":"เครื่องมือ Drawing map  ใช้ยังไง","a":"Drawing map\nManually Drawing > สร้างแผนที่ฮับโดยการวาดด้วยมือ\n- คลิกที่เครื่องมือ Manual Drawing \n1) เริ่มเส้นโดยกดคลิก 1 ครั้งในจุดที่ต้องการ\n2) ลากเส้นตามพื้นที่ที่ต้องการ\n3) จบเส้นโดยการกดคลิก 2 ครั้ง โดยจุดจบเส้นจะต้องบรรจบกับจุดเริ่ม\nหมายเหตุ: สามารถลากเส้นเกินขอบสีแดงได้\n3) กรอกข้อมูลในส่วนของ Select Properties\n- Hub Station Name: ฮับปลายทางของพัสดุ\n- Hub Zone Name: ชื่อโซนในแผนที่\n- Hub Zone ID: Sort Code > คัดลอก จาก active version\n4) Save 2 step\n- Save (Hub zone)\n- Save to Draft (Province)\n\nDraw Zone By Street > สร้างแผนที่ฮับโดยอิงจากถนนหลัก\n1) เลือกเขต\n2) กด Confirm\n3) ระบบแสดงโซนระดับถนน\n4) เลือกโซน\n- กรอกข้อมูลในส่วนของ Select Properties\n- Hub Station Name: ฮับปลายทางของพัสดุ\n- Hub Zone Name: ชื่อโซนในแผนที่\n- Hub Zone ID: Sort Code > คัดลอก จาก active version\n5) Save 2 step\n- Save (Hub zone)\n- Save to Draft (Province)\n\nDraw Zone By District > สร้างแผนที่ฮับโดยอิงจากเขต\n1) เลือกเขต\n2) กด Confirm\n3) ระบบแสดงโซนระดับเขต/อำเภอ\n4) เลือกโซน\n5) กรอกข้อมูลในส่วนของ Select Properties\n- Hub Station Name: ฮับปลายทางของพัสดุ\n- Hub Zone Name: ชื่อโซนในแผนที่\n- Hub Zone ID: Sort Code > คัดลอก จาก active version\n6) Save 2 step\n- Save (Hub zone)\n- Save to Draft (Province)\n\nDraw Zone By Subdistrict > สร้างแผนที่ฮับโดยอิงจากตำบล\n1) เลือกเขต\n2) กด Confirm\n3) ระบบแสดงโซนระดับแขวง/ตำบล\n4) เลือกโซน\n5) กรอกข้อมูลในส่วนของ Select Properties\n- Hub Station Name: ฮับปลายทางของพัสดุ\n- Hub Zone Name: ชื่อโซนในแผนที่\n- Hub Zone ID: Sort Code > คัดลอก จาก active version\n6) Save 2 step\n- Save (Hub zone)\n- Save to Draft (Province)\n\nDraw Zone By Driver Zone > สร้างแผนที่ฮับโดยอิงจาก Route driver zone\n1) กรอกชื่อฮับ\n2 ) กด Confirm\n3) ระบบแสดงโซน driver zone (เป็นโซนปัจจุบันที่ใช้งาน)\n4) เลือกโซน\n5) กรอกข้อมูลในส่วนของ Select Properties\n- Hub Station Name: ฮับปลายทางของพัสดุ\n- Hub Zone Name: ชื่อโซนในแผนที่\n- Hub Zone ID: Sort Code > คัดลอก จาก active version\n6) Save 2 step\n- Save (Hub zone)\n- Save to Draft (Province)\nหมายเหตุ: วิธีนี้นิยมใช้เมื่อต้องการ split hub โดยใช้พื้นที่จาก route driver zone โดยไม่ต้องตัดเส้นแบ่งใหม่\n\nDrawing map\nหลังจากทำการแก้ไข “กรอกข้อมูล Select Properties” & “Save 2 step” ทุกครั้ง","g":"Hub Zone Managemant"},{"q":"อยากจะ Adjust Map ต้องทำยังไง","a":"มี 4 functions\n1) Edit > การแก้ไข\r\n1.1) เลือกโซน\r\n1.2) ขยับโซนตามที่ต้องการ\r\n\r\n2)Split > การแบ่ง\n2.1) เลือกโซน\r\n2.2) เริ่มเส้นกด คลิก 1 ครั้งให้เลยขอบเส้นสีแดง\r\n2.3) จบเส้น กด คลิก 2 ครั้งให้เลยขอบเส้นสีแดง\n\r\n3) Merge > การรวม\r\n3.1) กด ctrl + เลือกโซน 2 โซนขึ้นไป\r\n3.2) กด Merge\n\r\n4) Delete > การลบ\r\nกดไปที่ hub zone\r\nเลือก delete","g":"Hub Zone Managemant"},{"q":"จะเอาข้อมูลของแต่ละฮับมาใช้เปรียบเทียบกัน ต้องดึงข้อมูลยังไง","a":"How to Export Zone List > ดึงข้อมูล Hub Station Name, Hub Station ID, Hub Zone ID, Hub Zone Name, Average Daily Order(Last 30 Days), Type, Area, Driver Zone Status\n1) คลิก “Zone List” under Action\n2) คลิก “Export” in the Zone List window\n3) คลิกดาวน์โหลด","g":"Hub Zone Managemant"},{"q":"Expansion new hub / Existing hub  จะสร้างแผนที่ต้องทำเหมือนกันเลยไหม","a":"ขั้นตอน การสร้างแผนที่สำหรับ Hub เปิดใหม่ และ Hub ที่เปิดอยู่แล้ว\nNew Hub > ฮับเปิดใหม่\n1) Single hub 1 Hub per District\n- Create a new map\n- Draw zone by District\n\n2) Multiple Hubs 2 Hub per District\n- Copy to draft from active map\n- Split zone from hub A\n\nExisting Hub > ฮับที่่เปิดยู่แล้ว\nไม่ว่าฮับจะอยู่ในพื้นที่กี่จังหวัดต้องกด Copy to draft from active map เท่านั้น\n\nหมายเหตุ: สาเหตุที่ต้องคัดลอก hub zone จากแผนที่ที่ใช้งานอยู่เนื่องจาก hub zone มีเส้นขอบของตัวเองที่แบ่งโดย AM แต่ละโซน \r\nหากไปสร้างใหม่และนำไปใช้งานอาจทำให้ hub zone ทับซ้อนกันได้","g":"Hub Zone Managemant"},{"q":"ทำไมต้องทำ Misroute","a":"เพราะในปัจจุบันมีปัญหาออเดอร์งานเจนขึ้นผิดเขตระหว่าง 4PL กับ SPX ทำให้ฮับตีกลับออเดอร์ไปที่ฮับต้นทาง ซึ่งทำให้ลูกค้าได้ของช้าหรือทำให้สินค้าเกิดความเสียหายและสูญหาย จึงทำให้เกิดโปรเจคนี้ขึ้นมาค่ะ","g":"Hub Remapping (Misroute)"},{"q":"แล้วจะแก้ไขปัญหา Misroute ได้ยังไงบ้าง","a":"มีให้เลือกทำได้ 2วิธี โดยที่ AM สามารถเลือกได้ค่ะว่าต้องการจะ Adjust Map หรือ Keep Current โดยก่อนจะตัดสินใจว่าจะใช้วิธีไหน ต้องเข้าไปทำการเช็ค Tracking Number ในเครื่องมือ Smart Sorting Management และกดเลือก Visual Analysis Tools ก่อน เพื่อเช็คว่าระบบเจนออเดอร์ฮับต้นทางคือที่ไหน และฮับปลายทางใครเป็นคนจัดส่งค่ะ หลังจากข้อมูลขึ้นมาแล้วทำการพิจารณาว่าออเดอร์ที่ขึ้นผิดเขตเกิดจากสาเหตุอะไร แล้วค่อยทำการตัดสินใจว่าจะแก้หรือไม่แก้ค่ะ","g":"Hub Remapping (Misroute)"},{"q":"เครื่องมือ Visual Analysis Tools  ใช้ยังไง","a":"หลังเข้าเข้ามาในหน้า Visual Analysis Tools แล้ว\n1) กดเข้าไปที่ Zone Display แล้วติ๊ก Select All Active LM Hub Zone แล้วกด Confrim \n2) กดเข้าไปที่ Order Location แล้วกรอกเลขออเดอร์ที่ต้องการค้นหาทั้งหมดพร้อมกันได้เลยในช่อง Order Tracking Number\n3) ติ๊กเครื่องหมายที่ช่อง Driver PIN และ Buyer PIN เสร็จแล้วกด Confrim \n4) ติ๊กไปที่เลขออเดอร์ที่เราต้องการจะเช็คฝั่งขวามือ จะขึ้นจุดที่ลูกค้าปักหมุด(สีฟ้า) และจุดที่ Fleet กด Delivered (สีส้ม)\n5) เช็คว่า pin ส่วนใหญ่ตกไปที่ไหน","g":"Hub Remapping (Misroute)"},{"q":"แล้วจะเช็คยังไงว่าควรแก้หรือไม่ควรแก้แมพ (Misroute)","a":"ทำการเช็ค Buyer PIN กับ Driver PIN\n1) ฮับไหนรับผิดชอบลูกค้าบ้านนี้\n2) ถ้าเป็น HBSAO-B >> ให้แก้ไขแผนที่ ถ้าเป็น HBSAO-A ไม่ต้องแก้แต่ห้ามตีกลับ hub A ต้องจัดส่ง","g":"Hub Remapping (Misroute)"},{"q":"จะแก้ไข Driver Zone ที่โดน Reject ไป ช่วยแนะนำวิธีแก้หน่อยได้ไหม","a":"วิธีแก้ไข Driver Zone ในจุดที่มีพนักงานวิ่งงานมากกว่า1คน \n- กดเข้าไปในเครื่องมือ Zone Management แล้วเลือก Driver Zone Managemant \n- เข้าไปหน้า Darft แล้วเลือก Draft Version ที่ต้องการแก้ไข แล้วกด Edit\n- หลังจากนั้นกดเลือกประเภทรถ วันที่และเวลา โซนที่วิ่งซ้อนกัน ที่กำหนดไว้ให้สำหรับที่ต้องทำการแก้ไข\n   เลือกประเภทรถ > จิ้มไปที่เครื่องมือ Vehicle Type setting แล้วเลือกประเภทรถที่ต้องการแก้ไข (เลือกแก้ทีละประเภทนะคะเพราะทำทำให้แก้ผิดพื้นที่ได้ค่ะ)\n   เลือกวันที่และเวลา > จิ้มไปที่เครื่องมือ Generate Driver Visualization แล้วใส่วันที่และเวลาที่กำหนดให้\n- หลังจากกรอกข้อมูลเรียบร้อยแล้ว สามารถดำเนินการแก้ไข Split Zone ได้ โดยเลือกโซนที่พบว่ามีพนักงานวิ่งงานซ้อนกันมากกว่า 1 คน ซึ่งสามารถพิจารณาได้จากสีของ Fleet ที่กดสถานะ Delivered หากภายในโซนเดียวกันมีมากกว่า 1 สี แสดงว่ามีการวิ่งงานซ้อนกัน ให้ทำการแบ่งโซนตามสี โดยปรับให้เหลือเพียง 1 สีต่อ 1 โซน (โดยสีเป็นตัวแทนของพนักงานแต่ละคนหากมีมากกว่า1สีแสดงว่ามีพนักงานมากกว่า1คน)\n- เมื่อทำการวาดและแบ่งโซนเรียบร้อยแล้ว ให้กดปุ่ม ‘Split’ ที่มุมล่างซ้าย จากนั้นระบบจะแสดงหน้าต่างให้กรอกข้อมูล โดยไม่ต้องแก้ไขชื่อโซนหลัก (เช่น A1) แต่ให้แก้ไขเฉพาะชื่อในวงเล็บเท่านั้น เนื่องจากเป็นการแบ่งโซนสำรอง (Spare Zone) สำหรับรองรับกรณีพนักงานลาหยุด ป่วย หรือไม่มีผู้ปฏิบัติงานในบางช่วงเวลา โดยไม่ได้มีการเปลี่ยนผู้รับผิดชอบหลักของโซนนั้น จึงไม่จำเป็นต้องเปลี่ยนชื่อโซนหลัก เพียงให้พนักงานคนอื่นเข้ามาช่วยวิ่งงานในโซนดังกล่าวเท่านั้น","g":"Driver Zone Managemant"},{"q":"SOP คืออะไร","a":"เป็นกฎและแนวทางที่กำหนดขึ้นเพื่อให้ฮับสามารถวางแผนการ Assign งานให้กับพนักงานแต่ละคนได้อย่างชัดเจน โดยกำหนดให้แต่ละโซนมีผู้รับผิดชอบเพียง 1 คน เพื่อเพิ่มประสิทธิภาพในการปฏิบัติงาน ช่วยประหยัดเวลา ลดการทำงานซ้ำซ้อนหรือทับซ้อนกันระหว่างโซน ทำให้การกระจายงานเป็นระบบมากขึ้น และส่งผลให้ลูกค้าได้รับพัสดุรวดเร็ว ถูกต้อง ไม่เกิดการสลับออเดอร์หรือความล่าช้า","g":"Driver Zone Managemant"},{"q":"ช่วงนี้ที่ฮับมีบางโซนที่งานเข้าเยอะ บางโซนมีงานเข้าน้อยเลยทำให้ต้องทำการกระจายงานไปให้คนอื่นช่วยกันวิ่งค่ะ แบบนี้จะต้องแแก้ไขยังไงคะ","a":"ดำเนินการ Split Zone เพื่อเพิ่ม Spare Zone สำหรับรองรับ Fleet ที่เข้ามาช่วยวิ่งงานในพื้นที่ โดยช่วยป้องกันไม่ให้ระบบแสดงสถานะการวิ่งงานซ้อนกันหลังจากกด Delivered","g":"Driver Zone Managemant"},{"q":"แล้วถ้าให้ 4WH วิ่งช่วยงาน 2WH ต้องแก้ยังไงเพราะบางพื้นที่ 2WH ไม่สามารถวิ่งไปถึงได้","a":"ยานพาหนะที่เป็นคนละประเภทสามารถวิ่งซ้อนทับกันในพื้นที่เดียวกันได้โดยไม่ส่งผลกระทบ เนื่องจากระบบจะตรวจจับเฉพาะกรณีที่ยานพาหนะประเภทเดียวกันวิ่งซ้อนทับกันภายในโซนเดียวกันเท่านั้น","g":"Driver Zone Managemant"},{"q":"จะขอแก้ไขพื้นที่ Hub Zone (Hub Zone Management / Editing hub boundary) ต้องทำยังไงบ้าง","a":"การขอแก้ไขพื้นที่ Map มีขั้นตอนในการดำเนินการดังนี้\nRequest map editing (Area Manager)\n- จะต้องขออนุมัติล่วงหน้า 5 วัน ก่อนวัน Active map  ไม่รวมวันหยุดเสาร์-อาทิตย์และนักขัตฤกษ์ \n- ฮับที่มีพื้นที่ติดกับโซนข้างเคียง และมี AM, RM คนละคน จะต้องทำการอนุมัติร่วมกันผ่านอีเมล์ โดยให้เพิ่ม To และ Cc ผู้ที่เกี่ยวข้อง\n\nApproval (Region Manage Manager (K.Nok))\n- อนุมัติผ่านอีเมล์เท่านั้น\n\nCreate draft Hub Zone & Driver zone (Smart Sorting Map)\n- ทำ Draft และส่งภายใน 3 วัน หลังได้รับอนุมัติ\n\nDriver zone editing (Area Manager Supervisor)\n- ฮับที่ถูกตัดพื้นที่ออก: ทำการแก้ไขชื่อโซนหลัก เพื่อให้โซนรันตามอักษร A-Z\n- ฮับที่ถูกเพิ่มพื้นที่เข้า: สร้างโซนให้พื้นที่ที่ถูกเพิ่มเข้ามา และแก้ไขชื่อโซนให้เรียงตามลำดับ A-Z\n- และแจ้งผ่านอีเมล์เดิมให้ทีม Smart Map ตรวจสอบ\n\nActive Map after confirm map (Smart Sorting Map)\n- หลัง Confirm map → Active ภายใน 1 วัน หากแก้ไขซ้ำ ต้องขออนุมัติ Region Manager\n- ช่วง Campaign double date จะงดการ Active map (ระยะเวลาก่อนและหลัง campaign 3 วัน) \n\nParcels delivered to hub: MP (Hubs)\n- พัสดุถึงฮับ 100% ในวันที่ 3 หลัง Active\n\nParcels delivered to hub: CB (Hubs)\n- พัสดุถึงฮับ 100% ในวันที่ 7-15 หลัง Active","g":"Hub Zone Managemant"}]},"sub":{"name":"Subcon","qa":[{"q":"-พนักงานไอดี 12345 เห้ารหัสไม่ได้","a":"-เช็คเบอร์จากที่ทางตัวแทนซัพที่ส่งรายชื่อเข้ามา ว่าเบอร์ตรงกับที่ทางซัพส่งมาให้หรื่อไม่ \nหากเบอร์ตรงติดต่อเข้าไปที่กลุ่ม เพื่อให้ทางทีมกดรีเซ็ทรหัสให้อีกครั้ง","g":"การเข้ารหัส"},{"q":"พนักงานท่านนี้ชื่อไม่ขึ้นในระบบ FMS","a":"-ให้เช็คชื่อในชีทว่าพนักงานท่านนี้มีชื่อยัง หากมีชื่อแล้วแต่รหัสยังเข้าไม่ได้แจ้งไปที่กลุ่มแต่ละกลุ่มที่อยู่ค่ะ","g":"การเข้ารหัส"},{"q":"-ตอนนี้ถึงขั้นตอนไหนแล้วคะ","a":"https://docs.google.com/spreadsheets/d/1Gvf1blSjrG-tgIaaZrX7Jg1GPPCJlo2LlEJgfZNgkIA/edit?resourcekey=&gid=1723890737#gid=1723890737","g":"ขอสลับแพลน Daily"},{"q":"-อยากสลับทั้ง Week ต้องทำอย่างไร","a":"เช็ค PDTY \n-วันจันทร์จะต้องดูที่ W0 หาก PDTY ถึง Taeget กรอกฟอร์มเข้ามาได้เลย\n-วันอังคาร ถึง วันอาทิตยต้องดูที่ W-1  หาก PDTY ถึง Taeget กรอกฟอร์มเข้ามาได้เลย","g":"ขอสลับแพลน Daily"},{"q":"-สลับแพลนวันต่อวันต้องทำอย่างไร","a":"-เช็ค PDTY D-1 หรือ W-1 หาก PDTY ถึง Taeget กรอกฟอร์มเข้ามาได้เลย\n-หาก D-1 ยังไม่อัพเดท ทางทีมจะดูที่ D-2 ให้","g":"ขอสลับแพลน Daily"},{"q":"PDTY ไม่ถึงทำอย่างไร","a":"-ถ้า PDTY ไม่ถึง ให้ขอพี่นกเพิ่มแพลน หรือจะหาแพลนที่ว่างอยู่ที่เป็นโซน RM เดียวกันมาสลับก็ได้ค่ะ","g":"ขอสลับแพลน Daily"},{"q":"ช่วงแคมเปญอยากสลับแพลนทำอย่างไร","a":"-ช่วงแคมเปญไม่ดู PDTY\n-นับหลังช่วงแคมเปญ 1 วัน\n ตัวอย่าง \n4.4 ตั้งแต่วันที่ 5-9/4/69  \n5.5 ตั้งแต่วันที่ 6-10/5/69\n6.6 ตั้งแต่วันที่ 7-11/5/69","g":"ขอสลับแพลน Daily"},{"q":"พนักงานโอน COD แล้วแต่รหัสยังเข้าไม่ได้ค่ะ","a":"","g":""},{"q":"ธนาคาร COP","a":"ธนาคาร : UOB (COP)\nชื่อบัญชี : บริษัท ช้อปปี้ เอ็กซ์เพรส (ประเทศไทย) จำกัด\nเลขที่บัญชี : 4013606001","g":"บัญชี"},{"q":"ธนาคร COD","a":"ธนาคาร : UOB (COD)\r\nชื่อบัญชี : บริษัท ช้อปปี้ เอ็กซ์เพรส (ประเทศไทย) จำกัด\r\nเลขที่บัญชี : 4005401111","g":"บัญชี"},{"q":"เก็บใบหน้าพนักงานเรียบร้อยแล้ว แต่ยังสแกนหน้าไม่ได้","a":"​ติดต่อคุณลภัทร pas.piemmong@shopee.com","g":"พนักงานสแกนหน้าไม่ได้"},{"q":"ยังไม่ได้เก็บใบหน้าให้พนักงาน","a":"ทางฮับต้องทำการเก็บใบหน้าพนักงานให้เรียบร้อยก่อน","g":"พนักงานสแกนหน้าไม่ได้"},{"q":"พนักงานทำไมถึงโดนตัดชื่อ","a":"-ไม่มาเริ่มงาน\n-หยุดติดต่อกันเกิน 5 วัน โดยไม่ได้รับการแจ้งจากทางซับหรือฮับให้ทางทีมรับทราบ","g":""},{"q":"ตักเตือนกี่ครั้งโดนตัดชื่อ","a":"-เรื่องเดิมเกิน 3 ครั้งโดนตัดชื่อ โดยทางฮับต้องแจ้งเข้ามาในกลุ่มเพื่อให้ทางทีมรับทราบ","g":""},{"q":"สลับประเภทรถ","a":"-2W 2 คัน แลก 4W 1 คัน\n-4W 1 คัน แลก 2W 1 คัน","g":"สลับประเภทรถ"},{"q":"พนักงานวิ่งงานเกิน 200 ชิ้นขึ้นไปทำอย่างไร","a":"-เปิดเมลล์แจ้งพี่นก","g":""},{"q":"โอนเงิน COD ล่าช้า","a":"-หากโอน COD ล่าช้าเกิน 1 วันโดยไม่แจ้งทางทีมให้รับทราบ พนักงานจะถูก Backlist","g":""}]},"sub_ic":{"name":"Subcon (IC)","qa":[{"q":"ฮับอยากทราบว่ามี  HC มีว่างไหม","a":"ติอต่อ\n-jaonow.phanurak@shopeemobile-external.com\n-muse.sriwicha@spxexpress.com\n-pui.khammo@shopeemobile-external.com","g":""},{"q":"การส่งสัญญาต้องทำอย่างไร","a":"รวบรวมสัญญาเป็น 1 ไฟล์ (ครบทุกหน้า) แล้วส่งกลับมาก่อนเริ่มงาน","g":""},{"q":"เปลียนเบอร์ เมลล์ บัญชี","a":"ติดต่อกลุ่มที่อยู่ได้เลย","g":""},{"q":"เงินลูกจ้างช้า","a":"-ถ้าไม่ใช่ 4 ธนาคาร หลักเงินจะเข้าวันศุกร์ แต่ถ้าเป็น 4  ธนาคารหลักเงินจะเข้าวันพฤหัสบดี\n 4 ธนาคาร ได้แก่ กรุงเทพ กรุงไทย กสิกร ไทยพาณิชย์","g":""},{"q":"อยากเปลี่ยนประเภทรถ","a":"ติอต่อ\n-muse.sriwicha@spxexpress.com\n-jaonow.phanurak@shopeemobile-external.com\n-pui.khammo@shopeemobile-external.com\n\nหากมี Ticket ว่าง ทางทีมจะเปลี่ยนประเภทรถให้ภายในวันจันทร์ แต่ถ้าพึ่งมาแจ้งเปลี่ยนวันจันทร์ประเภทรถพนักงานจะเปลี่ยนอีกทีเป็นวันจันทร์หน้า","g":""},{"q":"ขอเอกสาร เช่น ใบ 50 ทวิ สลิปเงินเดือน","a":"ติอต่อ\n-jaonow.phanurak@shopeemobile-external.com\n-muse.sriwicha@spxexpress.com\n-pui.khammo@shopeemobile-external.com","g":""}]},"sub_fm":{"name":"Subcon (FM)","qa":[{"q":"- ต้องการขอรถเสริม (Adhoc)","a":"[GBKK] >> https://docs.google.com/forms/d/e/1FAIpQLSfLrIkvBzLQRml7pwxLWrZofa4N9yPXE1yviKGyJ06jUa0fAw/viewform\n[UPC] >> https://docs.google.com/forms/d/e/1FAIpQLSccsoW3mgh1pwTkBa8Tpzec4syNIyw9Eke3_OOnlZ80TB3v4Q/viewform","g":"Adhoc"},{"q":"- สถานะการอนุมัติขอรถเสริม                                                                               - รายชื่อรถเสริม (กรณีให้ทีมช่วยหารถ)","a":"[GBKK] >> https://docs.google.com/spreadsheets/d/1tdDY8SM9JFvGjVy4KVVb-wlebLHnn7GYMNIRodQikQs/edit?usp=sharing\n[UPC] >> https://docs.google.com/spreadsheets/d/1ckNsoUrRRctEyILYeoSoJMNf2AYxYMxrTXG0idE1lDU/edit?usp=sharing","g":"Adhoc"},{"q":"- กรอกแพลนไม่ทัน cutoff / กรอกไม่ครบวัน สามารถขอกรอกเพิ่มหลัง cutoff ได้มั้ย (hub upc)","a":"- ไม่สามารถกรอกเพิ่มได้ หากต้องการใช้รถให้กรอกเป็น Adhoc แทน และให้ RM อนุมัติ","g":"Plan"},{"q":"- กรอกแพลนเสร็จแล้ว ใส่ข้อมูลครบถ้วน แต่คอลัมสีเทาไม่ขึ้นชื่อพนักงาน ต้องทำยังไง (hub upc)","a":"- คอลัมสีเทาไม่ขึ้นชื่อพนักงานไม่เป็นไรค่ะ  แต่ต้องตรวจสอบข้อมูลให้ถูกต้องครบถ้วน","g":"Plan"},{"q":"- กรอกรีวิวเลขแพลนไม่ทัน / ไม่ได้กรอก ทำอย่างไรได้บ้าง (hub gbkk)","a":"- กรณีที่ทางฮับไม่กรอก/กรอกไม่ทัน ทางทีมจะใช้ target เดิมในการทำแพลนให้ค่ะ","g":"Plan"},{"q":"- ต้องการเปลี่ยนรถเข้ารับ ต้องทำอย่างไร","a":"- สามารถเลือก 'เปลี่ยนรถ (ระบุ Col P)' ที่ คอลัม O ในชีทรายชื่อ และใส่รายชื่อคันที่เข้ารับแทน พร้อมใส่เหตุผลที่เปลี่ยนด้านหลังได้เลยค่ะ\n- กรณีเป็นฮับ 1Hub1Vendor รบกวนเปลี่ยนเป็นรถของซัพ keyvendor ก่อน","g":"เปลี่ยนรถเข้ารับ"},{"q":"- ต้องการติดต่อทีม FM Pick up (รถงานรับ)","a":"พิม > pim.kan-arun@spxexpress.com\nแอ๋ม > kansuda.san@spxexpress.com","g":""},{"q":"- ต้องการติดต่อขอรถเสริม LH / FM Shuttle","a":"ติดต่อทางทีม FM Shuttle / LH","g":""}]}};
+
+const TEAM_META = {
+  qc:     {icon:'verified',     color:'var(--cqc)', full:'ทีมควบคุมคุณภาพ'},
+  rp:     {icon:'calendar_month',color:'var(--crp)', full:'ทีมวางแผนและจัดสรรทรัพยากร'},
+  sm:     {icon:'map',          color:'var(--csm)', full:'ทีมระบบแผนที่อัจฉริยะ'},
+  sub:    {icon:'handshake',    color:'var(--csub)', full:'ทีมผู้รับเหมาช่วง'},
+  sub_ic: {icon:'person_add',   color:'var(--csub2)', full:'Subcon Individual Contractor'},
+  sub_fm: {icon:'local_shipping',color:'var(--csub3)', full:'Subcon Fleet Management'},
+};
+const BGCLRS = {qc:'rgba(172,44,0,.1)',rp:'rgba(0,97,143,.1)',sm:'rgba(92,102,0,.1)',sub:'rgba(107,33,168,.1)',sub_ic:'rgba(124,58,237,.1)',sub_fm:'rgba(3,105,161,.1)'};
+const ALL_QA = [];
+Object.entries(DB).forEach(([tid, t]) => t.qa.forEach((qa, i) => ALL_QA.push({...qa, tid, tn:t.name, idx:i})));
+
+/* ── ROUTING ── */
+function sp(n) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-'+n).classList.add('active');
+  window.scrollTo(0,0); closeAllDrops();
+}
+function sna(b) { document.querySelectorAll('#nl .nl').forEach(l => l.classList.remove('active')); if(b) b.classList.add('active'); }
+
+/* ── SMART ANSWER FORMATTER v3 ── */
+function fmtA(raw) {
+  if (!raw || !raw.trim()) return '<span style="color:rgba(255,255,255,.35);font-style:italic;">ยังไม่มีข้อมูล</span>';
+
+  const esc = s => s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+
+  // Detect link type for rich button rendering
+  const linkBtn = (url) => {
+    const eu = esc(url);
+    let icon = 'open_in_new', label = 'เปิดลิงก์';
+    if (url.includes('docs.google.com/presentation') || url.includes('slide=')) {
+      icon = 'slideshow'; label = 'เปิด Slides';
+    } else if (url.includes('docs.google.com/spreadsheets') || url.includes('/spreadsheets/')) {
+      icon = 'table_chart'; label = 'เปิด Sheets';
+    } else if (url.includes('docs.google.com/forms') || url.includes('/forms/')) {
+      icon = 'edit_note'; label = 'กรอกฟอร์ม';
+    } else if (url.includes('drive.google')) {
+      icon = 'folder'; label = 'เปิด Drive';
+    } else if (url.includes('itcenter') || url.includes('ticket')) {
+      icon = 'confirmation_number'; label = 'เปิด Ticket';
+    }
+    return `<a href="${eu}" target="_blank" rel="noopener" class="ans-link">` +
+      `<span class="mi material-symbols-outlined" style="font-size:.9rem">${icon}</span>${label}` +
+      `<span style="font-size:.65rem;opacity:.6;margin-left:4px;word-break:break-all;">${eu.length>60?eu.slice(0,60)+'…':eu}</span></a>`;
+  };
+
+  // linkify inline URLs (shorter, no full URL shown)
+  const linkifyInline = s => esc(s).replace(
+    /(https?:\/\/[^\s<>"]+)/g,
+    url => linkBtn(url)
+  );
+
+  // Split: \n first, then " > " or word>word separators
+  let segments = raw
+    .split('\n')
+    .flatMap(line => line.split(/\s>\s|(?<=\S)>(?=[ก-๙A-Za-z\[])/))
+    .map(s => s.replace(/\r/g,'').trim())
+    .filter(Boolean);
+
+  const URL_RE    = /^https?:\/\//;
+  const STEP_RE   = /^(\d+[\.\)]\d*[\.\)]?)\s+/;
+  const BULLET_RE = /^[-–•]\s+/;
+  const NOTE_RE   = /^(หมายเหตุ|Note|NOTE|สรุป|Important|สำคัญ)\s*[:：]/i;
+  const IMG_REF   = /ดังภาพ|ดังตัวอย่าง|ดังรูป|ดูภาพ/;
+
+  const classify = seg => {
+    if (URL_RE.test(seg))     return { type:'url',    text:seg };
+    if (STEP_RE.test(seg))    return { type:'step',   text:seg.replace(STEP_RE,'').trim() };
+    if (BULLET_RE.test(seg))  return { type:'bullet', text:seg.replace(BULLET_RE,'').trim() };
+    if (NOTE_RE.test(seg))    return { type:'note',   text:seg };
+    if (/[:：]$/.test(seg) && seg.length < 80 && !URL_RE.test(seg))
+                              return { type:'header', text:seg };
+    return { type:'text', text:seg };
+  };
+
+  const items = segments.map(classify);
+  const out = [];
+  let i = 0;
+
+  while (i < items.length) {
+    const it = items[i];
+
+    if (it.type === 'url') {
+      out.push(`<div style="margin:6px 0">${linkBtn(it.text)}</div>`);
+      i++; continue;
+    }
+    if (it.type === 'note') {
+      out.push(`<div class="ans-note">${linkifyInline(it.text)}</div>`);
+      i++; continue;
+    }
+    if (it.type === 'header') {
+      out.push(`<div class="ans-header">${esc(it.text)}</div>`);
+      i++; continue;
+    }
+    if (it.type === 'step') {
+      const steps = [];
+      while (i < items.length && items[i].type === 'step') { steps.push(items[i].text); i++; }
+      out.push('<ol class="ans-steps">' + steps.map(s => `<li>${linkifyInline(s)}</li>`).join('') + '</ol>');
+      continue;
+    }
+    if (it.type === 'bullet') {
+      const buls = [];
+      while (i < items.length && items[i].type === 'bullet') { buls.push(items[i].text); i++; }
+      out.push('<ul class="ans-bullets">' + buls.map(b => `<li>${linkifyInline(b)}</li>`).join('') + '</ul>');
+      continue;
+    }
+
+    // Plain text
+    let rendered = esc(it.text)
+      .replace(/\[([A-Za-zก-๙0-9 _\-]+)\]/g, '<strong class="ans-tag">[$1]</strong>')
+      .replace(/\b([A-Z][A-Za-z\s]{2,25})([:：])\s*/g, '<strong>$1$2</strong> ')
+      .replace(/(https?:\/\/[^\s<>"&]+)/g, url => linkBtn(url));
+
+    // Callout for "ดังภาพ / ดังตัวอย่าง"
+    if (IMG_REF.test(it.text)) {
+      out.push(`<div class="ans-img-ref">
+        <span class="mi material-symbols-outlined" style="font-size:1rem">image</span>
+        <span>${rendered}</span>
+      </div>`);
+    } else {
+      out.push(`<p class="ans-p">${rendered}</p>`);
+    }
+    i++;
+  }
+
+  return `<div class="ans-body">${out.join('')}</div>`;
+}
+
+/* ── GROUP COLORS ── */
+function groupBadgeStyle(tid) {
+  const c = {qc:BGCLRS.qc,rp:BGCLRS.rp,sm:BGCLRS.sm,sub:BGCLRS.sub,sub_ic:BGCLRS.sub_ic,sub_fm:BGCLRS.sub_fm};
+  const t = {qc:'var(--cqc)',rp:'var(--crp)',sm:'var(--csm)',sub:'var(--csub)',sub_ic:'var(--csub2)',sub_fm:'var(--csub3)'};
+  return `background:${c[tid]};color:${t[tid]}`;
+}
+
+/* ── BUILD FAQ ACCORDION ── */
+function buildFaqList(items, tid, showTeamBadge) {
+  if (!items.length) return `<div class="faq-empty"><span class="mi material-symbols-outlined">search_off</span><p style="font-weight:700">ไม่พบข้อมูล</p></div>`;
+  return items.map((item, i) => {
+    const realTid = item.tid || tid;
+    const g = item.g ? `<span class="faq-group-badge" style="${groupBadgeStyle(realTid)}">${item.g}</span>` : '';
+    const teamB = showTeamBadge ? `<span class="faq-group-badge" style="${groupBadgeStyle(item.tid)}">${item.tn}</span>` : '';
+    const fid = `fi-${realTid}-${item.idx !== undefined ? item.idx : i}`;
+    return `<div class="faq-item" id="${fid}">
+      <div class="faq-q" onclick="toggleFaq(this.parentElement)">
+        <div class="faq-q-left">
+          <div class="faq-num" style="${groupBadgeStyle(realTid)}">${i+1}</div>
+          <span class="faq-q-text">${item.q}</span>
+        </div>
+        ${g||teamB}
+        <span class="mi material-symbols-outlined faq-chevron">expand_more</span>
+      </div>
+      <div class="faq-a">
+        <div class="faq-a-inner" id="ans-${fid}">
+          <div class="ans-toolbar">
+            <span class="ans-updated"><span class="mi material-symbols-outlined" style="font-size:.8rem">schedule</span>อัปเดต ${UPDATED_DATE}</span>
+            <div style="display:flex;align-items:center;">
+              <button class="copy-btn" onclick="copyAnswer('${realTid}',${item.idx !== undefined ? item.idx : i},this)">
+                <span class="mi material-symbols-outlined" style="font-size:.85rem">content_copy</span>คัดลอก
+              </button>
+              <button class="report-btn" id="rb-${fid}" onclick="event.stopPropagation();openReportModal('${realTid}','${item.q.replace(/'/g,"\\'")}','rb-${fid}')">
+                <span class="mi material-symbols-outlined" style="font-size:.85rem">flag</span>แจ้งผิด
+              </button>
+            </div>
+          </div>
+          ${fmtA(item.a)}
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function toggleFaq(el) {
+  const isOpen = el.classList.contains('open');
+  const list = el.closest('.faq-list,.rlist');
+  list?.querySelectorAll('.faq-item.open,.rcard.open').forEach(x => x.classList.remove('open'));
+  if (!isOpen) el.classList.add('open');
+}
+
+/* ── HOME: BUILD TEAM CARDS ── */
+function buildHomeGrid() {
+  const grid = document.getElementById('home-team-grid');
+  grid.innerHTML = Object.entries(DB).map(([tid, t], i) => {
+    const m = TEAM_META[tid];
+    return `<div class="tcard ${tid} sc" style="animation-delay:${i*.06}s" onclick="showTeam('${tid}')">
+      <div class="tch">
+        <div class="tico ${tid}"><span class="mi material-symbols-outlined" style="font-variation-settings:'FILL' 1">${m.icon}</span></div>
+        <div><div class="tname ${tid}">${t.name}</div><div class="tfull">${m.full}</div></div>
+      </div>
+      <div class="tcount ${tid}">${t.qa.filter(q=>q.q).length} คำถาม-คำตอบ</div>
+      <div class="tcard-footer">
+        <span style="font-size:.75rem;color:var(--osv)">${[...new Set(t.qa.map(q=>q.g).filter(Boolean))].slice(0,2).join(', ')}${[...new Set(t.qa.map(q=>q.g).filter(Boolean))].length > 2 ? '...' : ''}</span>
+        <div class="carr"><span class="mi material-symbols-outlined" style="font-size:.9rem">north_east</span></div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+/* ── TEAM DETAIL PAGE ── */
+function showTeam(tid) {
+  const t = DB[tid]; const m = TEAM_META[tid];
+  document.querySelectorAll('[id^="sn-"]').forEach(e => e.classList.remove('active'));
+  const sn = document.getElementById('sn-'+tid); if(sn) sn.classList.add('active');
+  const groups = [...new Set(t.qa.map(q => q.g).filter(Boolean))];
+  const tabsHtml = ['ทั้งหมด', ...groups].map((g,i) => `<button class="gtab ${tid}${i===0?' active':''}" onclick="filterGroup(this,'${tid}','${g}')">${g||'ทั้งหมด'}</button>`).join('');
+  const qaWithIdx = t.qa.filter(q=>q.q).map((q,i) => ({...q, idx:i}));
+  document.getElementById('tpc').innerHTML = `
+    <nav class="bcrumb"><a onclick="sp('home')">หน้าแรก</a>
+      <span class="mi material-symbols-outlined" style="font-size:.8rem">chevron_right</span>
+      <span class="act">${t.name}</span></nav>
+    <div class="team-header">
+      <div class="taccent ${tid}"></div>
+      <h1>${t.name}</h1>
+      <p style="margin-bottom:10px">${m.full} · ${qaWithIdx.length} คำถาม-คำตอบ</p>
+      <div class="updated-bar">
+        <span class="mi material-symbols-outlined" style="font-size:.9rem">update</span>
+        อัปเดตล่าสุด: <strong>${UPDATED_DATE}</strong>
+      </div>
+    </div>
+    <div class="group-tabs">${tabsHtml}</div>
+    <div class="faq-list" id="team-faq-list">${buildFaqList(qaWithIdx, tid, false)}</div>`;
+  sp('team');
+}
+
+function filterGroup(btn, tid, group) {
+  btn.closest('.group-tabs').querySelectorAll('.gtab').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const t = DB[tid];
+  const all = t.qa.filter(q=>q.q).map((q,i) => ({...q, idx:i}));
+  const items = group === 'ทั้งหมด' ? all : all.filter(q => q.g === group);
+  document.getElementById('team-faq-list').innerHTML = buildFaqList(items, tid, false);
+}
+
+/* ── SEARCH ── */
+function buildFilters() {
+  document.getElementById('team-filters').innerHTML = Object.entries(DB).map(([tid, t]) =>
+    `<label class="fchk"><input type="checkbox" checked data-tm="${tid}" onchange="ds(document.getElementById('spi').value)">
+    <span style="display:flex;align-items:center;gap:5px;"><span class="mi material-symbols-outlined" style="font-size:.9rem;color:${TEAM_META[tid].color}">${TEAM_META[tid].icon}</span>${t.name}</span></label>`
+  ).join('');
+}
+
+function ds(q) {
+  const checked = Array.from(document.querySelectorAll('[data-tm]:checked')).map(e => e.dataset.tm);
+  const lq = (q||'').toLowerCase().trim();
+  const res = ALL_QA.filter(t => t.q && checked.includes(t.tid) && (!lq || t.q.toLowerCase().includes(lq) || (t.a||'').toLowerCase().includes(lq) || (t.g||'').toLowerCase().includes(lq) || t.tn.toLowerCase().includes(lq)));
+  document.getElementById('src').textContent = lq ? `พบ ${res.length} รายการสำหรับ "${q}"` : `แสดงทั้งหมด ${res.length} รายการ`;
+  if (!res.length) { document.getElementById('sr').innerHTML = `<div class="faq-empty"><span class="mi material-symbols-outlined">search_off</span><p style="font-weight:700;margin-bottom:4px">ไม่พบผลการค้นหา</p><p style="font-size:.82rem">ลองใช้คำอื่น</p></div>`; return; }
+  document.getElementById('sr').innerHTML = res.map((item, i) => {
+    const qHtml = lq ? item.q.replace(new RegExp(`(${q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')})`, 'gi'), '<mark style="background:rgba(172,44,0,.12);color:var(--primary);border-radius:3px;padding:0 2px">$1</mark>') : item.q;
+    const g = item.g ? `<span class="faq-group-badge" style="${groupBadgeStyle(item.tid)}">${item.g}</span>` : '';
+    return `<div class="rcard${i===0&&lq?' feat':''}" onclick="toggleFaq(this)">
+      <div class="faq-q">
+        <div class="faq-q-left">
+          <div class="faq-num" style="${groupBadgeStyle(item.tid)}">${i+1}</div>
+          <span class="faq-q-text">${qHtml}</span>
+        </div>
+        <span class="faq-group-badge" style="${groupBadgeStyle(item.tid)}">${item.tn}</span>
+        ${g}
+        <span class="mi material-symbols-outlined faq-chevron">expand_more</span>
+      </div>
+      <div class="faq-a" style="padding:0 16px 16px 16px;"><div class="faq-a-inner">${fmtA(item.a)}</div></div>
+    </div>`;
+  }).join('');
+}
+
+/* ── AUTOCOMPLETE ── */
+function buildSuggestions(q) {
+  if (!q || q.trim().length === 0) return [];
+  const lq = q.toLowerCase().trim();
+  return ALL_QA.filter(t => t.q).map(t => {
+    const ql = t.q.toLowerCase(), al = (t.a||'').toLowerCase(), gl = (t.g||'').toLowerCase();
+    let score = 0;
+    if (ql === lq) score = 100;
+    else if (ql.startsWith(lq)) score = 80;
+    else if (ql.includes(lq)) score = 60;
+    else if (al.includes(lq)) score = 35;
+    else if (gl.includes(lq)) score = 30;
+    else if (t.tn.toLowerCase().includes(lq)) score = 20;
+    else { const ws = lq.split(/\s+/); const m = ws.filter(w => ql.includes(w)||al.includes(w)).length; if (m) score = m*8; }
+    return {...t, score};
+  }).filter(t => t.score > 0).sort((a,b) => b.score-a.score).slice(0, 7);
+}
+function hl(text, q) {
+  if (!q) return text;
+  return text.replace(new RegExp(`(${q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')})`, 'gi'), '<em>$1</em>');
+}
+function renderDrop(dropEl, items, q, onSelect) {
+  const card = dropEl.closest('.search-card,.sp-search-card');
+  if (!items.length) { dropEl.classList.remove('open'); if(card) card.classList.remove('has-drop'); return; }
+  dropEl.innerHTML = items.map((t, i) => `
+    <div class="suggest-item" onmousedown="event.preventDefault()" onclick="${onSelect}('${t.tid}','${t.q.replace(/'/g,"\\'").replace(/"/g,'&quot;')}',${t.idx})">
+      <span class="mi material-symbols-outlined sug-ico">search</span>
+      <div class="sug-text">
+        <div class="sug-main">${hl(t.q.length>60?t.q.slice(0,60)+'…':t.q, q)}</div>
+        <div class="sug-sub">${(t.a||'').slice(0,50)||'—'}${t.a&&t.a.length>50?'…':''}</div>
+      </div>
+      <span class="sug-team" style="${groupBadgeStyle(t.tid)}">${t.tn}</span>
+    </div>`).join('');
+  dropEl.classList.add('open');
+  if (card) card.classList.add('has-drop');
+}
+function closeAllDrops() {
+  document.querySelectorAll('.suggest-drop,.sp-drop').forEach(d => d.classList.remove('open'));
+  document.querySelectorAll('.search-card,.sp-search-card').forEach(c => c.classList.remove('has-drop'));
+}
+document.addEventListener('click', e => { if (!e.target.closest('#hero-sc') && !e.target.closest('#sp-sc')) closeAllDrops(); });
+
+// Hero
+let hIdx=-1, hSugs=[];
+function onHI(v) {
+  document.getElementById('hsi-clear').classList.toggle('visible', v.length>0);
+  hIdx=-1; hSugs=buildSuggestions(v);
+  renderDrop(document.getElementById('hero-drop'), hSugs, v, 'selectSug');
+  if (!v) document.getElementById('hero-card').classList.remove('has-drop');
+}
+function onHK(e) {
+  const items = document.getElementById('hero-drop').querySelectorAll('.suggest-item');
+  if (e.key==='ArrowDown'){e.preventDefault();hIdx=Math.min(hIdx+1,items.length-1);items.forEach((el,i)=>el.classList.toggle('focused',i===hIdx));}
+  else if (e.key==='ArrowUp'){e.preventDefault();hIdx=Math.max(hIdx-1,-1);items.forEach((el,i)=>el.classList.toggle('focused',i===hIdx));}
+  else if (e.key==='Enter'){if(hIdx>=0&&hSugs[hIdx]){selectSug(hSugs[hIdx].tid,hSugs[hIdx].q,hSugs[hIdx].idx);}else gs();}
+  else if (e.key==='Escape') closeAllDrops();
+}
+function clearH(){document.getElementById('hsi').value='';document.getElementById('hsi-clear').classList.remove('visible');document.getElementById('hero-drop').classList.remove('open');document.getElementById('hero-card').classList.remove('has-drop');document.getElementById('hsi').focus();}
+function openDrop(t){if(t==='hero'){const v=document.getElementById('hsi').value;if(v)onHI(v);}if(t==='sp'){const v=document.getElementById('spi').value;if(v)onSI(v);}}
+
+function selectSug(tid, q, idx) {
+  closeAllDrops();
+  showTeam(tid);
+  setTimeout(() => {
+    const el = document.getElementById(`fi-${tid}-${idx}`);
+    if (el) {
+      if (!el.classList.contains('open')) el.querySelector('.faq-q').click();
+      el.scrollIntoView({behavior:'smooth', block:'center'});
+    }
+  }, 120);
+}
+
+// Search page
+let sIdx=-1, sSugs=[];
+function onSI(v) {
+  document.getElementById('spi-clear').classList.toggle('visible', v.length>0);
+  sIdx=-1; sSugs=buildSuggestions(v);
+  renderDrop(document.getElementById('sp-drop'), sSugs, v, 'selectSpSug');
+  if (!v) document.getElementById('sp-card').classList.remove('has-drop');
+  ds(v);
+}
+function onSK(e) {
+  const items = document.getElementById('sp-drop').querySelectorAll('.suggest-item');
+  if (e.key==='ArrowDown'){e.preventDefault();sIdx=Math.min(sIdx+1,items.length-1);items.forEach((el,i)=>el.classList.toggle('focused',i===sIdx));}
+  else if (e.key==='ArrowUp'){e.preventDefault();sIdx=Math.max(sIdx-1,-1);items.forEach((el,i)=>el.classList.toggle('focused',i===sIdx));}
+  else if (e.key==='Enter'){if(sIdx>=0&&sSugs[sIdx])selectSpSug(sSugs[sIdx].tid,sSugs[sIdx].q,sSugs[sIdx].idx);else ds(document.getElementById('spi').value);}
+  else if (e.key==='Escape') closeAllDrops();
+}
+function clearSp(){const el=document.getElementById('spi');el.value='';document.getElementById('spi-clear').classList.remove('visible');document.getElementById('sp-drop').classList.remove('open');document.getElementById('sp-card').classList.remove('has-drop');ds('');el.focus();}
+function selectSpSug(tid, q, idx) { document.getElementById('spi').value=q; document.getElementById('spi-clear').classList.add('visible'); closeAllDrops(); ds(q); }
+
+function gs() { const v=document.getElementById('hsi').value; document.getElementById('spi').value=v; sp('search'); ds(v); }
+function gst(t) { document.getElementById('hsi').value=t; document.getElementById('spi').value=t; sp('search'); ds(t); }
+
+/* ── UPDATED DATE ── */
+const UPDATED_DATE = (() => {
+  const d = new Date();
+  return `${d.getDate()} ${['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.'][d.getMonth()]} ${d.getFullYear()+543}`;
+})();
+
+/* ── TOAST ── */
+function showToast(msg, icon='check_circle') {
+  let t = document.getElementById('global-toast');
+  t.innerHTML = `<span class="mi material-symbols-outlined" style="font-size:1rem;color:#6ee7b7">${icon}</span>${msg}`;
+  t.classList.add('show');
+  clearTimeout(t._timer);
+  t._timer = setTimeout(() => t.classList.remove('show'), 2800);
+}
+
+/* ── CLIPBOARD HELPER (works in sandboxed iframe) ── */
+function copyToClipboard(text, successMsg) {
+  // Try modern API first, fall back to execCommand
+  const doExecCopy = () => {
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.cssText = 'position:fixed;top:-9999px;left:-9999px;opacity:0';
+    document.body.appendChild(ta);
+    ta.focus(); ta.select();
+    let ok = false;
+    try { ok = document.execCommand('copy'); } catch(e) {}
+    document.body.removeChild(ta);
+    return ok;
+  };
+
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text)
+      .then(() => showToast(successMsg))
+      .catch(() => {
+        doExecCopy() ? showToast(successMsg) : showToast('ไม่สามารถคัดลอกได้', 'error');
+      });
+  } else {
+    doExecCopy() ? showToast(successMsg) : showToast('ไม่สามารถคัดลอกได้', 'error');
+  }
+}
+
+/* ── COPY ANSWER ── */
+function copyAnswer(tid, idx, btn) {
+  const qa = DB[tid]?.qa?.filter(q => q.q)[idx];
+  if (!qa) return;
+  const text = `Q: ${qa.q}\n\nA: ${qa.a}`;
+  copyToClipboard(text, 'คัดลอกคำถาม-คำตอบแล้ว');
+  btn.classList.add('copied');
+  btn.innerHTML = '<span class="mi material-symbols-outlined" style="font-size:.85rem">check</span>คัดลอกแล้ว';
+  setTimeout(() => {
+    btn.classList.remove('copied');
+    btn.innerHTML = '<span class="mi material-symbols-outlined" style="font-size:.85rem">content_copy</span>คัดลอก';
+  }, 2000);
+}
+
+/* ── SHARE ── */
+function shareItem(tid, idx, qText) {
+  const teamName = DB[tid]?.name || tid;
+  const shareText = `[CTO FAQ] ${teamName}\nQ: ${qText}`;
+  copyToClipboard(shareText, 'คัดลอกชื่อคำถามแล้ว — แชร์ให้เพื่อนได้เลย');
+}
+
+/* ── DEEP LINK ON LOAD (disabled in iframe env) ── */
+function handleDeepLink() {
+  // no-op: history API not available in sandboxed iframe
+}
+
+/* ── APPS SCRIPT CONFIG ── */
+// วาง URL ของ Apps Script Web App ที่ Deploy แล้วที่นี่
+// ตัวอย่าง: 'https://script.google.com/macros/s/AKfycb.../exec'
+const APPS_SCRIPT_URL = 'https://script.google.com/a/macros/spxexpress.com/s/AKfycbw6fgPo0iHEnYl7_8SOPnYd07K3OoauCDuEP_yTnC_sMnHEBXcpU7qZwylGvB5aiouS1Q/exec';
+
+/* ── REPORT MODAL ── */
+let _reportCtx = { tid:'', q:'', btnId:'' };
+
+function openReportModal(tid, q, btnId) {
+  _reportCtx = { tid, q, btnId };
+  document.getElementById('rmodal-q-text').textContent = q;
+  document.getElementById('rmodal-problem').value = '';
+  document.getElementById('rmodal-submit-btn').disabled = false;
+  document.getElementById('report-modal').classList.add('open');
+}
+
+function closeReportModal(e) {
+  if (e && e.target !== document.getElementById('report-modal')) return;
+  document.getElementById('report-modal').classList.remove('open');
+}
+
+async function submitReport() {
+  const problem = document.getElementById('rmodal-problem').value.trim();
+  if (!problem) {
+    document.getElementById('rmodal-problem').focus();
+    return;
+  }
+  const btn = document.getElementById('rmodal-submit-btn');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="mi material-symbols-outlined" style="font-size:.85rem">hourglass_empty</span> กำลังส่ง...';
+
+  const teamName = DB[_reportCtx.tid]?.name || _reportCtx.tid;
+  const payload = { team: teamName, question: _reportCtx.q, problem };
+
+  try {
+    if (APPS_SCRIPT_URL) {
+      await fetch(APPS_SCRIPT_URL, {
+        method:'POST', mode:'no-cors',
+        headers:{'Content-Type':'application/json'},
+        body: JSON.stringify(payload)
+      });
+    }
+    // อัปเดตปุ่มใน accordion
+    const rb = document.getElementById(_reportCtx.btnId);
+    if (rb) {
+      rb.classList.add('sent');
+      rb.innerHTML = '<span class="mi material-symbols-outlined" style="font-size:.85rem">check</span>แจ้งแล้ว';
+      rb.disabled = true;
+    }
+    document.getElementById('report-modal').classList.remove('open');
+    showToast('ส่งรายงานแล้ว ขอบคุณที่แจ้ง! 🙏');
+  } catch(err) {
+    btn.disabled = false;
+    btn.innerHTML = '<span class="mi material-symbols-outlined" style="font-size:.85rem">send</span> ส่งรายงาน';
+    showToast('เกิดข้อผิดพลาด กรุณาลองใหม่', 'error');
+  }
+}
+
+/* ── TILT ── */
+document.addEventListener('DOMContentLoaded', () => {
+  buildHomeGrid();
+  buildFilters();
+  ds('');
+  handleDeepLink();
+  document.querySelectorAll('.tcard').forEach(c => {
+    c.addEventListener('mousemove', e => { const r=c.getBoundingClientRect(); const x=((e.clientX-r.left)/r.width-.5)*5; const y=((e.clientY-r.top)/r.height-.5)*5; c.style.transform=`translateY(-4px) rotateX(${-y}deg) rotateY(${x}deg)`; });
+    c.addEventListener('mouseleave', () => { c.style.transform=''; c.style.transition='all .4s ease'; setTimeout(()=>c.style.transition='',400); });
+  });
+});
+</script>
+<div class="toast" id="global-toast"></div>
+
+<!-- ── REPORT MODAL ── -->
+<div class="rmodal-bg" id="report-modal" onclick="closeReportModal(event)">
+  <div class="rmodal">
+    <h3><span class="mi material-symbols-outlined" style="font-size:1rem;vertical-align:middle;margin-right:4px">flag</span>แจ้งข้อมูลไม่ถูกต้อง</h3>
+    <div class="rmodal-q" id="rmodal-q-text"></div>
+    <label>อธิบายปัญหาที่พบ <span style="color:var(--primary)">*</span></label>
+    <textarea id="rmodal-problem" placeholder="เช่น ข้อมูลล้าสมัย, ขั้นตอนไม่ครบ, ลิงก์เสีย..."></textarea>
+    <div class="rmodal-actions">
+      <button class="rmodal-cancel" onclick="closeReportModal()">ยกเลิก</button>
+      <button class="rmodal-submit" id="rmodal-submit-btn" onclick="submitReport()">
+        <span class="mi material-symbols-outlined" style="font-size:.85rem">send</span> ส่งรายงาน
+      </button>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
