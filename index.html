@@ -307,12 +307,10 @@ footer { background:rgba(255,244,243,.8); border-top:1px solid var(--outv); padd
   border-radius:7px; padding:4px 10px; cursor:pointer;
   transition:all .2s; font-family:inherit; color:rgba(255,255,255,.45);
 }
-.fb-btn:hover { background:rgba(255,255,255,.1); color:rgba(255,255,255,.8); }
-.fb-btn.helpful { }
-.fb-btn.helpful.active { color:#6ee7b7; border-color:#6ee7b7; background:rgba(110,231,183,.12); cursor:default; }
-.fb-btn.unhelpful { }
-.fb-btn.unhelpful.active { color:#fca5a5; border-color:#fca5a5; background:rgba(252,165,165,.1); cursor:default; }
-.fb-btn:disabled { cursor:default; opacity:.7; }
+.fb-btn:hover:not(.active-helpful):not(.active-unhelpful) { background:rgba(255,255,255,.1); color:rgba(255,255,255,.8); }
+.fb-btn.active-helpful  { color:#6ee7b7; border-color:#6ee7b7; background:rgba(110,231,183,.15); }
+.fb-btn.active-unhelpful { color:#fca5a5; border-color:#fca5a5; background:rgba(252,165,165,.12); }
+.fb-btn.faded { opacity:.3; }
 .fb-divider { width:1px; height:14px; background:rgba(255,255,255,.12); flex-shrink:0; }
 
 /* ── REPORT MODAL ── */
@@ -1110,11 +1108,33 @@ let _reportCtx = { tid:'', q:'', wrapId:'', type:'' };
 
 function sendFeedback(type, tid, q, wrapId) {
   const wrap = document.getElementById(wrapId);
-  if (!wrap || wrap.dataset.voted) return;
-  wrap.dataset.voted = '1';
-  wrap.querySelectorAll('.fb-btn').forEach(b => { b.disabled = true; b.classList.remove('helpful','unhelpful'); });
-  const btn = wrap.querySelector('.fb-btn.' + type);
-  if (btn) btn.classList.add(type, 'active');
+  if (!wrap) return;
+
+  const helpBtn   = wrap.querySelector('.fb-btn.helpful');
+  const unhelpBtn = wrap.querySelector('.fb-btn.unhelpful');
+  const currentVote = wrap.dataset.voted;
+
+  // Toggle off — กดซ้ำบนปุ่มเดิม
+  if (currentVote === type) {
+    wrap.dataset.voted = '';
+    helpBtn.classList.remove('active-helpful','faded');
+    unhelpBtn.classList.remove('active-unhelpful','faded');
+    return;
+  }
+
+  // Set new vote
+  wrap.dataset.voted = type;
+  if (type === 'helpful') {
+    helpBtn.classList.add('active-helpful');
+    helpBtn.classList.remove('faded');
+    unhelpBtn.classList.remove('active-unhelpful');
+    unhelpBtn.classList.add('faded');
+  } else {
+    unhelpBtn.classList.add('active-unhelpful');
+    unhelpBtn.classList.remove('faded');
+    helpBtn.classList.remove('active-helpful');
+    helpBtn.classList.add('faded');
+  }
 
   if (APPS_SCRIPT_URL) {
     const teamName = DB[tid]?.name || tid;
@@ -1128,8 +1148,6 @@ function sendFeedback(type, tid, q, wrapId) {
 }
 
 function openFeedbackModal(tid, q, wrapId) {
-  const wrap = document.getElementById(wrapId);
-  if (wrap && wrap.dataset.voted) return;
   _reportCtx = { tid, q, wrapId, type:'unhelpful' };
   document.getElementById('rmodal-q-text').textContent = q;
   document.getElementById('rmodal-problem').value = '';
@@ -1167,10 +1185,13 @@ async function submitReport() {
     // Mark wrap as voted
     const wrap = document.getElementById(wrapId);
     if (wrap) {
-      wrap.dataset.voted = '1';
-      wrap.querySelectorAll('.fb-btn').forEach(b => { b.disabled = true; });
+      wrap.dataset.voted = 'unhelpful';
+      const helpBtn   = wrap.querySelector('.fb-btn.helpful');
       const unhelpBtn = wrap.querySelector('.fb-btn.unhelpful');
-      if (unhelpBtn) unhelpBtn.classList.add('active');
+      if (unhelpBtn) unhelpBtn.classList.add('active-unhelpful');
+      if (unhelpBtn) unhelpBtn.classList.remove('faded');
+      if (helpBtn)   helpBtn.classList.add('faded');
+      if (helpBtn)   helpBtn.classList.remove('active-helpful');
     }
     document.getElementById('report-modal').classList.remove('open');
     showToast('รับทราบแล้ว ขอบคุณที่แจ้ง! 🙏');
