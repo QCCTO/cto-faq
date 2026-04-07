@@ -1203,17 +1203,20 @@ async function submitReport() {
 function handleGoogleLogin(response) {
   const errEl = document.getElementById('login-err');
   try {
-    // Decode JWT payload
     const payload = JSON.parse(atob(response.credential.split('.')[1]));
-    const email = payload.email.toLowerCase();
-    const allowedDomains = ['@spxexpress.com', '@shopee.com'];
+    const email = (payload.email || '').toLowerCase();
+    const hd = (payload.hd || '').toLowerCase(); // hosted domain from Google
+    const allowedDomains = ['@spxexpress.com', '@shopee.com', '@shopeemobile.com', '@sea.com'];
 
-    if (!allowedDomains.some(d => email.endsWith(d))) {
-      errEl.textContent = 'กรุณาใช้อีเมล @spxexpress.com หรือ @shopee.com เท่านั้น';
+    const allowed = allowedDomains.some(d => email.endsWith(d))
+      || ['spxexpress.com','shopee.com','shopeemobile.com','sea.com'].includes(hd);
+
+    if (!allowed) {
+      if (errEl) errEl.textContent = 'กรุณาใช้อีเมลของ SPX Express หรือ Shopee เท่านั้น (ได้รับ: ' + email + ')';
       return;
     }
 
-    errEl.textContent = '';
+    if (errEl) errEl.textContent = '';
     try { sessionStorage.setItem('spx_user', email); } catch(e) {}
 
     // Log login to Apps Script
@@ -1236,7 +1239,7 @@ function handleGoogleLogin(response) {
 
     document.getElementById('login-page').classList.remove('active');
   } catch(err) {
-    errEl.textContent = 'เกิดข้อผิดพลาด กรุณาลองใหม่';
+    if (errEl) errEl.textContent = 'เกิดข้อผิดพลาด: ' + err.message;
   }
 }
 
