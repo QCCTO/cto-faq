@@ -296,22 +296,18 @@ footer { background:rgba(255,244,243,.8); border-top:1px solid var(--outv); padd
 .img-modal-bg.open { display:flex; }
 .img-modal-bg img { max-width:92vw; max-height:88vh; border-radius:10px; }
 
-/* ── FEEDBACK BUTTONS ── */
-.feedback-wrap { display:flex; align-items:center; gap:6px; margin-left:6px; }
-.fb-btn {
-  display:inline-flex; align-items:center; gap:4px;
-  font-size:.72rem; font-weight:700;
-  background:none; border-radius:7px; padding:4px 10px; cursor:pointer;
-  transition:all .2s; font-family:inherit;
+/* ── REPORT BUTTON ── */
+.report-btn {
+  display:inline-flex; align-items:center; gap:5px;
+  font-size:.72rem; font-weight:700; color:rgba(255,160,120,.7);
+  background:none; border:1px solid rgba(255,160,120,.25);
+  border-radius:7px; padding:4px 10px; cursor:pointer;
+  transition:all .2s; font-family:inherit; margin-left:6px;
 }
-.fb-yes { color:rgba(110,231,183,.8); border:1px solid rgba(110,231,183,.3); }
-.fb-yes:hover { background:rgba(110,231,183,.12); color:#6ee7b7; border-color:#6ee7b7; }
-.fb-yes.done { background:rgba(110,231,183,.15); color:#6ee7b7; border-color:#6ee7b7; cursor:default; }
-.fb-no  { color:rgba(255,160,120,.7); border:1px solid rgba(255,160,120,.25); }
-.fb-no:hover  { background:rgba(255,100,50,.12); color:#ff9f7a; border-color:rgba(255,120,82,.5); }
-.fb-no.done  { background:rgba(255,100,50,.1); color:#ff9f7a; border-color:rgba(255,120,82,.5); cursor:default; }
+.report-btn:hover { background:rgba(255,100,50,.15); color:#ff9f7a; border-color:rgba(255,120,82,.5); }
+.report-btn.sent { color:#6ee7b7; border-color:#6ee7b7; background:rgba(110,231,183,.08); cursor:default; }
 
-/* ── FEEDBACK MODAL ── */
+/* ── REPORT MODAL ── */
 .rmodal-bg {
   display:none; position:fixed; inset:0; z-index:500;
   background:rgba(30,10,5,.55); backdrop-filter:blur(4px);
@@ -339,7 +335,7 @@ footer { background:rgba(255,244,243,.8); border-top:1px solid var(--outv); padd
 .rmodal-cancel:hover { background:var(--sl); }
 .rmodal-submit { padding:8px 20px; border-radius:9px; border:none; background:var(--primary); color:#fff; font-family:inherit; font-size:.85rem; font-weight:700; cursor:pointer; transition:all .2s; }
 .rmodal-submit:hover { background:var(--pd); }
-.rmodal-submit:disabled { opacity:.5; cursor:default; }
+.rmodal-submit:disabled { opacity:.5; cursor:default; } */
 .toast {
   position:fixed; bottom:28px; left:50%; transform:translateX(-50%) translateY(20px);
   background:#1c1c1c; color:#fff; padding:10px 20px;
@@ -495,8 +491,20 @@ footer { background:rgba(255,244,243,.8); border-top:1px solid var(--outv); padd
     <div class="login-logo">CTO FAQ</div>
     <div class="login-sub">SPX Express · Internal Use Only</div>
     <div class="g-signin-wrap">
-      <div id="g_id_onload"></div>
-      <div id="g_id_signin"></div>
+      <div id="g_id_onload"
+        data-client_id="126312656340-881ng9rr38765jq3indjjabqt2tg585n.apps.googleusercontent.com"
+        data-callback="handleGoogleLogin"
+        data-auto_prompt="false">
+      </div>
+      <div class="g_id_signin"
+        data-type="standard"
+        data-size="large"
+        data-theme="outline"
+        data-text="signin_with"
+        data-shape="rectangular"
+        data-logo_alignment="left"
+        data-width="320">
+      </div>
     </div>
     <div class="login-err" id="login-err"></div>
     <div class="login-footer">เฉพาะบุคลากร SPX Express และ Shopee เท่านั้น</div>
@@ -798,14 +806,9 @@ function buildFaqList(items, tid, showTeamBadge) {
               <button class="copy-btn" onclick="copyAnswer('${realTid}',${item.idx !== undefined ? item.idx : i},this)">
                 <span class="mi material-symbols-outlined" style="font-size:.85rem">content_copy</span>คัดลอก
               </button>
-              <div class="feedback-wrap" id="fb-${fid}">
-                <button class="fb-btn fb-yes" onclick="event.stopPropagation();sendFeedback('yes','${realTid}','${item.q.replace(/'/g,\"\\'\")}','${fid}')">
-                  <span class="mi material-symbols-outlined" style="font-size:.85rem">thumb_up</span>มีประโยชน์
-                </button>
-                <button class="fb-btn fb-no" onclick="event.stopPropagation();openFeedbackModal('${realTid}','${item.q.replace(/'/g,\"\\'\")}','${fid}')">
-                  <span class="mi material-symbols-outlined" style="font-size:.85rem">thumb_down</span>ไม่มีประโยชน์
-                </button>
-              </div>
+              <button class="report-btn" id="rb-${fid}" onclick="event.stopPropagation();openReportModal('${realTid}','${item.q.replace(/'/g,"\\'")}','rb-${fid}')">
+                <span class="mi material-symbols-outlined" style="font-size:.85rem">flag</span>แจ้งผิด
+              </button>
             </div>
           </div>
           ${fmtA(item.a)}
@@ -1088,48 +1091,14 @@ function closeImgModal() {
 // ตัวอย่าง: 'https://script.google.com/macros/s/AKfycb.../exec'
 const APPS_SCRIPT_URL = 'https://script.google.com/a/macros/spxexpress.com/s/AKfycbxinmy1IoxfhvKwmhrRCHtvFi064aG52cVJfadQJ5NEYibEkmhQ84mfskApDjln1BDZ7g/exec';
 
-/* ── FEEDBACK ── */
-let _fbCtx = { tid:'', q:'', fid:'' };
+/* ── REPORT MODAL ── */
+let _reportCtx = { tid:'', q:'', btnId:'' };
 
-function sendFeedback(type, tid, q, fid) {
-  const wrap = document.getElementById('fb-' + fid);
-  if (!wrap || wrap.dataset.done) return;
-  wrap.dataset.done = '1';
-  // mark buttons
-  wrap.querySelectorAll('.fb-btn').forEach(b => b.disabled = true);
-  const yesBtn = wrap.querySelector('.fb-yes');
-  yesBtn.classList.add('done');
-  yesBtn.innerHTML = '<span class="mi material-symbols-outlined" style="font-size:.85rem">check</span>ขอบคุณ!';
-  const noBtn = wrap.querySelector('.fb-no');
-  noBtn.style.display = 'none';
-
-  const user = (() => { try { return sessionStorage.getItem('spx_user') || '-'; } catch(e) { return '-'; } })();
-  const teamName = DB[tid]?.name || tid;
-  const now = new Date();
-  if (APPS_SCRIPT_URL) {
-    fetch(APPS_SCRIPT_URL, {
-      method:'POST', mode:'no-cors', credentials:'include',
-      headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({
-        type: 'feedback',
-        feedback: 'helpful',
-        team: teamName,
-        question: q,
-        reason: '',
-        email: user,
-        localTime: now.toLocaleString('th-TH', { timeZone: 'Asia/Bangkok' })
-      })
-    }).catch(()=>{});
-  }
-  showToast('ขอบคุณสำหรับ Feedback! 🙏');
-}
-
-function openFeedbackModal(tid, q, fid) {
-  _fbCtx = { tid, q, fid };
+function openReportModal(tid, q, btnId) {
+  _reportCtx = { tid, q, btnId };
   document.getElementById('rmodal-q-text').textContent = q;
   document.getElementById('rmodal-problem').value = '';
   document.getElementById('rmodal-submit-btn').disabled = false;
-  document.getElementById('rmodal-submit-btn').innerHTML = '<span class="mi material-symbols-outlined" style="font-size:.85rem">send</span> ส่ง Feedback';
   document.getElementById('report-modal').classList.add('open');
 }
 
@@ -1148,68 +1117,49 @@ async function submitReport() {
   btn.disabled = true;
   btn.innerHTML = '<span class="mi material-symbols-outlined" style="font-size:.85rem">hourglass_empty</span> กำลังส่ง...';
 
-  const user = (() => { try { return sessionStorage.getItem('spx_user') || '-'; } catch(e) { return '-'; } })();
-  const teamName = DB[_fbCtx.tid]?.name || _fbCtx.tid;
-  const now = new Date();
+  const teamName = DB[_reportCtx.tid]?.name || _reportCtx.tid;
+  const payload = { team: teamName, question: _reportCtx.q, problem };
 
   try {
     if (APPS_SCRIPT_URL) {
       await fetch(APPS_SCRIPT_URL, {
-        method:'POST', mode:'no-cors', credentials:'include',
+        method:'POST', mode:'no-cors',
+        credentials:'include',
         headers:{'Content-Type':'application/json'},
-        body: JSON.stringify({
-          type: 'feedback',
-          feedback: 'not_helpful',
-          team: teamName,
-          question: _fbCtx.q,
-          reason: problem,
-          email: user,
-          localTime: now.toLocaleString('th-TH', { timeZone: 'Asia/Bangkok' })
-        })
+        body: JSON.stringify(payload)
       });
     }
-    // mark buttons
-    const wrap = document.getElementById('fb-' + _fbCtx.fid);
-    if (wrap) {
-      wrap.dataset.done = '1';
-      wrap.querySelectorAll('.fb-btn').forEach(b => b.disabled = true);
-      const noBtn = wrap.querySelector('.fb-no');
-      noBtn.classList.add('done');
-      noBtn.innerHTML = '<span class="mi material-symbols-outlined" style="font-size:.85rem">check</span>ขอบคุณ!';
-      wrap.querySelector('.fb-yes').style.display = 'none';
+    // อัปเดตปุ่มใน accordion
+    const rb = document.getElementById(_reportCtx.btnId);
+    if (rb) {
+      rb.classList.add('sent');
+      rb.innerHTML = '<span class="mi material-symbols-outlined" style="font-size:.85rem">check</span>แจ้งแล้ว';
+      rb.disabled = true;
     }
     document.getElementById('report-modal').classList.remove('open');
-    showToast('ขอบคุณสำหรับ Feedback! 🙏');
+    showToast('ส่งรายงานแล้ว ขอบคุณที่แจ้ง! 🙏');
   } catch(err) {
     btn.disabled = false;
-    btn.innerHTML = '<span class="mi material-symbols-outlined" style="font-size:.85rem">send</span> ส่ง Feedback';
+    btn.innerHTML = '<span class="mi material-symbols-outlined" style="font-size:.85rem">send</span> ส่งรายงาน';
     showToast('เกิดข้อผิดพลาด กรุณาลองใหม่', 'error');
   }
 }
 
 /* ── LOGIN (Google Sign-In) ── */
-window.handleGoogleLogin = function handleGoogleLogin(response) {
+function handleGoogleLogin(response) {
   const errEl = document.getElementById('login-err');
   try {
+    // Decode JWT payload
     const payload = JSON.parse(atob(response.credential.split('.')[1]));
-    const email = (payload.email || '').toLowerCase();
-    const hd = (payload.hd || '').toLowerCase(); // hosted domain from Google
-    const allowedDomains = ['@spxexpress.com', '@shopee.com', '@shopeemobile.com', '@sea.com'];
+    const email = payload.email.toLowerCase();
+    const allowedDomains = ['@spxexpress.com', '@shopee.com'];
 
-    // ---- DEBUG: แสดง email ที่ได้จาก Google ----
-    console.log('Google email:', email, '| hd:', hd);
-    showToast('email: ' + email);
-
-    const allowed = allowedDomains.some(d => email.endsWith(d))
-      || ['spxexpress.com','shopee.com','shopeemobile.com','sea.com'].includes(hd);
-
-    if (!allowed) {
-      if (errEl) errEl.textContent = 'ไม่ได้รับอนุญาต: ' + email;
-      showToast('ไม่ได้รับอนุญาต: ' + email, 'error');
+    if (!allowedDomains.some(d => email.endsWith(d))) {
+      errEl.textContent = 'กรุณาใช้อีเมล @spxexpress.com หรือ @shopee.com เท่านั้น';
       return;
     }
 
-    if (errEl) errEl.textContent = '';
+    errEl.textContent = '';
     try { sessionStorage.setItem('spx_user', email); } catch(e) {}
 
     // Log login to Apps Script
@@ -1232,7 +1182,7 @@ window.handleGoogleLogin = function handleGoogleLogin(response) {
 
     document.getElementById('login-page').classList.remove('active');
   } catch(err) {
-    if (errEl) errEl.textContent = 'เกิดข้อผิดพลาด: ' + err.message;
+    errEl.textContent = 'เกิดข้อผิดพลาด กรุณาลองใหม่';
   }
 }
 
@@ -1247,27 +1197,6 @@ function checkLogin() {
   } catch(e) {}
   document.getElementById('login-page').classList.add('active');
 }
-
-/* ── GOOGLE SIGN-IN INIT ── */
-const CLIENT_ID = '126312656340-881ng9rr38765jq3indjjabqt2tg585n.apps.googleusercontent.com';
-
-function initGoogleSignIn() {
-  if (typeof google === 'undefined' || !google.accounts) {
-    setTimeout(initGoogleSignIn, 200);
-    return;
-  }
-  google.accounts.id.initialize({
-    client_id: CLIENT_ID,
-    callback: window.handleGoogleLogin,
-    auto_select: false,
-    cancel_on_tap_outside: false,
-  });
-  google.accounts.id.renderButton(
-    document.getElementById('g_id_signin'),
-    { theme: 'outline', size: 'large', text: 'signin_with', width: 320 }
-  );
-}
-initGoogleSignIn();
 
 /* ── TILT ── */
 document.addEventListener('DOMContentLoaded', () => {
@@ -1292,10 +1221,10 @@ document.addEventListener('DOMContentLoaded', () => {
 <!-- ── REPORT MODAL ── -->
 <div class="rmodal-bg" id="report-modal" onclick="closeReportModal(event)">
   <div class="rmodal">
-    <h3><span class="mi material-symbols-outlined" style="font-size:1rem;vertical-align:middle;margin-right:4px">thumb_down</span>ไม่มีประโยชน์เพราะอะไร?</h3>
+    <h3><span class="mi material-symbols-outlined" style="font-size:1rem;vertical-align:middle;margin-right:4px">flag</span>แจ้งข้อมูลไม่ถูกต้อง</h3>
     <div class="rmodal-q" id="rmodal-q-text"></div>
-    <label>บอกเราว่าคำตอบนี้ไม่มีประโยชน์อย่างไร <span style="color:var(--primary)">*</span></label>
-    <textarea id="rmodal-problem" placeholder="เช่น ข้อมูลล้าสมัย, ไม่ตรงกับปัญหา, อธิบายไม่ชัดเจน..."></textarea>
+    <label>อธิบายปัญหาที่พบ <span style="color:var(--primary)">*</span></label>
+    <textarea id="rmodal-problem" placeholder="เช่น ข้อมูลล้าสมัย, ขั้นตอนไม่ครบ, ลิงก์เสีย..."></textarea>
     <div class="rmodal-actions">
       <button class="rmodal-cancel" onclick="closeReportModal()">ยกเลิก</button>
       <button class="rmodal-submit" id="rmodal-submit-btn" onclick="submitReport()">
