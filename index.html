@@ -296,16 +296,24 @@ footer { background:rgba(255,244,243,.8); border-top:1px solid var(--outv); padd
 .img-modal-bg.open { display:flex; }
 .img-modal-bg img { max-width:92vw; max-height:88vh; border-radius:10px; }
 
-/* ── REPORT BUTTON ── */
-.report-btn {
-  display:inline-flex; align-items:center; gap:5px;
-  font-size:.72rem; font-weight:700; color:rgba(255,160,120,.7);
-  background:none; border:1px solid rgba(255,160,120,.25);
-  border-radius:7px; padding:4px 10px; cursor:pointer;
-  transition:all .2s; font-family:inherit; margin-left:6px;
+/* ── FEEDBACK BUTTONS ── */
+.feedback-wrap {
+  display:inline-flex; align-items:center; gap:5px; margin-left:6px;
 }
-.report-btn:hover { background:rgba(255,100,50,.15); color:#ff9f7a; border-color:rgba(255,120,82,.5); }
-.report-btn.sent { color:#6ee7b7; border-color:#6ee7b7; background:rgba(110,231,183,.08); cursor:default; }
+.fb-btn {
+  display:inline-flex; align-items:center; gap:4px;
+  font-size:.72rem; font-weight:700;
+  background:none; border:1px solid rgba(255,255,255,.15);
+  border-radius:7px; padding:4px 10px; cursor:pointer;
+  transition:all .2s; font-family:inherit; color:rgba(255,255,255,.45);
+}
+.fb-btn:hover { background:rgba(255,255,255,.1); color:rgba(255,255,255,.8); }
+.fb-btn.helpful { }
+.fb-btn.helpful.active { color:#6ee7b7; border-color:#6ee7b7; background:rgba(110,231,183,.12); cursor:default; }
+.fb-btn.unhelpful { }
+.fb-btn.unhelpful.active { color:#fca5a5; border-color:#fca5a5; background:rgba(252,165,165,.1); cursor:default; }
+.fb-btn:disabled { cursor:default; opacity:.7; }
+.fb-divider { width:1px; height:14px; background:rgba(255,255,255,.12); flex-shrink:0; }
 
 /* ── REPORT MODAL ── */
 .rmodal-bg {
@@ -806,9 +814,15 @@ function buildFaqList(items, tid, showTeamBadge) {
               <button class="copy-btn" onclick="copyAnswer('${realTid}',${item.idx !== undefined ? item.idx : i},this)">
                 <span class="mi material-symbols-outlined" style="font-size:.85rem">content_copy</span>คัดลอก
               </button>
-              <button class="report-btn" id="rb-${fid}" onclick="event.stopPropagation();openReportModal('${realTid}','${item.q.replace(/'/g,"\\'")}','rb-${fid}')">
-                <span class="mi material-symbols-outlined" style="font-size:.85rem">flag</span>แจ้งผิด
-              </button>
+              <span class="fb-divider"></span>
+              <div class="feedback-wrap" id="fw-${fid}">
+                <button class="fb-btn helpful" onclick="event.stopPropagation();sendFeedback('helpful','${realTid}','${item.q.replace(/'/g,"\\'")}','fw-${fid}')">
+                  <span class="mi material-symbols-outlined" style="font-size:.85rem">thumb_up</span>มีประโยชน์
+                </button>
+                <button class="fb-btn unhelpful" onclick="event.stopPropagation();openFeedbackModal('${realTid}','${item.q.replace(/'/g,"\\'")}','fw-${fid}')">
+                  <span class="mi material-symbols-outlined" style="font-size:.85rem">thumb_down</span>ไม่มีประโยชน์
+                </button>
+              </div>
             </div>
           </div>
           ${fmtA(item.a)}
@@ -1091,14 +1105,36 @@ function closeImgModal() {
 // ตัวอย่าง: 'https://script.google.com/macros/s/AKfycb.../exec'
 const APPS_SCRIPT_URL = 'https://script.google.com/a/macros/spxexpress.com/s/AKfycbxinmy1IoxfhvKwmhrRCHtvFi064aG52cVJfadQJ5NEYibEkmhQ84mfskApDjln1BDZ7g/exec';
 
-/* ── REPORT MODAL ── */
-let _reportCtx = { tid:'', q:'', btnId:'' };
+/* ── FEEDBACK ── */
+let _reportCtx = { tid:'', q:'', wrapId:'', type:'' };
 
-function openReportModal(tid, q, btnId) {
-  _reportCtx = { tid, q, btnId };
+function sendFeedback(type, tid, q, wrapId) {
+  const wrap = document.getElementById(wrapId);
+  if (!wrap || wrap.dataset.voted) return;
+  wrap.dataset.voted = '1';
+  wrap.querySelectorAll('.fb-btn').forEach(b => { b.disabled = true; b.classList.remove('helpful','unhelpful'); });
+  const btn = wrap.querySelector('.fb-btn.' + type);
+  if (btn) btn.classList.add(type, 'active');
+
+  if (APPS_SCRIPT_URL) {
+    const teamName = DB[tid]?.name || tid;
+    fetch(APPS_SCRIPT_URL, {
+      method:'POST', mode:'no-cors', credentials:'include',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ type: 'feedback', feedback: type, team: teamName, question: q, reason: '' })
+    }).catch(() => {});
+  }
+  showToast(type === 'helpful' ? 'ขอบคุณที่ให้ข้อมูล! 🙏' : 'รับทราบแล้ว ขอบคุณ! 🙏');
+}
+
+function openFeedbackModal(tid, q, wrapId) {
+  const wrap = document.getElementById(wrapId);
+  if (wrap && wrap.dataset.voted) return;
+  _reportCtx = { tid, q, wrapId, type:'unhelpful' };
   document.getElementById('rmodal-q-text').textContent = q;
   document.getElementById('rmodal-problem').value = '';
   document.getElementById('rmodal-submit-btn').disabled = false;
+  document.getElementById('rmodal-submit-btn').innerHTML = '<span class="mi material-symbols-outlined" style="font-size:.85rem">send</span> ส่งความคิดเห็น';
   document.getElementById('report-modal').classList.add('open');
 }
 
@@ -1117,30 +1153,30 @@ async function submitReport() {
   btn.disabled = true;
   btn.innerHTML = '<span class="mi material-symbols-outlined" style="font-size:.85rem">hourglass_empty</span> กำลังส่ง...';
 
-  const teamName = DB[_reportCtx.tid]?.name || _reportCtx.tid;
-  const payload = { team: teamName, question: _reportCtx.q, problem };
+  const { tid, q, wrapId } = _reportCtx;
+  const teamName = DB[tid]?.name || tid;
 
   try {
     if (APPS_SCRIPT_URL) {
       await fetch(APPS_SCRIPT_URL, {
-        method:'POST', mode:'no-cors',
-        credentials:'include',
+        method:'POST', mode:'no-cors', credentials:'include',
         headers:{'Content-Type':'application/json'},
-        body: JSON.stringify(payload)
+        body: JSON.stringify({ type: 'feedback', feedback: 'unhelpful', team: teamName, question: q, reason: problem })
       });
     }
-    // อัปเดตปุ่มใน accordion
-    const rb = document.getElementById(_reportCtx.btnId);
-    if (rb) {
-      rb.classList.add('sent');
-      rb.innerHTML = '<span class="mi material-symbols-outlined" style="font-size:.85rem">check</span>แจ้งแล้ว';
-      rb.disabled = true;
+    // Mark wrap as voted
+    const wrap = document.getElementById(wrapId);
+    if (wrap) {
+      wrap.dataset.voted = '1';
+      wrap.querySelectorAll('.fb-btn').forEach(b => { b.disabled = true; });
+      const unhelpBtn = wrap.querySelector('.fb-btn.unhelpful');
+      if (unhelpBtn) unhelpBtn.classList.add('active');
     }
     document.getElementById('report-modal').classList.remove('open');
-    showToast('ส่งรายงานแล้ว ขอบคุณที่แจ้ง! 🙏');
+    showToast('รับทราบแล้ว ขอบคุณที่แจ้ง! 🙏');
   } catch(err) {
     btn.disabled = false;
-    btn.innerHTML = '<span class="mi material-symbols-outlined" style="font-size:.85rem">send</span> ส่งรายงาน';
+    btn.innerHTML = '<span class="mi material-symbols-outlined" style="font-size:.85rem">send</span> ส่งความคิดเห็น';
     showToast('เกิดข้อผิดพลาด กรุณาลองใหม่', 'error');
   }
 }
@@ -1218,17 +1254,17 @@ document.addEventListener('DOMContentLoaded', () => {
   <img id="img-modal-img" src="" alt="">
 </div>
 
-<!-- ── REPORT MODAL ── -->
+<!-- ── FEEDBACK MODAL ── -->
 <div class="rmodal-bg" id="report-modal" onclick="closeReportModal(event)">
   <div class="rmodal">
-    <h3><span class="mi material-symbols-outlined" style="font-size:1rem;vertical-align:middle;margin-right:4px">flag</span>แจ้งข้อมูลไม่ถูกต้อง</h3>
+    <h3><span class="mi material-symbols-outlined" style="font-size:1rem;vertical-align:middle;margin-right:4px">thumb_down</span>บอกเราได้เลย คำตอบนี้ไม่มีประโยชน์อย่างไร?</h3>
     <div class="rmodal-q" id="rmodal-q-text"></div>
-    <label>อธิบายปัญหาที่พบ <span style="color:var(--primary)">*</span></label>
-    <textarea id="rmodal-problem" placeholder="เช่น ข้อมูลล้าสมัย, ขั้นตอนไม่ครบ, ลิงก์เสีย..."></textarea>
+    <label>เหตุผล <span style="color:var(--primary)">*</span></label>
+    <textarea id="rmodal-problem" placeholder="เช่น ข้อมูลไม่ครบ, ไม่ตรงกับปัญหา, ข้อมูลล้าสมัย, ลิงก์เสีย..."></textarea>
     <div class="rmodal-actions">
       <button class="rmodal-cancel" onclick="closeReportModal()">ยกเลิก</button>
       <button class="rmodal-submit" id="rmodal-submit-btn" onclick="submitReport()">
-        <span class="mi material-symbols-outlined" style="font-size:.85rem">send</span> ส่งรายงาน
+        <span class="mi material-symbols-outlined" style="font-size:.85rem">send</span> ส่งความคิดเห็น
       </button>
     </div>
   </div>
