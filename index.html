@@ -495,20 +495,8 @@ footer { background:rgba(255,244,243,.8); border-top:1px solid var(--outv); padd
     <div class="login-logo">CTO FAQ</div>
     <div class="login-sub">SPX Express · Internal Use Only</div>
     <div class="g-signin-wrap">
-      <div id="g_id_onload"
-        data-client_id="126312656340-881ng9rr38765jq3indjjabqt2tg585n.apps.googleusercontent.com"
-        data-callback="handleGoogleLogin"
-        data-auto_prompt="false">
-      </div>
-      <div class="g_id_signin"
-        data-type="standard"
-        data-size="large"
-        data-theme="outline"
-        data-text="signin_with"
-        data-shape="rectangular"
-        data-logo_alignment="left"
-        data-width="320">
-      </div>
+      <div id="g_id_onload"></div>
+      <div id="g_id_signin"></div>
     </div>
     <div class="login-err" id="login-err"></div>
     <div class="login-footer">เฉพาะบุคลากร SPX Express และ Shopee เท่านั้น</div>
@@ -1259,6 +1247,27 @@ function checkLogin() {
   } catch(e) {}
   document.getElementById('login-page').classList.add('active');
 }
+
+/* ── GOOGLE SIGN-IN INIT ── */
+const CLIENT_ID = '126312656340-881ng9rr38765jq3indjjabqt2tg585n.apps.googleusercontent.com';
+
+function initGoogleSignIn() {
+  if (typeof google === 'undefined' || !google.accounts) {
+    setTimeout(initGoogleSignIn, 200);
+    return;
+  }
+  google.accounts.id.initialize({
+    client_id: CLIENT_ID,
+    callback: window.handleGoogleLogin,
+    auto_select: false,
+    cancel_on_tap_outside: false,
+  });
+  google.accounts.id.renderButton(
+    document.getElementById('g_id_signin'),
+    { theme: 'outline', size: 'large', text: 'signin_with', width: 320 }
+  );
+}
+initGoogleSignIn();
 
 /* ── TILT ── */
 document.addEventListener('DOMContentLoaded', () => {
