@@ -1173,33 +1173,37 @@ async function submitReport() {
 
   const { tid, q, wrapId } = _reportCtx;
   const teamName = DB[tid]?.name || tid;
+  const payload = { type: 'feedback', feedback: 'unhelpful', team: teamName, question: q, reason: problem };
 
-  try {
-    if (APPS_SCRIPT_URL) {
-      await fetch(APPS_SCRIPT_URL, {
-        method:'POST', mode:'no-cors', credentials:'include',
-        headers:{'Content-Type':'application/json'},
-        body: JSON.stringify({ type: 'feedback', feedback: 'unhelpful', team: teamName, question: q, reason: problem })
-      });
-    }
-    // Mark wrap as voted
-    const wrap = document.getElementById(wrapId);
-    if (wrap) {
-      wrap.dataset.voted = 'unhelpful';
-      const helpBtn   = wrap.querySelector('.fb-btn.helpful');
-      const unhelpBtn = wrap.querySelector('.fb-btn.unhelpful');
-      if (unhelpBtn) unhelpBtn.classList.add('active-unhelpful');
-      if (unhelpBtn) unhelpBtn.classList.remove('faded');
-      if (helpBtn)   helpBtn.classList.add('faded');
-      if (helpBtn)   helpBtn.classList.remove('active-helpful');
-    }
-    document.getElementById('report-modal').classList.remove('open');
-    showToast('รับทราบแล้ว ขอบคุณที่แจ้ง! 🙏');
-  } catch(err) {
-    btn.disabled = false;
-    btn.innerHTML = '<span class="mi material-symbols-outlined" style="font-size:.85rem">send</span> ส่งความคิดเห็น';
-    showToast('เกิดข้อผิดพลาด กรุณาลองใหม่', 'error');
+  // ส่งข้อมูลไป Apps Script (no-cors ไม่ block แต่ก็ไม่ return response — fire and forget)
+  if (APPS_SCRIPT_URL) {
+    fetch(APPS_SCRIPT_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    }).catch(() => {});
   }
+
+  // อัปเดต UI ทันที (ไม่รอ response เพราะ no-cors ไม่คืนค่า)
+  const wrap = document.getElementById(wrapId);
+  if (wrap) {
+    wrap.dataset.voted = 'unhelpful';
+    const helpBtn   = wrap.querySelector('.fb-btn.helpful');
+    const unhelpBtn = wrap.querySelector('.fb-btn.unhelpful');
+    if (unhelpBtn) { unhelpBtn.classList.add('active-unhelpful'); unhelpBtn.classList.remove('faded'); }
+    if (helpBtn)   { helpBtn.classList.add('faded'); helpBtn.classList.remove('active-helpful'); }
+  }
+
+  // แสดง success state ใน modal ก่อน แล้วค่อยปิด
+  btn.innerHTML = '<span class="mi material-symbols-outlined" style="font-size:.85rem">check_circle</span> ส่งแล้ว!';
+  btn.style.background = '#16a34a';
+
+  setTimeout(() => {
+    document.getElementById('report-modal').classList.remove('open');
+    btn.style.background = '';
+    showToast('ส่งความคิดเห็นแล้ว ขอบคุณที่แจ้ง! 🙏');
+  }, 900);
 }
 
 /* ── LOGIN (Google Sign-In) ── */
