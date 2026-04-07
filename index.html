@@ -810,9 +810,14 @@ function buildFaqList(items, tid, showTeamBadge) {
               <button class="copy-btn" onclick="copyAnswer('${realTid}',${item.idx !== undefined ? item.idx : i},this)">
                 <span class="mi material-symbols-outlined" style="font-size:.85rem">content_copy</span>คัดลอก
               </button>
-              <button class="report-btn" id="rb-${fid}" onclick="event.stopPropagation();openReportModal('${realTid}','${item.q.replace(/'/g,"\\'")}','rb-${fid}')">
-                <span class="mi material-symbols-outlined" style="font-size:.85rem">flag</span>แจ้งผิด
-              </button>
+              <div class="feedback-wrap" id="fb-${fid}">
+                <button class="fb-btn fb-yes" onclick="event.stopPropagation();sendFeedback('yes','${realTid}','${item.q.replace(/'/g,\"\\'\")}','${fid}')">
+                  <span class="mi material-symbols-outlined" style="font-size:.85rem">thumb_up</span>มีประโยชน์
+                </button>
+                <button class="fb-btn fb-no" onclick="event.stopPropagation();openFeedbackModal('${realTid}','${item.q.replace(/'/g,\"\\'\")}','${fid}')">
+                  <span class="mi material-symbols-outlined" style="font-size:.85rem">thumb_down</span>ไม่มีประโยชน์
+                </button>
+              </div>
             </div>
           </div>
           ${fmtA(item.a)}
