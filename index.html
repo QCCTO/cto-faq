@@ -1200,7 +1200,7 @@ async function submitReport() {
 }
 
 /* ── LOGIN (Google Sign-In) ── */
-function handleGoogleLogin(response) {
+window.handleGoogleLogin = function handleGoogleLogin(response) {
   const errEl = document.getElementById('login-err');
   try {
     const payload = JSON.parse(atob(response.credential.split('.')[1]));
