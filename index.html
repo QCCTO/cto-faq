@@ -1208,11 +1208,16 @@ function handleGoogleLogin(response) {
     const hd = (payload.hd || '').toLowerCase(); // hosted domain from Google
     const allowedDomains = ['@spxexpress.com', '@shopee.com', '@shopeemobile.com', '@sea.com'];
 
+    // ---- DEBUG: แสดง email ที่ได้จาก Google ----
+    console.log('Google email:', email, '| hd:', hd);
+    showToast('email: ' + email);
+
     const allowed = allowedDomains.some(d => email.endsWith(d))
       || ['spxexpress.com','shopee.com','shopeemobile.com','sea.com'].includes(hd);
 
     if (!allowed) {
-      if (errEl) errEl.textContent = 'กรุณาใช้อีเมลของ SPX Express หรือ Shopee เท่านั้น (ได้รับ: ' + email + ')';
+      if (errEl) errEl.textContent = 'ไม่ได้รับอนุญาต: ' + email;
+      showToast('ไม่ได้รับอนุญาต: ' + email, 'error');
       return;
     }
 
