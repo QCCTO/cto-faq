@@ -557,7 +557,6 @@ footer { background:rgba(255,244,243,.8); border-top:1px solid var(--outv); padd
       <div class="logo" onclick="sp('home')">CTO FAQ</div>
       <div class="nlinks" id="nl">
         <button class="nl active" onclick="sp('home');sna(this)">หน้าแรก</button>
-        <button class="nl" onclick="sp('search');sna(this);ds('')">ค้นหา FAQ</button>
         <button class="nl" onclick="sp('contact');sna(this);clSearch('')">Contact List</button>
         <div class="nav-dropdown" id="team-nav-dd">
           <button class="nl" onclick="toggleTeamDd()">CTO Team ▾</button>
@@ -1322,55 +1321,91 @@ function clClear() {
 function renderContacts(data, q) {
   const container = document.getElementById('cl-results');
   const countEl = document.getElementById('cl-count');
-  countEl.textContent = `พบ ${data.length} รายการ`;
 
   if (!data.length) {
-    container.innerHTML = `<div class="cl-empty"><span class="mi material-symbols-outlined">person_search</span><p style="font-weight:700;margin-bottom:4px">ไม่พบข้อมูล</p><p style="font-size:.82rem">ลองค้นหาด้วยคำอื่น</p></div>`;
+    countEl.textContent = 'ไม่พบข้อมูล';
+    container.innerHTML = `<div class="cl-empty"><span class="mi material-symbols-outlined">person_search</span><p style="font-weight:700;margin-bottom:4px">ไม่พบข้อมูล</p><p style="font-size:.82rem">ลองค้นหาด้วยคำอื่น เช่น Hub code, Zone, Area</p></div>`;
     return;
   }
 
-  // Show max 100 for performance
-  const shown = data.slice(0, 100);
   const hl = (text) => {
-    if (!q || !text) return text;
-    return text.replace(new RegExp('(' + q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&') + ')', 'gi'), '<mark style="background:rgba(172,44,0,.15);color:var(--primary);border-radius:2px;padding:0 1px">$1</mark>');
+    if (!q || !text || text === '-') return text || '-';
+    return String(text).replace(new RegExp('(' + q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&') + ')', 'gi'), '<mark style="background:rgba(172,44,0,.15);color:var(--primary);border-radius:2px;padding:0 1px">$1</mark>');
   };
 
-  container.innerHTML = shown.map(c => {
-    const initials = (c.name||'?').charAt(0);
-    const isSup = c.position.includes('Supervisor, Hub');
-    const posLabel = isSup ? 'Supervisor' : 'Asst. Supervisor';
-    const posClass = isSup ? 'qc' : 'rp';
-    const hasMeta = c.region !== '-' || c.zone !== '-' || c.area !== '-';
+  // Group by Hub
+  const hubMap = {};
+  data.forEach(c => {
+    if (!hubMap[c.hub]) hubMap[c.hub] = { hub: c.hub, region: c.region, zone: c.zone, area: c.area, am_name: c.am_name, am_mail: c.am_mail, rm_name: c.rm_name, rm_mail: c.rm_mail, members: [] };
+    hubMap[c.hub].members.push(c);
+  });
+
+  const hubs = Object.values(hubMap);
+  const shownHubs = hubs.slice(0, 80);
+  countEl.textContent = `พบ ${data.length} คน จาก ${hubs.length} Hub`;
+
+  container.innerHTML = shownHubs.map(h => {
+    const hasMeta = h.region !== '-';
+    const sup = h.members.find(m => m.position.includes('Supervisor, Hub') && !m.position.includes('Assistant'));
+    const astList = h.members.filter(m => m.position.includes('Assistant'));
+
+    const memberRow = (m, label) => {
+      const isSup = !m.position.includes('Assistant');
+      const badge = isSup
+        ? `<span style="font-size:.65rem;font-weight:700;background:rgba(172,44,0,.1);color:var(--primary);border-radius:6px;padding:2px 7px;margin-right:6px;">SUP</span>`
+        : `<span style="font-size:.65rem;font-weight:700;background:rgba(0,97,143,.1);color:var(--crp);border-radius:6px;padding:2px 7px;margin-right:6px;">ASST</span>`;
+      return `<div style="display:flex;align-items:center;gap:8px;padding:7px 0;border-top:1px solid var(--outv);">
+        ${badge}
+        <span style="font-size:.82rem;font-weight:600;color:var(--os);min-width:0;flex:1;">${hl(m.name)} <span style="font-weight:400;color:var(--osv);">(${hl(m.nick)})</span></span>
+        ${m.mobile !== '-' ? `<a href="tel:${m.mobile}" style="font-size:.78rem;color:var(--ter);text-decoration:none;white-space:nowrap;display:flex;align-items:center;gap:3px;"><span class="mi material-symbols-outlined" style="font-size:.85rem">phone</span>${hl(m.mobile)}</a>` : ''}
+        <div style="display:flex;align-items:center;gap:3px;min-width:0;">
+          <span class="mi material-symbols-outlined" style="font-size:.85rem;color:var(--osv);">mail</span>
+          ${m.email !== '-' ? `<a href="mailto:${m.email}" style="font-size:.75rem;color:var(--ter);text-decoration:none;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:220px;">${hl(m.email)}</a>` : '<span style="font-size:.75rem;color:var(--osv)">-</span>'}
+        </div>
+      </div>`;
+    };
+
     return `<div class="cl-card">
-      <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;">
-        <div style="display:flex;align-items:center;gap:10px;flex:1;min-width:0;">
-          <div class="cl-avatar">${initials}</div>
-          <div style="flex:1;min-width:0;">
-            <div class="cl-name">${hl(c.name)} <span style="font-size:.75rem;color:var(--osv);font-weight:400;">(${hl(c.nick)})</span></div>
-            <div style="margin-top:4px;">
-              <span class="cl-meta-tag pos">${posLabel}</span>
-              <span class="cl-hub-badge">${hl(c.hub)}</span>
-            </div>
+      <!-- Hub header -->
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:8px;">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <div style="width:42px;height:42px;border-radius:10px;background:var(--primary);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <span class="mi material-symbols-outlined" style="color:#fff;font-size:1.2rem;">warehouse</span>
+          </div>
+          <div>
+            <div style="font-family:'Plus Jakarta Sans',sans-serif;font-size:1rem;font-weight:800;color:var(--primary);">${hl(h.hub)}</div>
+            <div style="font-size:.72rem;color:var(--osv);margin-top:2px;">${h.members.length} คน</div>
           </div>
         </div>
-        ${hasMeta ? `<div style="text-align:right;flex-shrink:0;">
-          ${c.region !== '-' ? `<span class="cl-meta-tag region">${hl(c.region)}</span>` : ''}
-          ${c.zone !== '-' ? `<span class="cl-meta-tag zone">Zone: ${hl(c.zone)}</span>` : ''}
-          ${c.area !== '-' ? `<span class="cl-meta-tag area">Area: ${hl(c.area)}</span>` : ''}
+        ${hasMeta ? `<div style="display:flex;gap:5px;flex-wrap:wrap;justify-content:flex-end;">
+          <span class="cl-meta-tag region">${hl(h.region)}</span>
+          ${h.zone !== '-' ? `<span class="cl-meta-tag zone">Zone: ${hl(h.zone)}</span>` : ''}
+          ${h.area !== '-' ? `<span class="cl-meta-tag area">Area: ${hl(h.area)}</span>` : ''}
         </div>` : ''}
       </div>
-      <div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--outv);display:flex;flex-wrap:wrap;gap:4px 0;">
-        <span class="cl-info-item"><span class="mi material-symbols-outlined">phone</span>${c.mobile !== '-' ? `<a href="tel:${c.mobile}">${hl(c.mobile)}</a>` : '-'}</span>
-        <span class="cl-info-item"><span class="mi material-symbols-outlined">mail</span>${c.email !== '-' ? `<a href="mailto:${c.email}">${hl(c.email)}</a>` : '-'}</span>
-        ${c.am_name !== '-' ? `<span class="cl-am-rm-item"><strong>AM:</strong>${hl(c.am_name)} · <a href="mailto:${c.am_mail}" style="color:var(--ter);text-decoration:none;">${c.am_mail}</a></span>` : ''}
-        ${c.rm_name !== '-' ? `<span class="cl-am-rm-item"><strong>RM:</strong>${hl(c.rm_name)} · <a href="mailto:${c.rm_mail}" style="color:var(--ter);text-decoration:none;">${c.rm_mail}</a></span>` : ''}
-      </div>
+
+      <!-- Members -->
+      <div>${h.members.map(m => memberRow(m)).join('')}</div>
+
+      <!-- AM / RM row -->
+      ${h.am_name !== '-' || h.rm_name !== '-' ? `
+      <div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--outv);display:flex;gap:16px;flex-wrap:wrap;">
+        ${h.am_name !== '-' ? `<div style="display:flex;align-items:center;gap:6px;font-size:.76rem;">
+          <span style="font-weight:800;color:var(--os);background:rgba(92,102,0,.1);color:var(--csm);border-radius:5px;padding:1px 7px;">AM</span>
+          <span style="color:var(--os);font-weight:600;">${hl(h.am_name)}</span>
+          <a href="mailto:${h.am_mail}" style="color:var(--ter);text-decoration:none;">${h.am_mail}</a>
+        </div>` : ''}
+        ${h.rm_name !== '-' ? `<div style="display:flex;align-items:center;gap:6px;font-size:.76rem;">
+          <span style="font-weight:800;background:rgba(107,33,168,.1);color:var(--csub);border-radius:5px;padding:1px 7px;">RM</span>
+          <span style="color:var(--os);font-weight:600;">${hl(h.rm_name)}</span>
+          <a href="mailto:${h.rm_mail}" style="color:var(--ter);text-decoration:none;">${h.rm_mail}</a>
+        </div>` : ''}
+      </div>` : ''}
     </div>`;
   }).join('');
 
-  if (data.length > 100) {
-    container.innerHTML += `<div style="text-align:center;padding:16px;font-size:.82rem;color:var(--osv);">แสดง 100 จาก ${data.length} รายการ — กรุณาระบุคำค้นหาเพิ่มเติม</div>`;
+  if (hubs.length > 80) {
+    container.innerHTML += `<div style="text-align:center;padding:16px;font-size:.82rem;color:var(--osv);">แสดง 80 จาก ${hubs.length} Hub — กรุณาระบุคำค้นหาเพิ่มเติม</div>`;
   }
 }
 
