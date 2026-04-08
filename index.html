@@ -1198,7 +1198,14 @@ async function submitReport() {
   const teamName = DB[tid]?.name || tid;
   const payload = { type: 'feedback', feedback: 'unhelpful', team: teamName, question: q, reason: problem };
 
-  postToAppsScript(payload);
+  if (APPS_SCRIPT_URL) {
+    fetch(APPS_SCRIPT_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    }).catch(() => {});
+  }
 
   // อัปเดต UI ทันที (ไม่รอ response เพราะ no-cors ไม่คืนค่า)
   const wrap = document.getElementById(wrapId);
