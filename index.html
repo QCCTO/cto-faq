@@ -260,6 +260,36 @@ footer { background:rgba(255,244,243,.8); border-top:1px solid var(--outv); padd
 .fbrand { font-family:'Plus Jakarta Sans',sans-serif; font-weight:900; color:var(--primary); font-size:.88rem; }
 .fcopy { font-size:.72rem; color:var(--osv); margin-top:2px; }
 
+/* ── CONTACT LIST PAGE ── */
+.clmain { padding:calc(var(--nh) + 36px) 28px 56px; max-width:1400px; margin:0 auto; }
+.cl-hero { position:relative; border-radius:24px; overflow:hidden; padding:48px 40px; text-align:center; margin-bottom:40px; background:var(--surf); box-shadow:0 6px 40px rgba(172,44,0,.08); }
+.cl-hero h1 { font-family:'Plus Jakarta Sans',sans-serif; font-size:clamp(2rem,5vw,3.5rem); font-weight:900; letter-spacing:-1.5px; line-height:1.1; color:var(--primary); margin-bottom:12px; }
+.cl-hero p { font-size:.95rem; color:var(--osv); max-width:600px; margin:0 auto 28px; line-height:1.6; }
+.cl-filters { display:flex; gap:16px; margin-bottom:32px; flex-wrap:wrap; align-items:flex-start; }
+.cl-search { flex:1; min-width:300px; }
+.cl-team-filter { min-width:220px; }
+.cl-select { width:100%; padding:12px 16px; border:1.5px solid var(--outv); border-radius:12px; font-family:inherit; font-size:.9rem; color:var(--os); background:var(--surf); outline:none; transition:border-color .2s; cursor:pointer; }
+.cl-select:focus { border-color:var(--primary); }
+.cl-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(340px,1fr)); gap:16px; }
+.cl-card { background:var(--surf); border-radius:16px; padding:20px; border:1.5px solid var(--outv); transition:all .25s; position:relative; overflow:hidden; }
+.cl-card::after { content:''; position:absolute; bottom:0; left:0; right:0; height:3px; background:var(--primary); transition:height .25s; }
+.cl-card:hover { transform:translateY(-4px); box-shadow:0 12px 32px rgba(172,44,0,.1); border-color:rgba(172,44,0,.3); }
+.cl-card:hover::after { height:5px; }
+.cl-hub { font-family:'Plus Jakarta Sans',sans-serif; font-size:1.15rem; font-weight:800; color:var(--primary); margin-bottom:12px; display:flex; align-items:center; gap:8px; }
+.cl-hub .mi { font-size:1.2rem; }
+.cl-info { display:flex; flex-direction:column; gap:8px; }
+.cl-info-row { display:flex; align-items:flex-start; gap:8px; font-size:.85rem; }
+.cl-info-label { font-weight:700; color:var(--osv); min-width:90px; flex-shrink:0; }
+.cl-info-value { color:var(--os); word-break:break-word; }
+.cl-info-value a { color:var(--ter); text-decoration:none; transition:color .2s; }
+.cl-info-value a:hover { color:var(--primary); text-decoration:underline; }
+.cl-team-badge { display:inline-block; padding:3px 10px; border-radius:12px; font-size:.7rem; font-weight:700; background:rgba(172,44,0,.1); color:var(--primary); margin-top:8px; }
+.cl-empty { padding:60px 20px; text-align:center; background:var(--surf); border-radius:16px; border:1.5px dashed var(--outv); }
+.cl-empty .mi { font-size:3.5rem; display:block; margin-bottom:16px; opacity:.2; color:var(--osv); }
+.cl-empty p { color:var(--osv); font-size:1rem; }
+.cl-count { text-align:center; margin-bottom:24px; color:var(--sec); font-weight:600; font-size:.9rem; }
+
+
 /* ── COPY BUTTON ── */
 .ans-toolbar {
   display:flex; justify-content:space-between; align-items:center;
@@ -524,7 +554,7 @@ footer { background:rgba(255,244,243,.8); border-top:1px solid var(--outv); padd
       <div class="logo" onclick="sp('home')">CTO FAQ</div>
       <div class="nlinks" id="nl">
         <button class="nl active" onclick="sp('home');sna(this)">หน้าแรก</button>
-        <button class="nl" onclick="sp('search');sna(this);ds('')">ค้นหา FAQ</button>
+        <button class="nl" onclick="sp('contacts');sna(this)">Contact List</button>
         <button class="nl" onclick="showTeam('qc');sna(this)">Quality Control</button>
         <button class="nl" onclick="showTeam('rp');sna(this)">Resource & Planning</button>
         <button class="nl" onclick="showTeam('sm');sna(this)">Smart Map</button>
@@ -645,6 +675,31 @@ footer { background:rgba(255,244,243,.8); border-top:1px solid var(--outv); padd
       </div>
     </main>
   </div>
+  <footer><div><div class="fbrand">CTO FAQ</div><div class="fcopy">© 2024 CTO FAQ SPX. Internal Use Only.</div></div></footer>
+</div>
+
+<!-- ══ CONTACT LIST PAGE ══ -->
+<div class="page" id="page-contacts">
+  <main class="clmain">
+    <section class="cl-hero">
+      <h1 class="su">CONTACT LIST</h1>
+      <p class="su2">ค้นหาข้อมูลติดต่อของ Hub, Region, Zone, Area ทั่วประเทศ</p>
+    </section>
+
+    <div class="cl-filters">
+      <div class="cl-search">
+        <input type="text" id="cl-search-input" class="cl-select" placeholder="ค้นหา Hub, Region, Zone, Area..." oninput="filterContacts()">
+      </div>
+      <div class="cl-team-filter">
+        <select id="cl-team-select" class="cl-select" onchange="filterContacts()">
+          <option value="">ทีมทั้งหมด (CTO TEAM)</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="cl-count" id="cl-count"></div>
+    <div class="cl-grid" id="cl-grid"></div>
+  </main>
   <footer><div><div class="fbrand">CTO FAQ</div><div class="fcopy">© 2024 CTO FAQ SPX. Internal Use Only.</div></div></footer>
 </div>
 
@@ -1282,6 +1337,166 @@ function checkLogin() {
   document.getElementById('login-page').classList.add('active');
 }
 
+/* ── CONTACT LIST ── */
+let CONTACTS_DATA = [];
+let FILTERED_CONTACTS = [];
+
+// Load and parse CSV data
+async function loadContactsData() {
+  try {
+    const response = await fetch('contacts.csv');
+    const text = await response.text();
+    parseContactsCSV(text);
+    populateTeamFilter();
+    filterContacts();
+  } catch (error) {
+    console.error('Error loading contacts:', error);
+    document.getElementById('cl-grid').innerHTML = '<div class="cl-empty"><span class="mi material-symbols-outlined">error</span><p>ไม่สามารถโหลดข้อมูลติดต่อได้</p></div>';
+  }
+}
+
+function parseContactsCSV(text) {
+  const lines = text.split('\n').filter(l => l.trim());
+  
+  // Find header row (row 4, index 3)
+  // Headers: Hub,Supervisor Mail,Assistant Supervisor Mail,Last Date,Region,Zone,Area,AM Name,AM Mail,RM Name,RM Mail
+  
+  // Start from row 5 (index 4) onwards
+  for (let i = 4; i < lines.length; i++) {
+    const line = lines[i];
+    if (!line.trim()) continue;
+    
+    // Parse CSV line (handle quoted fields)
+    const values = parseCSVLine(line);
+    if (values.length < 22) continue;
+    
+    // Column indices based on the CSV structure
+    const hub = values[11]?.trim();
+    const supervisorMail = values[12]?.trim();
+    const assistantMail = values[13]?.trim();
+    const region = values[15]?.trim();
+    const zone = values[16]?.trim();
+    const area = values[17]?.trim();
+    const amName = values[18]?.trim();
+    const amMail = values[19]?.trim();
+    const rmName = values[20]?.trim();
+    const rmMail = values[21]?.trim();
+    
+    if (!hub || hub === '#N/A' || hub === 'Hub') continue;
+    
+    CONTACTS_DATA.push({
+      hub,
+      supervisorMail: supervisorMail && supervisorMail !== '#N/A' ? supervisorMail : '-',
+      assistantMail: assistantMail && assistantMail !== '#N/A' ? assistantMail : '-',
+      region: region || '-',
+      zone: zone || '-',
+      area: area || '-',
+      amName: amName || '-',
+      amMail: amMail || '-',
+      rmName: rmName || '-',
+      rmMail: rmMail || '-'
+    });
+  }
+}
+
+function parseCSVLine(line) {
+  const result = [];
+  let current = '';
+  let inQuotes = false;
+  
+  for (let i = 0; i < line.length; i++) {
+    const char = line[i];
+    const nextChar = line[i + 1];
+    
+    if (char === '"') {
+      if (inQuotes && nextChar === '"') {
+        current += '"';
+        i++;
+      } else {
+        inQuotes = !inQuotes;
+      }
+    } else if (char === ',' && !inQuotes) {
+      result.push(current);
+      current = '';
+    } else if (char !== '\r') {
+      current += char;
+    }
+  }
+  result.push(current);
+  return result;
+}
+
+function populateTeamFilter() {
+  const teams = new Set();
+  CONTACTS_DATA.forEach(c => {
+    if (c.amName && c.amName !== '-') teams.add(c.amName);
+    if (c.rmName && c.rmName !== '-') teams.add(c.rmName);
+  });
+  
+  const select = document.getElementById('cl-team-select');
+  const sortedTeams = Array.from(teams).sort();
+  sortedTeams.forEach(team => {
+    const option = document.createElement('option');
+    option.value = team;
+    option.textContent = team;
+    select.appendChild(option);
+  });
+}
+
+function filterContacts() {
+  const searchTerm = document.getElementById('cl-search-input').value.toLowerCase().trim();
+  const teamFilter = document.getElementById('cl-team-select').value;
+  
+  FILTERED_CONTACTS = CONTACTS_DATA.filter(contact => {
+    // Search filter
+    const searchMatch = !searchTerm || 
+      contact.hub.toLowerCase().includes(searchTerm) ||
+      contact.region.toLowerCase().includes(searchTerm) ||
+      contact.zone.toLowerCase().includes(searchTerm) ||
+      contact.area.toLowerCase().includes(searchTerm);
+    
+    // Team filter
+    const teamMatch = !teamFilter || 
+      contact.amName === teamFilter || 
+      contact.rmName === teamFilter;
+    
+    return searchMatch && teamMatch;
+  });
+  
+  displayContacts();
+}
+
+function displayContacts() {
+  const grid = document.getElementById('cl-grid');
+  const count = document.getElementById('cl-count');
+  
+  count.textContent = `พบ ${FILTERED_CONTACTS.length} รายการ`;
+  
+  if (FILTERED_CONTACTS.length === 0) {
+    grid.innerHTML = '<div class="cl-empty"><span class="mi material-symbols-outlined">search_off</span><p>ไม่พบข้อมูลที่ค้นหา</p></div>';
+    return;
+  }
+  
+  grid.innerHTML = FILTERED_CONTACTS.map(contact => `
+    <div class="cl-card">
+      <div class="cl-hub">
+        <span class="mi material-symbols-outlined">location_on</span>
+        ${contact.hub}
+      </div>
+      <div class="cl-info">
+        ${contact.region !== '-' ? `<div class="cl-info-row"><span class="cl-info-label">Region:</span><span class="cl-info-value">${contact.region}</span></div>` : ''}
+        ${contact.zone !== '-' ? `<div class="cl-info-row"><span class="cl-info-label">Zone:</span><span class="cl-info-value">${contact.zone}</span></div>` : ''}
+        ${contact.area !== '-' ? `<div class="cl-info-row"><span class="cl-info-label">Area:</span><span class="cl-info-value">${contact.area}</span></div>` : ''}
+        ${contact.supervisorMail !== '-' ? `<div class="cl-info-row"><span class="cl-info-label">Supervisor:</span><span class="cl-info-value"><a href="mailto:${contact.supervisorMail}">${contact.supervisorMail}</a></span></div>` : ''}
+        ${contact.assistantMail !== '-' ? `<div class="cl-info-row"><span class="cl-info-label">Asst. Supervisor:</span><span class="cl-info-value"><a href="mailto:${contact.assistantMail}">${contact.assistantMail}</a></span></div>` : ''}
+        ${contact.amName !== '-' ? `<div class="cl-info-row"><span class="cl-info-label">AM:</span><span class="cl-info-value">${contact.amName}${contact.amMail !== '-' ? ` (<a href="mailto:${contact.amMail}">${contact.amMail}</a>)` : ''}</span></div>` : ''}
+        ${contact.rmName !== '-' ? `<div class="cl-info-row"><span class="cl-info-label">RM:</span><span class="cl-info-value">${contact.rmName}${contact.rmMail !== '-' ? ` (<a href="mailto:${contact.rmMail}">${contact.rmMail}</a>)` : ''}</span></div>` : ''}
+      </div>
+      ${contact.amName !== '-' || contact.rmName !== '-' ? `<div class="cl-team-badge">${contact.amName !== '-' ? contact.amName : contact.rmName}</div>` : ''}
+    </div>
+  `).join('');
+}
+
 /* ── TILT ── */
 document.addEventListener('DOMContentLoaded', () => {
   checkLogin();
@@ -1289,6 +1504,7 @@ document.addEventListener('DOMContentLoaded', () => {
   buildFilters();
   ds('');
   handleDeepLink();
+  loadContactsData(); // Load contact list data
   document.querySelectorAll('.tcard').forEach(c => {
     c.addEventListener('mousemove', e => { const r=c.getBoundingClientRect(); const x=((e.clientX-r.left)/r.width-.5)*5; const y=((e.clientY-r.top)/r.height-.5)*5; c.style.transform=`translateY(-4px) rotateX(${-y}deg) rotateY(${x}deg)`; });
     c.addEventListener('mouseleave', () => { c.style.transform=''; c.style.transition='all .4s ease'; setTimeout(()=>c.style.transition='',400); });
