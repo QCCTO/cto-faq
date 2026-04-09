@@ -343,15 +343,15 @@ footer { background:rgba(255,244,243,.8); border-top:1px solid var(--outv); padd
 .rmodal-submit:hover { background:var(--pd); }
 .rmodal-submit:disabled { opacity:.5; cursor:default; } */
 .toast {
-  position:fixed; bottom:28px; left:50%; transform:translateX(-50%) translateY(20px);
-  background:#1c1c1c; color:#fff; padding:10px 20px;
-  border-radius:24px; font-size:.82rem; font-weight:600;
-  display:flex; align-items:center; gap:8px;
-  box-shadow:0 8px 32px rgba(0,0,0,.3);
-  opacity:0; transition:all .3s; pointer-events:none; z-index:9999;
+  position:fixed; top:50%; left:50%; transform:translate(-50%,-50%) scale(.92);
+  background:#1c1c1c; color:#fff; padding:14px 28px;
+  border-radius:24px; font-size:.9rem; font-weight:600;
+  display:flex; align-items:center; gap:10px;
+  box-shadow:0 16px 48px rgba(0,0,0,.35);
+  opacity:0; transition:all .25s cubic-bezier(.34,1.56,.64,1); pointer-events:none; z-index:9999;
   white-space:nowrap;
 }
-.toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+.toast.show { opacity:1; transform:translate(-50%,-50%) scale(1); }
 
 /* ── FEEDBACK WIDGET ── */
 .fw-fab {
@@ -688,7 +688,7 @@ footer { background:rgba(255,244,243,.8); border-top:1px solid var(--outv); padd
       <div class="tgrid" id="home-team-grid"></div>
     </section>
   </main>
-  <footer><div><div class="fbrand">CTO FAQ</div><div class="fcopy">© 2024 CTO FAQ SPX. Internal Use Only.</div></div></footer>
+  <footer><div><div class="fbrand">CTO FAQ</div><div class="fcopy">© 2026 CTO FAQ SPX. Internal Use Only.</div></div></footer>
 </div>
 
 <!-- ══ TEAM FAQ PAGE ══ -->
@@ -709,7 +709,7 @@ footer { background:rgba(255,244,243,.8); border-top:1px solid var(--outv); padd
     </aside>
     <main class="cmain" id="tpc"></main>
   </div>
-  <footer><div><div class="fbrand">CTO FAQ</div><div class="fcopy">© 2024 CTO FAQ SPX. Internal Use Only.</div></div></footer>
+  <footer><div><div class="fbrand">CTO FAQ</div><div class="fcopy">© 2026 CTO FAQ SPX. Internal Use Only.</div></div></footer>
 </div>
 
 <!-- ══ SEARCH PAGE ══ -->
@@ -758,7 +758,7 @@ footer { background:rgba(255,244,243,.8); border-top:1px solid var(--outv); padd
       </div>
     </main>
   </div>
-  <footer><div><div class="fbrand">CTO FAQ</div><div class="fcopy">© 2024 CTO FAQ SPX. Internal Use Only.</div></div></footer>
+  <footer><div><div class="fbrand">CTO FAQ</div><div class="fcopy">© 2026 CTO FAQ SPX. Internal Use Only.</div></div></footer>
 </div>
 
 <script>
@@ -1785,7 +1785,7 @@ document.addEventListener('DOMContentLoaded', () => {
     </div>
     <div class="cl-results" id="cl-results"></div>
   </main>
-  <footer><div><div class="fbrand">CTO FAQ</div><div class="fcopy">© 2024 CTO FAQ SPX. Internal Use Only.</div></div></footer>
+  <footer><div><div class="fbrand">CTO FAQ</div><div class="fcopy">© 2026 CTO FAQ SPX. Internal Use Only.</div></div></footer>
 </div>
 
 
