@@ -1421,6 +1421,14 @@ const DB = {
     ]
   }
 };
+const TEAM_META = {
+  qc:     {icon:'verified',     color:'var(--cqc)', full:'ทีมควบคุมคุณภาพ'},
+  rp:     {icon:'calendar_month',color:'var(--crp)', full:'ทีมวางแผนและจัดสรรทรัพยากร'},
+  sm:     {icon:'map',          color:'var(--csm)', full:'ทีมระบบแผนที่อัจฉริยะ'},
+  sub:    {icon:'handshake',    color:'var(--csub)', full:'ทีมผู้รับเหมาช่วง'},
+  sub_ic: {icon:'person_add',   color:'var(--csub2)', full:'Subcon Individual Contractor'},
+  sub_fm: {icon:'local_shipping',color:'var(--csub3)', full:'Subcon Fleet Management'},
+};
 const BGCLRS = {qc:'rgba(172,44,0,.1)',rp:'rgba(0,97,143,.1)',sm:'rgba(92,102,0,.1)',sub:'rgba(107,33,168,.1)',sub_ic:'rgba(124,58,237,.1)',sub_fm:'rgba(3,105,161,.1)'};
 const ALL_QA = [];
 Object.entries(DB).forEach(([tid, t]) => t.qa.forEach((qa, i) => ALL_QA.push({...qa, tid, tn:t.name, idx:i})));
