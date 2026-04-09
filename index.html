@@ -344,10 +344,13 @@ footer { background:rgba(255,244,243,.8); border-top:1px solid var(--outv); padd
 .rmodal-submit:disabled { opacity:.5; cursor:default; } */
 .toast-overlay {
   display:none; position:fixed; inset:0; z-index:99999;
-  align-items:center; justify-content:center;
   pointer-events:none;
 }
-.toast-overlay.show { display:flex; }
+.toast-overlay.show {
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
 .toast {
   background:#1c1c1c; color:#fff; padding:16px 32px;
   border-radius:24px; font-size:.92rem; font-weight:600;
@@ -1147,14 +1150,15 @@ const UPDATED_DATE = (() => {
 })();
 
 /* ── TOAST ── */
+let _toastTimer = null;
 function showToast(msg, icon='check_circle') {
   let overlay = document.getElementById('global-toast-overlay');
   let t = document.getElementById('global-toast');
   t.innerHTML = `<span class="mi material-symbols-outlined" style="font-size:1rem;color:#6ee7b7">${icon}</span>${msg}`;
   t.style.animation = 'none'; t.offsetHeight; t.style.animation = '';
   overlay.classList.add('show');
-  clearTimeout(overlay._timer);
-  overlay._timer = setTimeout(() => overlay.classList.remove('show'), 2800);
+  clearTimeout(_toastTimer);
+  _toastTimer = setTimeout(() => overlay.classList.remove('show'), 2800);
 }
 
 /* ── CLIPBOARD HELPER (works in sandboxed iframe) ── */
