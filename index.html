@@ -1497,7 +1497,7 @@ function toggleFW() {
   }
 }
 
-document.addEventListener('click', e => {
+document.addEventListener('mousedown', e => {
   if (!e.target.closest('#fw-panel') && !e.target.closest('#fw-fab')) {
     document.getElementById('fw-panel')?.classList.remove('open');
     document.getElementById('fw-fab')?.classList.remove('open');
