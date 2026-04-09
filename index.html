@@ -342,16 +342,21 @@ footer { background:rgba(255,244,243,.8); border-top:1px solid var(--outv); padd
 .rmodal-submit { padding:8px 20px; border-radius:9px; border:none; background:var(--primary); color:#fff; font-family:inherit; font-size:.85rem; font-weight:700; cursor:pointer; transition:all .2s; }
 .rmodal-submit:hover { background:var(--pd); }
 .rmodal-submit:disabled { opacity:.5; cursor:default; } */
-.toast {
-  position:fixed; top:50%; left:50%; transform:translate(-50%,-50%) scale(.92);
-  background:#1c1c1c; color:#fff; padding:14px 28px;
-  border-radius:24px; font-size:.9rem; font-weight:600;
-  display:flex; align-items:center; gap:10px;
-  box-shadow:0 16px 48px rgba(0,0,0,.35);
-  opacity:0; transition:all .25s cubic-bezier(.34,1.56,.64,1); pointer-events:none; z-index:9999;
-  white-space:nowrap;
+.toast-overlay {
+  display:none; position:fixed; inset:0; z-index:99999;
+  align-items:center; justify-content:center;
+  pointer-events:none;
 }
-.toast.show { opacity:1; transform:translate(-50%,-50%) scale(1); }
+.toast-overlay.show { display:flex; }
+.toast {
+  background:#1c1c1c; color:#fff; padding:16px 32px;
+  border-radius:24px; font-size:.92rem; font-weight:600;
+  display:flex; align-items:center; gap:10px;
+  box-shadow:0 16px 48px rgba(0,0,0,.4);
+  white-space:nowrap;
+  animation:toastIn .25s cubic-bezier(.34,1.56,.64,1) forwards;
+}
+@keyframes toastIn { from{opacity:0;transform:scale(.85);} to{opacity:1;transform:scale(1);} }
 
 /* ── FEEDBACK WIDGET ── */
 .fw-fab {
@@ -1143,11 +1148,13 @@ const UPDATED_DATE = (() => {
 
 /* ── TOAST ── */
 function showToast(msg, icon='check_circle') {
+  let overlay = document.getElementById('global-toast-overlay');
   let t = document.getElementById('global-toast');
   t.innerHTML = `<span class="mi material-symbols-outlined" style="font-size:1rem;color:#6ee7b7">${icon}</span>${msg}`;
-  t.classList.add('show');
-  clearTimeout(t._timer);
-  t._timer = setTimeout(() => t.classList.remove('show'), 2800);
+  t.style.animation = 'none'; t.offsetHeight; t.style.animation = '';
+  overlay.classList.add('show');
+  clearTimeout(overlay._timer);
+  overlay._timer = setTimeout(() => overlay.classList.remove('show'), 2800);
 }
 
 /* ── CLIPBOARD HELPER (works in sandboxed iframe) ── */
@@ -1671,7 +1678,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 </script>
-<div class="toast" id="global-toast"></div>
+<div class="toast-overlay" id="global-toast-overlay"><div class="toast" id="global-toast"></div></div>
 
 <!-- ── FEEDBACK WIDGET ── -->
 <button class="fw-fab" id="fw-fab" onclick="toggleFW()" title="Feedback / แนะนำคำถาม">
