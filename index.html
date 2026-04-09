@@ -353,6 +353,79 @@ footer { background:rgba(255,244,243,.8); border-top:1px solid var(--outv); padd
 }
 .toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
 
+/* ── FEEDBACK WIDGET ── */
+.fw-fab {
+  position:fixed; bottom:28px; right:28px; z-index:400;
+  width:52px; height:52px; border-radius:50%;
+  background:var(--primary); color:#fff; border:none; cursor:pointer;
+  display:flex; align-items:center; justify-content:center;
+  box-shadow:0 6px 24px rgba(172,44,0,.35);
+  transition:all .25s; font-family:inherit;
+}
+.fw-fab:hover { transform:scale(1.08) translateY(-2px); box-shadow:0 10px 32px rgba(172,44,0,.45); }
+.fw-fab .mi { font-size:1.4rem; transition:transform .3s; }
+.fw-fab.open .mi { transform:rotate(45deg); }
+.fw-pulse { position:absolute; top:-3px; right:-3px; width:14px; height:14px; border-radius:50%; background:#ff7852; border:2px solid #fff; animation:pls 2s infinite; }
+
+.fw-panel {
+  position:fixed; bottom:92px; right:28px; z-index:400;
+  width:360px; background:var(--surf); border-radius:20px;
+  box-shadow:0 20px 60px rgba(0,0,0,.15); border:1.5px solid var(--outv);
+  overflow:hidden; transform:scale(.92) translateY(16px); opacity:0;
+  pointer-events:none; transition:all .25s cubic-bezier(.34,1.56,.64,1);
+  transform-origin:bottom right;
+}
+.fw-panel.open { transform:scale(1) translateY(0); opacity:1; pointer-events:all; }
+
+.fw-header { background:linear-gradient(135deg,var(--primary),var(--pl)); padding:18px 20px 14px; color:#fff; }
+.fw-header h3 { font-family:'Plus Jakarta Sans',sans-serif; font-size:1rem; font-weight:800; margin-bottom:3px; }
+.fw-header p { font-size:.75rem; opacity:.85; }
+
+.fw-tabs { display:flex; border-bottom:1px solid var(--outv); }
+.fw-tab { flex:1; padding:11px; border:none; background:none; font-family:inherit; font-size:.8rem; font-weight:600; color:var(--osv); cursor:pointer; border-bottom:2.5px solid transparent; transition:all .2s; }
+.fw-tab.active { color:var(--primary); border-bottom-color:var(--primary); }
+.fw-tab:hover:not(.active) { background:var(--sl); }
+
+.fw-body { padding:18px 20px 20px; max-height:360px; overflow-y:auto; }
+
+.fw-label { font-size:.75rem; font-weight:700; color:var(--os); display:block; margin-bottom:6px; }
+.fw-input, .fw-textarea, .fw-select {
+  width:100%; border:1.5px solid var(--outv); border-radius:10px;
+  padding:9px 12px; font-family:inherit; font-size:.84rem; color:var(--os);
+  background:var(--bg); outline:none; transition:border-color .2s;
+  margin-bottom:12px;
+}
+.fw-input:focus, .fw-textarea:focus, .fw-select:focus { border-color:var(--primary); }
+.fw-textarea { resize:vertical; min-height:80px; }
+
+.fw-rating { display:flex; gap:8px; margin-bottom:12px; }
+.fw-rating-btn {
+  flex:1; padding:8px; border-radius:10px; border:1.5px solid var(--outv);
+  background:none; font-family:inherit; font-size:.82rem; cursor:pointer;
+  transition:all .2s; display:flex; align-items:center; justify-content:center; gap:5px; color:var(--osv);
+}
+.fw-rating-btn:hover { border-color:var(--primary); color:var(--primary); background:var(--sl); }
+.fw-rating-btn.selected-good { border-color:#16a34a; color:#16a34a; background:rgba(22,163,74,.08); }
+.fw-rating-btn.selected-bad { border-color:#dc2626; color:#dc2626; background:rgba(220,38,38,.08); }
+
+.fw-submit {
+  width:100%; padding:10px; border-radius:11px; border:none;
+  background:var(--primary); color:#fff; font-family:inherit;
+  font-size:.88rem; font-weight:700; cursor:pointer; transition:all .2s;
+  display:flex; align-items:center; justify-content:center; gap:6px; margin-top:4px;
+}
+.fw-submit:hover { background:var(--pd); }
+.fw-submit:disabled { opacity:.5; cursor:default; }
+
+.fw-success {
+  text-align:center; padding:28px 20px;
+  display:none; flex-direction:column; align-items:center; gap:8px;
+}
+.fw-success.show { display:flex; }
+.fw-success .mi { font-size:2.8rem; color:#16a34a; }
+.fw-success h4 { font-family:'Plus Jakarta Sans',sans-serif; font-weight:800; color:var(--os); }
+.fw-success p { font-size:.8rem; color:var(--osv); }
+
 /* ── CONTACT LIST PAGE ── */
 .cl-hero { background:var(--surf); border-radius:20px; padding:40px 36px 32px; margin-bottom:32px; box-shadow:0 4px 24px rgba(172,44,0,.07); border:1.5px solid var(--outv); }
 .cl-hero h1 { font-family:'Plus Jakarta Sans',sans-serif; font-size:2rem; font-weight:900; color:var(--primary); margin-bottom:6px; }
@@ -1410,6 +1483,129 @@ function renderContacts(data, q) {
   }
 }
 
+/* ── FEEDBACK WIDGET ── */
+let _fwRating = '';
+
+function toggleFW() {
+  const panel = document.getElementById('fw-panel');
+  const fab = document.getElementById('fw-fab');
+  const isOpen = panel.classList.toggle('open');
+  fab.classList.toggle('open', isOpen);
+  if (isOpen) {
+    const pulse = fab.querySelector('.fw-pulse');
+    if (pulse) pulse.style.display = 'none';
+  }
+}
+
+document.addEventListener('click', e => {
+  if (!e.target.closest('#fw-panel') && !e.target.closest('#fw-fab')) {
+    document.getElementById('fw-panel')?.classList.remove('open');
+    document.getElementById('fw-fab')?.classList.remove('open');
+  }
+});
+
+function switchFWTab(tab, btn) {
+  document.querySelectorAll('.fw-tab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('fw-tab-feedback').style.display = tab === 'feedback' ? 'block' : 'none';
+  document.getElementById('fw-tab-suggest').style.display = tab === 'suggest' ? 'block' : 'none';
+}
+
+function selectRating(val, btn) {
+  _fwRating = val;
+  document.querySelectorAll('.fw-rating-btn').forEach(b => {
+    b.classList.remove('selected-good','selected-bad');
+    b.style.cssText = '';
+  });
+  if (val === 'good') btn.classList.add('selected-good');
+  else if (val === 'bad') btn.classList.add('selected-bad');
+  else { btn.style.borderColor='var(--primary)'; btn.style.color='var(--primary)'; btn.style.background='var(--sl)'; }
+}
+
+function submitFWFeedback() {
+  const text = document.getElementById('fw-fb-text').value.trim();
+  if (!text) { document.getElementById('fw-fb-text').focus(); return; }
+  const btn = document.getElementById('fw-fb-btn');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="mi material-symbols-outlined" style="font-size:.9rem">hourglass_empty</span> กำลังส่ง...';
+
+  let user = '-';
+  try { user = sessionStorage.getItem('spx_user') || '-'; } catch(e) {}
+
+  const payload = {
+    type: 'general_feedback',
+    rating: _fwRating || '-',
+    message: text,
+    user: user,
+    page: document.querySelector('#nl .nl.active')?.textContent?.trim() || '-'
+  };
+
+  if (APPS_SCRIPT_URL) {
+    fetch(APPS_SCRIPT_URL, {
+      method: 'POST', mode: 'no-cors', credentials: 'include',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    }).catch(() => {});
+  }
+
+  document.getElementById('fw-fb-form').style.display = 'none';
+  document.getElementById('fw-fb-success').classList.add('show');
+  setTimeout(() => {
+    toggleFW();
+    setTimeout(() => {
+      document.getElementById('fw-fb-form').style.display = 'block';
+      document.getElementById('fw-fb-success').classList.remove('show');
+      document.getElementById('fw-fb-text').value = '';
+      btn.disabled = false;
+      btn.innerHTML = '<span class="mi material-symbols-outlined" style="font-size:.9rem">send</span> ส่ง Feedback';
+      _fwRating = '';
+      document.querySelectorAll('.fw-rating-btn').forEach(b => { b.style.cssText=''; b.classList.remove('selected-good','selected-bad'); });
+    }, 500);
+  }, 1800);
+}
+
+function submitFWSuggest() {
+  const text = document.getElementById('fw-sq-text').value.trim();
+  if (!text) { document.getElementById('fw-sq-text').focus(); return; }
+  const btn = document.getElementById('fw-sq-btn');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="mi material-symbols-outlined" style="font-size:.9rem">hourglass_empty</span> กำลังส่ง...';
+
+  let user = '-';
+  try { user = sessionStorage.getItem('spx_user') || '-'; } catch(e) {}
+
+  const payload = {
+    type: 'suggest_question',
+    team: document.getElementById('fw-sq-team').value || 'ไม่ระบุ',
+    question: text,
+    context: document.getElementById('fw-sq-context').value.trim() || '-',
+    user: user
+  };
+
+  if (APPS_SCRIPT_URL) {
+    fetch(APPS_SCRIPT_URL, {
+      method: 'POST', mode: 'no-cors', credentials: 'include',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    }).catch(() => {});
+  }
+
+  document.getElementById('fw-sq-form').style.display = 'none';
+  document.getElementById('fw-sq-success').classList.add('show');
+  setTimeout(() => {
+    toggleFW();
+    setTimeout(() => {
+      document.getElementById('fw-sq-form').style.display = 'block';
+      document.getElementById('fw-sq-success').classList.remove('show');
+      document.getElementById('fw-sq-text').value = '';
+      document.getElementById('fw-sq-context').value = '';
+      document.getElementById('fw-sq-team').value = '';
+      btn.disabled = false;
+      btn.innerHTML = '<span class="mi material-symbols-outlined" style="font-size:.9rem">send</span> ส่งคำแนะนำ';
+    }, 500);
+  }, 1800);
+}
+
 function handleGoogleLogin(response) {
   const errEl = document.getElementById('login-err');
   try {
@@ -1476,6 +1672,85 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 </script>
 <div class="toast" id="global-toast"></div>
+
+<!-- ── FEEDBACK WIDGET ── -->
+<button class="fw-fab" id="fw-fab" onclick="toggleFW()" title="Feedback / แนะนำคำถาม">
+  <span class="mi material-symbols-outlined">add_comment</span>
+  <span class="fw-pulse"></span>
+</button>
+
+<div class="fw-panel" id="fw-panel">
+  <div class="fw-header">
+    <h3>💬 บอกเราได้เลย!</h3>
+    <p>Feedback หรืออยากให้เพิ่มคำถามอะไร? เราฟังอยู่เสมอ</p>
+  </div>
+
+  <div class="fw-tabs">
+    <button class="fw-tab active" onclick="switchFWTab('feedback',this)">
+      ⭐ Feedback
+    </button>
+    <button class="fw-tab" onclick="switchFWTab('suggest',this)">
+      ❓ แนะนำคำถาม
+    </button>
+  </div>
+
+  <!-- TAB: Feedback -->
+  <div class="fw-body" id="fw-tab-feedback">
+    <div class="fw-success" id="fw-fb-success">
+      <span class="mi material-symbols-outlined">check_circle</span>
+      <h4>ขอบคุณมากเลย! 🙏</h4>
+      <p>Feedback ของคุณช่วยให้เราพัฒนาได้ดีขึ้นครับ</p>
+    </div>
+    <div id="fw-fb-form">
+      <label class="fw-label">ความพึงพอใจโดยรวม</label>
+      <div class="fw-rating" id="fw-rating">
+        <button class="fw-rating-btn" onclick="selectRating('good',this)">
+          <span class="mi material-symbols-outlined" style="font-size:1rem">thumb_up</span> ดีมาก
+        </button>
+        <button class="fw-rating-btn" onclick="selectRating('ok',this)">
+          <span class="mi material-symbols-outlined" style="font-size:1rem">sentiment_neutral</span> พอใช้
+        </button>
+        <button class="fw-rating-btn" onclick="selectRating('bad',this)">
+          <span class="mi material-symbols-outlined" style="font-size:1rem">thumb_down</span> ต้องปรับ
+        </button>
+      </div>
+      <label class="fw-label">ความคิดเห็น / ข้อเสนอแนะ <span style="color:var(--primary)">*</span></label>
+      <textarea class="fw-textarea" id="fw-fb-text" placeholder="เช่น ข้อมูลครบถ้วนดี, อยากให้เพิ่มหัวข้อ..., UI สวยแต่โหลดช้า..."></textarea>
+      <button class="fw-submit" id="fw-fb-btn" onclick="submitFWFeedback()">
+        <span class="mi material-symbols-outlined" style="font-size:.9rem">send</span> ส่ง Feedback
+      </button>
+    </div>
+  </div>
+
+  <!-- TAB: Suggest Question -->
+  <div class="fw-body" id="fw-tab-suggest" style="display:none;">
+    <div class="fw-success" id="fw-sq-success">
+      <span class="mi material-symbols-outlined">check_circle</span>
+      <h4>รับเรื่องแล้วครับ! 🙌</h4>
+      <p>ทีมงานจะนำไปพิจารณาเพิ่มใน FAQ โดยเร็ว</p>
+    </div>
+    <div id="fw-sq-form">
+      <label class="fw-label">ทีมที่เกี่ยวข้อง</label>
+      <select class="fw-select" id="fw-sq-team">
+        <option value="">-- เลือกทีม --</option>
+        <option>Quality Control</option>
+        <option>Resource & Planning</option>
+        <option>Smart Map</option>
+        <option>Subcon</option>
+        <option>Subcon (IC)</option>
+        <option>Subcon (FM)</option>
+        <option>ทั่วไป / ไม่แน่ใจ</option>
+      </select>
+      <label class="fw-label">คำถามที่อยากให้เพิ่ม <span style="color:var(--primary)">*</span></label>
+      <textarea class="fw-textarea" id="fw-sq-text" placeholder="เช่น ขั้นตอนการขอ OT เร่งด่วนคืออะไร?, COD ต้องดำเนินการอย่างไร?..."></textarea>
+      <label class="fw-label">บริบทเพิ่มเติม (ถ้ามี)</label>
+      <input class="fw-input" id="fw-sq-context" placeholder="เช่น เคยเกิดปัญหานี้บ่อย, ต้องใช้ใน scenario ไหน..." style="margin-bottom:12px;">
+      <button class="fw-submit" id="fw-sq-btn" onclick="submitFWSuggest()">
+        <span class="mi material-symbols-outlined" style="font-size:.9rem">send</span> ส่งคำแนะนำ
+      </button>
+    </div>
+  </div>
+</div>
 
 <!-- ══ CONTACT LIST PAGE ══ -->
 <div class="page" id="page-contact">
