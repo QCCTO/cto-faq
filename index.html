@@ -185,6 +185,20 @@ aside.snav { width:220px; flex-shrink:0; background:var(--surf); border-right:1p
 .faq-chevron { transition:transform .25s; color:var(--osv); font-size:1rem; flex-shrink:0; margin-top:3px; }
 .faq-item.open .faq-chevron { transform:rotate(180deg); color:var(--primary); }
 
+/* ── SCROLL REVEAL ── */
+.reveal { opacity:0; transform:translateY(20px); transition:opacity .45s ease, transform .45s ease; }
+.reveal.visible { opacity:1; transform:none; }
+
+/* ── RIPPLE on interactive buttons ── */
+.ripple-btn { position:relative; overflow:hidden; }
+.ripple-btn .ripple-wave {
+  position:absolute; border-radius:50%; transform:scale(0);
+  background:rgba(255,255,255,.35);
+  animation:rippleAnim .55s linear;
+  pointer-events:none;
+}
+@keyframes rippleAnim { to { transform:scale(4); opacity:0; } }
+
 /* Answer panel */
 @keyframes fadeIn { from{opacity:0;transform:translateY(-4px);} to{opacity:1;transform:none;} }
 .faq-a { display:none; padding:0 16px 10px 16px; }
@@ -1696,6 +1710,40 @@ document.addEventListener('DOMContentLoaded', () => {
   document.querySelectorAll('.tcard').forEach(c => {
     c.addEventListener('mousemove', e => { const r=c.getBoundingClientRect(); const x=((e.clientX-r.left)/r.width-.5)*5; const y=((e.clientY-r.top)/r.height-.5)*5; c.style.transform=`translateY(-4px) rotateX(${-y}deg) rotateY(${x}deg)`; });
     c.addEventListener('mouseleave', () => { c.style.transform=''; c.style.transition='all .4s ease'; setTimeout(()=>c.style.transition='',400); });
+  });
+
+  /* ── Scroll Reveal ── */
+  const revealObs = new IntersectionObserver((entries) => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('visible'), i * 40);
+        revealObs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.08 });
+  const observeReveal = () => {
+    document.querySelectorAll('.faq-item:not(.reveal), .rcard:not(.reveal)').forEach(el => {
+      el.classList.add('reveal');
+      revealObs.observe(el);
+    });
+  };
+  observeReveal();
+  // Re-observe when new items appear (team switch / search)
+  const mutObs = new MutationObserver(observeReveal);
+  mutObs.observe(document.body, { childList: true, subtree: true });
+
+  /* ── Ripple on primary buttons ── */
+  document.addEventListener('click', e => {
+    const btn = e.target.closest('.search-go, .sp-go, .rmodal-submit, .fw-submit, .gtab');
+    if (!btn) return;
+    btn.classList.add('ripple-btn');
+    const r = btn.getBoundingClientRect();
+    const size = Math.max(r.width, r.height) * 2;
+    const el = document.createElement('span');
+    el.className = 'ripple-wave';
+    el.style.cssText = `width:${size}px;height:${size}px;left:${e.clientX-r.left-size/2}px;top:${e.clientY-r.top-size/2}px`;
+    btn.appendChild(el);
+    el.addEventListener('animationend', () => el.remove());
   });
 });
 </script>
