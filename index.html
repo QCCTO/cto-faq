@@ -868,11 +868,51 @@ footer { background:rgba(255,244,243,.8); border-top:1px solid var(--outv); padd
     animation-duration:.01ms !important;
     transition-duration:.01ms !important;
   }
+
+/* ── TCARD SHIMMER on hover ── */
+.tcard {
+  --mx: 50%; --my: 50%;
+}
+.tcard::before {
+  content:'';
+  position:absolute;
+  inset:0;
+  border-radius:inherit;
+  background:radial-gradient(circle at var(--mx) var(--my), rgba(255,255,255,.18) 0%, transparent 60%);
+  opacity:0;
+  transition:opacity .25s;
+  pointer-events:none;
+  z-index:1;
+}
+.tcard:hover::before { opacity:1; }
+
+/* ── HERO FLOAT BADGE ── */
+@keyframes floatBadge {
+  0%,100%{transform:translateY(0) rotate(-2deg);}
+  50%{transform:translateY(-8px) rotate(2deg);}
+}
+.hero-float-badge {
+  position:absolute;
+  font-size:.72rem;
+  font-weight:700;
+  padding:4px 12px;
+  border-radius:20px;
+  background:rgba(172,44,0,.1);
+  border:1.5px solid rgba(172,44,0,.2);
+  color:var(--primary);
+  pointer-events:none;
+  z-index:2;
+  animation:floatBadge 4s ease-in-out infinite;
+  white-space:nowrap;
+  backdrop-filter:blur(6px);
+}
+
 }
 
 </style>
 </head>
 <body>
+<div id="cursor-glow" style="position:fixed;pointer-events:none;z-index:9999;width:400px;height:400px;border-radius:50%;background:radial-gradient(circle,rgba(172,44,0,.07) 0%,transparent 70%);transform:translate(-50%,-50%);transition:opacity .3s;opacity:0;top:0;left:0;"></div>
 
 <!-- ── LOGIN PAGE ── -->
 <div id="login-page" class="active">
@@ -928,10 +968,16 @@ footer { background:rgba(255,244,243,.8); border-top:1px solid var(--outv); padd
 <div class="page active" id="page-home">
   <main class="hmain">
     <section class="hero">
+      <canvas id="hero-particles" style="position:absolute;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;border-radius:24px;"></canvas>
       <div class="hbg"></div><div class="hblob hb1"></div><div class="hblob hb2"></div>
       <div class="hcon">
         <h1 class="su">CTO SPX FAQ</h1>
         <p class="su2">ค้นหาคำถาม-คำตอบจากทีม Quality Control, Resource & Planning, Smart Map และ Subcon</p>
+        <!-- Floating decorative badges -->
+        <div class="hero-float-badge" style="top:18%;left:6%;animation-delay:0s;">📦 VPN</div>
+        <div class="hero-float-badge" style="top:12%;right:8%;animation-delay:1.3s;animation-duration:5s;">🗺️ Smart Map</div>
+        <div class="hero-float-badge" style="bottom:18%;left:5%;animation-delay:.7s;animation-duration:3.8s;">📋 Subcon</div>
+        <div class="hero-float-badge" style="bottom:22%;right:6%;animation-delay:2s;animation-duration:4.5s;">✅ QC</div>
         <div class="search-container su3" id="hero-sc">
           <div class="search-card" id="hero-card">
             <div class="search-box">
@@ -2150,6 +2196,176 @@ document.addEventListener('DOMContentLoaded', () => {
     </div>
   </div>
 </div>
+<!-- ══ VISUAL EFFECTS ══ -->
+<script>
+(function() {
+  /* ── 1. HERO PARTICLE CANVAS ── */
+  function initParticles() {
+    const canvas = document.getElementById('hero-particles');
+    if (!canvas) return;
+    const hero = canvas.parentElement;
+    const ctx = canvas.getContext('2d');
+    let W, H, particles = [], animId;
+
+    function resize() {
+      W = canvas.width  = hero.offsetWidth;
+      H = canvas.height = hero.offsetHeight;
+    }
+
+    function Particle() {
+      this.reset = function() {
+        this.x = Math.random() * W;
+        this.y = Math.random() * H;
+        this.vx = (Math.random() - .5) * .55;
+        this.vy = (Math.random() - .5) * .55;
+        this.r  = Math.random() * 2.2 + .6;
+        this.alpha = Math.random() * .5 + .15;
+      };
+      this.reset();
+    }
+
+    function connect() {
+      for (let i = 0; i < particles.length; i++) {
+        for (let j = i + 1; j < particles.length; j++) {
+          const dx = particles[i].x - particles[j].x;
+          const dy = particles[i].y - particles[j].y;
+          const dist = Math.sqrt(dx*dx + dy*dy);
+          if (dist < 95) {
+            ctx.strokeStyle = `rgba(172,44,0,${.13 * (1 - dist/95)})`;
+            ctx.lineWidth = .8;
+            ctx.beginPath();
+            ctx.moveTo(particles[i].x, particles[i].y);
+            ctx.lineTo(particles[j].x, particles[j].y);
+            ctx.stroke();
+          }
+        }
+      }
+    }
+
+    function draw() {
+      ctx.clearRect(0, 0, W, H);
+      particles.forEach(p => {
+        p.x += p.vx; p.y += p.vy;
+        if (p.x < 0) p.x = W; if (p.x > W) p.x = 0;
+        if (p.y < 0) p.y = H; if (p.y > H) p.y = 0;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI*2);
+        ctx.fillStyle = `rgba(172,44,0,${p.alpha})`;
+        ctx.fill();
+      });
+      connect();
+      animId = requestAnimationFrame(draw);
+    }
+
+    resize();
+    const COUNT = Math.min(55, Math.floor(W * H / 9000));
+    for (let i = 0; i < COUNT; i++) { const p = new Particle(); particles.push(p); }
+
+    draw();
+    window.addEventListener('resize', () => { cancelAnimationFrame(animId); resize(); draw(); });
+
+    // Mouse repel effect inside hero
+    hero.addEventListener('mousemove', e => {
+      const rect = hero.getBoundingClientRect();
+      const mx = e.clientX - rect.left;
+      const my = e.clientY - rect.top;
+      particles.forEach(p => {
+        const dx = p.x - mx, dy = p.y - my;
+        const dist = Math.sqrt(dx*dx + dy*dy);
+        if (dist < 80) {
+          p.vx += dx / dist * .12;
+          p.vy += dy / dist * .12;
+          // dampen
+          p.vx *= .92; p.vy *= .92;
+        }
+      });
+    });
+  }
+
+  /* ── 2. CURSOR GLOW ── */
+  function initCursorGlow() {
+    const glow = document.getElementById('cursor-glow');
+    if (!glow) return;
+    let tx = 0, ty = 0, cx = 0, cy = 0, raf;
+    document.addEventListener('mousemove', e => {
+      tx = e.clientX; ty = e.clientY;
+      glow.style.opacity = '1';
+    });
+    document.addEventListener('mouseleave', () => { glow.style.opacity = '0'; });
+    function loop() {
+      cx += (tx - cx) * .09;
+      cy += (ty - cy) * .09;
+      glow.style.left = cx + 'px';
+      glow.style.top  = cy + 'px';
+      raf = requestAnimationFrame(loop);
+    }
+    loop();
+  }
+
+  /* ── 3. TCARD MOUSE SHIMMER ── */
+  function initCardShimmer() {
+    document.addEventListener('mousemove', e => {
+      const card = e.target.closest('.tcard');
+      if (!card) return;
+      const rect = card.getBoundingClientRect();
+      const x = ((e.clientX - rect.left) / rect.width  * 100).toFixed(1) + '%';
+      const y = ((e.clientY - rect.top ) / rect.height * 100).toFixed(1) + '%';
+      card.style.setProperty('--mx', x);
+      card.style.setProperty('--my', y);
+    });
+  }
+
+  /* ── 4. TCARD ENTRANCE COUNT-UP ── */
+  function initCountUp() {
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        const el = entry.target.querySelector('.tcount');
+        if (!el || el._animated) return;
+        el._animated = true;
+        const match = el.textContent.match(/(\d+)/);
+        if (!match) return;
+        const target = parseInt(match[1]);
+        let current = 0;
+        const duration = 700;
+        const start = performance.now();
+        function step(now) {
+          const progress = Math.min((now - start) / duration, 1);
+          const eased = 1 - Math.pow(1 - progress, 3);
+          current = Math.round(eased * target);
+          el.textContent = el.textContent.replace(/\d+/, current);
+          if (progress < 1) requestAnimationFrame(step);
+        }
+        requestAnimationFrame(step);
+        observer.unobserve(entry.target);
+      });
+    }, { threshold: .3 });
+
+    // Observe after grid builds
+    function attachObserver() {
+      document.querySelectorAll('.tcard').forEach(c => observer.observe(c));
+    }
+    setTimeout(attachObserver, 600);
+    // re-attach if home is navigated back
+    const origBuild = window.buildHomeGrid;
+    if (origBuild) {
+      window.buildHomeGrid = function() { origBuild(); setTimeout(attachObserver, 100); };
+    }
+  }
+
+  // Init on DOMContentLoaded
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', run);
+  } else { run(); }
+
+  function run() {
+    initParticles();
+    initCursorGlow();
+    initCardShimmer();
+    initCountUp();
+  }
+})();
+</script>
 
 </body>
 </html>
