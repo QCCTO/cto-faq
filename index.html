@@ -69,6 +69,8 @@ aside.snav { width:220px; flex-shrink:0; background:var(--surf); border-right:1p
 .stags { margin-top:18px; display:flex; gap:10px; justify-content:center; flex-wrap:wrap; }
 .stag { font-size:.8rem; color:var(--primary); font-weight:600; cursor:pointer; transition:all .2s; padding:2px 0; }
 .stag:hover { text-decoration:underline; }
+.stag-kw { padding:3px 12px; border-radius:20px; border:1.5px solid rgba(172,44,0,.25); background:rgba(172,44,0,.05); color:var(--primary); font-weight:600; font-size:.78rem; transition:all .18s; }
+.stag-kw:hover { background:rgba(172,44,0,.12); border-color:var(--primary); transform:translateY(-1px); text-decoration:none !important; }
 
 /* ── SEARCH CARD (unified) ── */
 .search-container { position:relative; max-width:640px; margin:0 auto; z-index:10; }
@@ -705,14 +707,15 @@ footer { background:rgba(255,244,243,.8); border-top:1px solid var(--outv); padd
             <div class="suggest-drop" id="hero-drop"></div>
           </div>
         </div>
-        <div class="stags su4">
-          <span style="color:var(--sec);font-size:.8rem;">ค้นหายอดนิยม:</span>
-          <span class="stag" onclick="gst('VPN')">#VPN</span>
-          <span class="stag" onclick="gst('Inhouse')">#Inhouse</span>
-          <span class="stag" onclick="gst('OT')">#OT</span>
-          <span class="stag" onclick="gst('Misroute')">#Misroute</span>
-          <span class="stag" onclick="gst('Asset')">#Asset</span>
-          <span class="stag" onclick="gst('COD')">#COD</span>
+        <div class="stags su4" style="gap:8px;align-items:center;">
+          <span style="color:var(--sec);font-size:.78rem;flex-shrink:0;">ตัวอย่าง keyword:</span>
+          <span class="stag stag-kw" onclick="gst('VPN')">VPN</span>
+          <span class="stag stag-kw" onclick="gst('Inhouse')">Inhouse</span>
+          <span class="stag stag-kw" onclick="gst('OT')">OT</span>
+          <span class="stag stag-kw" onclick="gst('Misroute')">Misroute</span>
+          <span class="stag stag-kw" onclick="gst('Asset')">Asset</span>
+          <span class="stag stag-kw" onclick="gst('COD')">COD</span>
+          <span class="stag stag-kw" onclick="gst('Subcon')">Subcon</span>
         </div>
       </div>
     </section>
