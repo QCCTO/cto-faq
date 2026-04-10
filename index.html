@@ -631,6 +631,245 @@ footer { background:rgba(255,244,243,.8); border-top:1px solid var(--outv); padd
 .login-divider { display:flex; align-items:center; gap:10px; margin:20px 0; color:var(--out); font-size:.75rem; }
 .login-divider::before,.login-divider::after { content:''; flex:1; height:1px; background:var(--outv); }
 .g-signin-wrap { display:flex; justify-content:center; margin-bottom:4px; }
+
+/* ══════════════════════════════════════════════
+   ✨ ENHANCED ANIMATIONS & VISUAL POLISH
+══════════════════════════════════════════════ */
+
+/* ── Smooth cursor glow on hero search ── */
+.search-card:focus-within {
+  box-shadow:0 8px 40px rgba(172,44,0,.18), 0 0 0 3px rgba(172,44,0,.08) !important;
+  border-color:var(--primary) !important;
+  transition:all .3s cubic-bezier(.34,1.56,.64,1);
+}
+
+/* ── Search button pulse on hover ── */
+.search-go {
+  position:relative;
+  overflow:hidden;
+}
+.search-go::after {
+  content:'';
+  position:absolute;
+  inset:0;
+  background:linear-gradient(90deg,transparent 0%,rgba(255,255,255,.18) 50%,transparent 100%);
+  transform:translateX(-100%);
+  transition:transform .4s ease;
+}
+.search-go:hover::after { transform:translateX(100%); }
+
+/* ── Team cards: lift + color glow ── */
+.tcard { transition:transform .3s cubic-bezier(.34,1.4,.64,1), box-shadow .3s ease, border-color .25s; }
+.tcard:hover {
+  transform:translateY(-6px) scale(1.012) !important;
+  box-shadow:0 20px 48px rgba(0,0,0,.11) !important;
+}
+.tcard.qc:hover    { box-shadow:0 20px 48px rgba(172,44,0,.18) !important; border-color:rgba(172,44,0,.4) !important; }
+.tcard.rp:hover    { box-shadow:0 20px 48px rgba(0,97,143,.18) !important; border-color:rgba(0,97,143,.4) !important; }
+.tcard.sm:hover    { box-shadow:0 20px 48px rgba(92,102,0,.18) !important; border-color:rgba(92,102,0,.4) !important; }
+.tcard.sub:hover   { box-shadow:0 20px 48px rgba(107,33,168,.18) !important; border-color:rgba(107,33,168,.35) !important; }
+.tcard.sub_ic:hover{ box-shadow:0 20px 48px rgba(124,58,237,.18) !important; border-color:rgba(124,58,237,.35) !important; }
+.tcard.sub_fm:hover{ box-shadow:0 20px 48px rgba(3,105,161,.18) !important; border-color:rgba(3,105,161,.35) !important; }
+
+/* ── Team icon bounce on card hover ── */
+.tcard:hover .tico {
+  animation:iconBounce .45s cubic-bezier(.34,1.56,.64,1) forwards;
+}
+@keyframes iconBounce {
+  0%   { transform:scale(1) rotate(0deg); }
+  40%  { transform:scale(1.28) rotate(-8deg); }
+  70%  { transform:scale(.95) rotate(4deg); }
+  100% { transform:scale(1.08) rotate(0deg); }
+}
+
+/* ── FAQ accordion: smoother open/close ── */
+.faq-item {
+  transition:box-shadow .22s ease, border-color .22s ease, transform .18s ease;
+}
+.faq-item:hover { transform:translateX(3px); }
+.faq-item.open  { transform:none; }
+
+/* ── FAQ answer: slide-down reveal ── */
+@keyframes slideDown {
+  from { opacity:0; transform:translateY(-8px); max-height:0; }
+  to   { opacity:1; transform:translateY(0);    max-height:2000px; }
+}
+.faq-item.open .faq-a { animation:slideDown .28s cubic-bezier(.4,0,.2,1) forwards; }
+
+/* ── Nav links: underline sweep ── */
+.nl {
+  position:relative;
+  overflow:hidden;
+}
+.nl::after {
+  content:'';
+  position:absolute;
+  bottom:0; left:50%;
+  width:0; height:2px;
+  background:var(--primary);
+  transition:width .25s ease, left .25s ease;
+  border-radius:2px;
+}
+.nl:hover::after { width:80%; left:10%; }
+.nl.active::after { width:100%; left:0; }
+
+/* ── Sidebar nav item: slide-in glow ── */
+.si { position:relative; overflow:hidden; }
+.si::before {
+  content:'';
+  position:absolute;
+  left:-8px; top:50%;
+  transform:translateY(-50%);
+  width:3px; height:0;
+  background:var(--primary);
+  border-radius:2px;
+  transition:height .2s ease;
+}
+.si:hover::before { height:60%; }
+.si.active::before { height:80%; left:0; }
+
+/* ── Logo: shimmer on hover ── */
+.logo {
+  background:linear-gradient(90deg, var(--primary) 0%, var(--pl) 50%, var(--primary) 100%);
+  background-size:200%;
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  background-clip:text;
+  background-position:0%;
+  transition:background-position .6s ease, opacity .2s;
+}
+.logo:hover {
+  background-position:100%;
+  opacity:1 !important;
+}
+
+/* ── Stats / count numbers: count-up feel ── */
+@keyframes countUp {
+  from { opacity:0; transform:translateY(8px) scale(.9); }
+  to   { opacity:1; transform:none scale(1); }
+}
+.tcount { animation:countUp .5s ease both; animation-delay:.2s; }
+
+/* ── Scroll reveal: stagger children ── */
+.reveal { opacity:0; transform:translateY(24px); transition:opacity .5s ease, transform .5s ease; }
+.reveal.visible { opacity:1; transform:none; }
+.reveal:nth-child(2) { transition-delay:.07s; }
+.reveal:nth-child(3) { transition-delay:.14s; }
+.reveal:nth-child(4) { transition-delay:.21s; }
+.reveal:nth-child(5) { transition-delay:.28s; }
+.reveal:nth-child(6) { transition-delay:.35s; }
+
+/* ── Hero title: text gradient animation ── */
+.hero h1 {
+  background:linear-gradient(135deg, var(--primary) 0%, #e05020 40%, var(--primary) 80%);
+  background-size:200%;
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  background-clip:text;
+  animation:titleShimmer 5s ease-in-out infinite;
+}
+@keyframes titleShimmer {
+  0%,100% { background-position:0% 50%; }
+  50%      { background-position:100% 50%; }
+}
+
+/* ── Search results: card pop-in stagger ── */
+@keyframes cardIn {
+  from { opacity:0; transform:translateY(12px) scale(.97); }
+  to   { opacity:1; transform:none; }
+}
+.faq-item { animation:cardIn .3s ease both; }
+.faq-item:nth-child(1) { animation-delay:.03s; }
+.faq-item:nth-child(2) { animation-delay:.07s; }
+.faq-item:nth-child(3) { animation-delay:.11s; }
+.faq-item:nth-child(4) { animation-delay:.15s; }
+.faq-item:nth-child(5) { animation-delay:.19s; }
+.faq-item:nth-child(6) { animation-delay:.23s; }
+
+/* ── Floating action button: heartbeat ── */
+@keyframes heartbeat {
+  0%,100% { transform:scale(1); }
+  14%      { transform:scale(1.1); }
+  28%      { transform:scale(1); }
+  42%      { transform:scale(1.06); }
+  70%      { transform:scale(1); }
+}
+.fw-toggle { animation:heartbeat 3.5s ease-in-out infinite; }
+
+/* ── Contact list card: smooth hover ── */
+.cl-card {
+  transition:transform .2s cubic-bezier(.34,1.4,.64,1), box-shadow .2s ease, border-color .2s;
+}
+.cl-card:hover {
+  transform:translateY(-3px);
+  box-shadow:0 12px 32px rgba(172,44,0,.1);
+  border-color:rgba(172,44,0,.3) !important;
+}
+
+/* ── Dropdown: smooth open ── */
+@keyframes dropIn {
+  from { opacity:0; transform:translateY(-6px) scaleY(.95); }
+  to   { opacity:1; transform:none; }
+}
+.suggest-drop.open, .sp-drop.open {
+  animation:dropIn .18s cubic-bezier(.4,0,.2,1) forwards;
+  transform-origin:top center;
+}
+
+/* ── Page transition: enhanced ── */
+.page.active { animation:pageFadeIn .35s cubic-bezier(.4,0,.2,1); }
+@keyframes pageFadeIn {
+  from { opacity:0; transform:translateY(14px); }
+  to   { opacity:1; transform:none; }
+}
+
+/* ── Group tabs: active bounce ── */
+.gtab {
+  transition:all .2s cubic-bezier(.34,1.4,.64,1);
+}
+.gtab:active { transform:scale(.94); }
+.gtab.active { transform:scale(1.04); }
+
+/* ── Copy button: success flash ── */
+.copy-btn.copied {
+  animation:successFlash .5s ease;
+}
+@keyframes successFlash {
+  0%  { transform:scale(1); }
+  30% { transform:scale(1.15); }
+  60% { transform:scale(.97); }
+  100%{ transform:scale(1); }
+}
+
+/* ── Feedback float widget: slide-up appear ── */
+@keyframes slideUp {
+  from { opacity:0; transform:translateY(20px) scale(.95); }
+  to   { opacity:1; transform:none; }
+}
+.fw-panel.open { animation:slideUp .25s cubic-bezier(.34,1.4,.64,1) forwards; }
+
+/* ── Search suggestion item: stagger ── */
+.suggest-item {
+  animation:fadeSlideIn .15s ease both;
+}
+.suggest-item:nth-child(1) { animation-delay:.02s; }
+.suggest-item:nth-child(2) { animation-delay:.05s; }
+.suggest-item:nth-child(3) { animation-delay:.08s; }
+.suggest-item:nth-child(4) { animation-delay:.11s; }
+.suggest-item:nth-child(5) { animation-delay:.14s; }
+@keyframes fadeSlideIn {
+  from { opacity:0; transform:translateX(-6px); }
+  to   { opacity:1; transform:none; }
+}
+
+/* ── Reduced motion: respect user preference ── */
+@media (prefers-reduced-motion:reduce) {
+  *, *::before, *::after {
+    animation-duration:.01ms !important;
+    transition-duration:.01ms !important;
+  }
+}
+
 </style>
 </head>
 <body>
