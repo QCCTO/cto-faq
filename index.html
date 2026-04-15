@@ -1956,10 +1956,10 @@ function handleGoogleLogin(response) {
     // Decode JWT payload
     const payload = JSON.parse(atob(response.credential.split('.')[1]));
     const email = payload.email.toLowerCase();
-    const allowedDomains = ['@spxexpress.com', '@shopee.com'];
+    const allowedDomains = ['@spxexpress.com', '@shopee.com', '@shopeemobile-external.com'];
 
     if (!allowedDomains.some(d => email.endsWith(d))) {
-      errEl.textContent = 'กรุณาใช้อีเมล @spxexpress.com หรือ @shopee.com เท่านั้น';
+      errEl.textContent = 'กรุณาใช้อีเมล @spxexpress.com, @shopee.com หรือ @shopeemobile-external.com เท่านั้น';
       return;
     }
 
@@ -1993,7 +1993,7 @@ function handleGoogleLogin(response) {
 function checkLogin() {
   try {
     const u = sessionStorage.getItem('spx_user');
-    const allowedDomains = ['@spxexpress.com', '@shopee.com'];
+    const allowedDomains = ['@spxexpress.com', '@shopee.com', '@shopeemobile-external.com'];
     if (u && allowedDomains.some(d => u.endsWith(d))) {
       document.getElementById('login-page').classList.remove('active');
       return;
