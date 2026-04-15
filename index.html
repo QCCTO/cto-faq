@@ -15,8 +15,76 @@
   --ter:#00618f; --sec:#5c5b5b; --nh:60px;
   --cqc:#ac2c00; --crp:#00618f; --csm:#5c6600; --csub:#6b21a8; --csub2:#7c3aed; --csub3:#0369a1;
 }
+/* ── DARK MODE VARIABLES ── */
+body.dark {
+  --primary:#ff7852; --pl:#ffaa8a; --pd:#ff5530;
+  --bg:#1a0f0e; --surf:#261510; --sl:#2e1a14; --sm2:#38201a; --sh:#3d221c; --shh:#45261f;
+  --os:#f5e0da; --osv:#c49a8f; --out:#8a5a52; --outv:#4a2820;
+  --ter:#4db8ff; --sec:#b0a09a;
+}
+body.dark nav.topnav { background:rgba(26,15,14,.95); border-bottom-color:var(--outv); }
+body.dark .hero { background:var(--surf); }
+body.dark .search-card, body.dark .suggest-drop { background:var(--surf); }
+body.dark .faq-item, body.dark .rcard, body.dark .tcard, body.dark .cl-card { background:var(--surf); }
+body.dark aside.snav { background:var(--surf); border-right-color:var(--outv); }
+body.dark footer { background:rgba(26,15,14,.8); border-top-color:var(--outv); }
+body.dark .fw-panel, body.dark .rmodal, body.dark .login-card { background:var(--surf); }
+body.dark .nav-dropdown-menu { background:var(--surf); border-color:var(--outv); }
+body.dark .login-input, body.dark .fw-input, body.dark .fw-textarea,
+body.dark .fw-select, body.dark .rmodal textarea { background:var(--bg); border-color:var(--outv); color:var(--os); }
+body.dark .search-inp, body.dark .sp-inp { color:var(--os); }
+body.dark .sp-search-card, body.dark .sp-drop { background:var(--surf); }
+body.dark .gtab { border-color:var(--outv); color:var(--osv); }
+body.dark .updated-bar { background:var(--sl); border-color:var(--outv); }
+
+/* ── USER AVATAR DROPDOWN ── */
+.user-menu { position:relative; display:flex; align-items:center; gap:8px; }
+.user-avatar {
+  width:34px; height:34px; border-radius:50%;
+  background:var(--primary); color:#fff;
+  font-size:.78rem; font-weight:800;
+  display:flex; align-items:center; justify-content:center;
+  cursor:pointer; flex-shrink:0; border:2px solid transparent;
+  transition:all .2s; font-family:'Plus Jakarta Sans',sans-serif;
+  user-select:none;
+}
+.user-avatar:hover { border-color:rgba(255,255,255,.5); transform:scale(1.06); }
+.user-dropdown {
+  display:none; position:absolute; top:calc(100% + 10px); right:0;
+  background:var(--surf); border:1.5px solid var(--outv); border-radius:14px;
+  box-shadow:0 12px 40px rgba(0,0,0,.12); min-width:220px; z-index:300;
+  overflow:hidden; animation:pfi .15s ease;
+}
+.user-menu.open .user-dropdown { display:block; }
+.user-dd-header {
+  padding:14px 16px 12px; border-bottom:1px solid var(--outv);
+  background:var(--sl);
+}
+.user-dd-name { font-weight:700; font-size:.9rem; color:var(--os); }
+.user-dd-email { font-size:.72rem; color:var(--osv); margin-top:2px; word-break:break-all; }
+.user-dd-item {
+  display:flex; align-items:center; gap:10px;
+  padding:11px 16px; cursor:pointer; transition:background .15s;
+  font-size:.84rem; font-weight:500; color:var(--osv);
+  border:none; background:none; width:100%; text-align:left; font-family:inherit;
+}
+.user-dd-item:hover { background:var(--sl); color:var(--primary); }
+.user-dd-item .mi { font-size:1rem; }
+.user-dd-item.danger { color:#e24b4b; }
+.user-dd-item.danger:hover { background:rgba(226,75,75,.08); color:#e24b4b; }
+.user-dd-divider { height:1px; background:var(--outv); margin:2px 0; }
+
+/* ── DARK MODE TOGGLE ── */
+.dm-toggle {
+  width:34px; height:34px; border-radius:50%; border:none;
+  background:none; cursor:pointer;
+  display:flex; align-items:center; justify-content:center;
+  color:var(--osv); transition:all .2s; flex-shrink:0;
+}
+.dm-toggle:hover { background:var(--sl); color:var(--primary); transform:rotate(20deg); }
+
 * { box-sizing:border-box; margin:0; padding:0; }
-body { font-family:'Kanit','Plus Jakarta Sans',sans-serif; background:var(--bg); color:var(--os); overflow-x:hidden; }
+body { font-family:'Kanit','Plus Jakarta Sans',sans-serif; background:var(--bg); color:var(--os); overflow-x:hidden; transition:background .3s, color .3s; }
 .mi { font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24; vertical-align:middle; line-height:1; }
 
 /* ── PAGE SYSTEM ── */
@@ -961,6 +1029,32 @@ footer { background:rgba(255,244,243,.8); border-top:1px solid var(--outv); padd
         </div>
       </div>
     </div>
+    <!-- Right side: dark mode + user -->
+    <div style="display:flex;align-items:center;gap:6px;">
+      <!-- Dark mode toggle -->
+      <button class="dm-toggle" id="dm-btn" onclick="toggleDark()" title="สลับ Dark Mode">
+        <span class="mi material-symbols-outlined" id="dm-icon">dark_mode</span>
+      </button>
+      <!-- User avatar dropdown -->
+      <div class="user-menu" id="user-menu">
+        <div class="user-avatar" id="user-avatar" onclick="toggleUserMenu()">?</div>
+        <div class="user-dropdown" id="user-dropdown">
+          <div class="user-dd-header">
+            <div class="user-dd-name" id="ud-name">-</div>
+            <div class="user-dd-email" id="ud-email">-</div>
+          </div>
+          <button class="user-dd-item" onclick="toggleDark();toggleUserMenu()">
+            <span class="mi material-symbols-outlined" id="ud-dm-icon">dark_mode</span>
+            <span id="ud-dm-label">Dark Mode</span>
+          </button>
+          <div class="user-dd-divider"></div>
+          <button class="user-dd-item danger" onclick="doLogout()">
+            <span class="mi material-symbols-outlined">logout</span>
+            ออกจากระบบ
+          </button>
+        </div>
+      </div>
+    </div>
   </div>
 </nav>
 
@@ -1842,6 +1936,9 @@ function toggleFW() {
 }
 
 document.addEventListener('mousedown', e => {
+  if (!e.target.closest('#user-menu')) {
+    document.getElementById('user-menu')?.classList.remove('open');
+  }
   if (!e.target.closest('#fw-panel') && !e.target.closest('#fw-fab')) {
     document.getElementById('fw-panel')?.classList.remove('open');
     document.getElementById('fw-fab')?.classList.remove('open');
@@ -1964,7 +2061,13 @@ function handleGoogleLogin(response) {
     }
 
     errEl.textContent = '';
-    try { sessionStorage.setItem('spx_user', email); } catch(e) {}
+    const name = payload.name || email.split('@')[0];
+    try {
+      sessionStorage.setItem('spx_user', email);
+      sessionStorage.setItem('spx_name', name);
+    } catch(e) {}
+
+    updateUserUI(name, email);
 
     // Log login to Apps Script
     if (APPS_SCRIPT_URL) {
@@ -1990,20 +2093,74 @@ function handleGoogleLogin(response) {
   }
 }
 
+function updateUserUI(name, email) {
+  const initials = name.split(' ').map(w => w[0]).join('').substring(0,2).toUpperCase() || '?';
+  const avatarEl = document.getElementById('user-avatar');
+  const nameEl   = document.getElementById('ud-name');
+  const emailEl  = document.getElementById('ud-email');
+  if (avatarEl) avatarEl.textContent = initials;
+  if (nameEl)   nameEl.textContent   = name;
+  if (emailEl)  emailEl.textContent  = email;
+}
+
 function checkLogin() {
   try {
     const u = sessionStorage.getItem('spx_user');
+    const n = sessionStorage.getItem('spx_name') || (u ? u.split('@')[0] : '?');
     const allowedDomains = ['@spxexpress.com', '@shopee.com', '@shopeemobile-external.com'];
     if (u && allowedDomains.some(d => u.endsWith(d))) {
       document.getElementById('login-page').classList.remove('active');
+      updateUserUI(n, u);
       return;
     }
   } catch(e) {}
   document.getElementById('login-page').classList.add('active');
 }
 
+function toggleUserMenu() {
+  const m = document.getElementById('user-menu');
+  m.classList.toggle('open');
+}
+
+function doLogout() {
+  try { sessionStorage.removeItem('spx_user'); sessionStorage.removeItem('spx_name'); } catch(e) {}
+  document.getElementById('user-menu').classList.remove('open');
+  document.getElementById('user-avatar').textContent = '?';
+  document.getElementById('ud-name').textContent = '-';
+  document.getElementById('ud-email').textContent = '-';
+  document.getElementById('login-page').classList.add('active');
+}
+
+function toggleDark() {
+  const isDark = document.body.classList.toggle('dark');
+  try { localStorage.setItem('spx_dark', isDark ? '1' : '0'); } catch(e) {}
+  const icon    = document.getElementById('dm-icon');
+  const udIcon  = document.getElementById('ud-dm-icon');
+  const udLabel = document.getElementById('ud-dm-label');
+  if (icon)    icon.textContent    = isDark ? 'light_mode' : 'dark_mode';
+  if (udIcon)  udIcon.textContent  = isDark ? 'light_mode' : 'dark_mode';
+  if (udLabel) udLabel.textContent = isDark ? 'Light Mode' : 'Dark Mode';
+}
+
+function initDarkMode() {
+  try {
+    const saved = localStorage.getItem('spx_dark');
+    const prefersDark = window.matchMedia('(prefers-color-scheme:dark)').matches;
+    if (saved === '1' || (saved === null && prefersDark)) {
+      document.body.classList.add('dark');
+      const icon    = document.getElementById('dm-icon');
+      const udIcon  = document.getElementById('ud-dm-icon');
+      const udLabel = document.getElementById('ud-dm-label');
+      if (icon)    icon.textContent    = 'light_mode';
+      if (udIcon)  udIcon.textContent  = 'light_mode';
+      if (udLabel) udLabel.textContent = 'Light Mode';
+    }
+  } catch(e) {}
+}
+
 /* ── TILT ── */
 document.addEventListener('DOMContentLoaded', () => {
+  initDarkMode();
   checkLogin();
   buildHomeGrid();
   buildFilters();
