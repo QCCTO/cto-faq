@@ -22,7 +22,18 @@ body.dark {
   --os:#f5e0da; --osv:#c49a8f; --out:#8a5a52; --outv:#4a2820;
   --ter:#4db8ff; --sec:#b0a09a;
 }
-body.dark nav.topnav { background:rgba(26,15,14,.95); border-bottom-color:var(--outv); }
+body.dark nav.topnav {
+  background:rgba(26,15,14,.45);
+  backdrop-filter:blur(24px) saturate(180%);
+  -webkit-backdrop-filter:blur(24px) saturate(180%);
+  border-bottom-color:rgba(255,120,82,.1);
+  box-shadow:0 1px 0 rgba(255,120,82,.05), 0 4px 24px rgba(0,0,0,.18);
+}
+body.dark nav.topnav.scrolled {
+  background:rgba(26,15,14,.72);
+  border-bottom-color:rgba(255,120,82,.18);
+  box-shadow:0 1px 0 rgba(255,120,82,.08), 0 8px 32px rgba(0,0,0,.28);
+}
 body.dark .hero { background:var(--surf); }
 body.dark .search-card, body.dark .suggest-drop { background:var(--surf); }
 body.dark .faq-item, body.dark .rcard, body.dark .tcard, body.dark .cl-card { background:var(--surf); }
@@ -84,7 +95,17 @@ body.dark .updated-bar { background:var(--sl); border-color:var(--outv); }
 .dm-toggle:hover { background:var(--sl); color:var(--primary); transform:rotate(20deg); }
 
 * { box-sizing:border-box; margin:0; padding:0; }
-body { font-family:'Kanit','Plus Jakarta Sans',sans-serif; background:var(--bg); color:var(--os); overflow-x:hidden; transition:background .3s, color .3s; }
+body { font-family:'Kanit','Plus Jakarta Sans',sans-serif; background:var(--bg); color:var(--os); overflow-x:hidden; transition:background .45s ease, color .45s ease; }
+*, *::before, *::after {
+  transition-property: background-color, border-color, box-shadow, color, fill, stroke, opacity;
+  transition-duration: .35s;
+  transition-timing-function: ease;
+}
+/* but don't override animation-driven or layout transitions */
+.page, .faq-item, .tcard, .cl-card, .si, .nl, .gtab, .fw-panel, .suggest-drop,
+.search-card, .faq-chevron, .user-dropdown, .nav-dropdown-menu {
+  transition-property: background-color, border-color, box-shadow, color, transform, opacity, max-height;
+}
 .mi { font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24; vertical-align:middle; line-height:1; }
 
 /* ── PAGE SYSTEM ── */
@@ -92,8 +113,21 @@ body { font-family:'Kanit','Plus Jakarta Sans',sans-serif; background:var(--bg);
 .page.active { display:block; animation:pfi .3s ease; }
 @keyframes pfi { from{opacity:0;transform:translateY(10px);} to{opacity:1;transform:none;} }
 
-/* ── NAV ── */
-nav.topnav { position:fixed; top:0; width:100%; z-index:200; background:rgba(255,244,243,.95); backdrop-filter:blur(16px); border-bottom:1px solid var(--outv); height:var(--nh); }
+/* ── NAV — Glassmorphism ── */
+nav.topnav {
+  position:fixed; top:0; width:100%; z-index:200; height:var(--nh);
+  background:rgba(255,244,243,.55);
+  backdrop-filter:blur(24px) saturate(180%);
+  -webkit-backdrop-filter:blur(24px) saturate(180%);
+  border-bottom:1px solid rgba(172,44,0,.12);
+  box-shadow:0 1px 0 rgba(255,255,255,.6), 0 4px 24px rgba(172,44,0,.06);
+  transition:background .4s ease, box-shadow .4s ease, border-color .4s ease;
+}
+nav.topnav.scrolled {
+  background:rgba(255,244,243,.78);
+  box-shadow:0 1px 0 rgba(255,255,255,.7), 0 8px 32px rgba(172,44,0,.1);
+  border-bottom-color:rgba(172,44,0,.18);
+}
 .ni { display:flex; align-items:center; justify-content:space-between; padding:0 28px; height:100%; max-width:1400px; margin:0 auto; }
 .logo { font-family:'Plus Jakarta Sans',sans-serif; font-weight:900; font-size:1.25rem; color:var(--primary); cursor:pointer; transition:opacity .2s; user-select:none; }
 .logo:hover { opacity:.8; }
@@ -976,9 +1010,78 @@ footer { background:rgba(255,244,243,.8); border-top:1px solid var(--outv); padd
 }
 
 }
+/* ══ SKELETON LOADING ══════════════════════════════════════════ */
+@keyframes skeletonShimmer {
+  0%   { background-position: 200% center; }
+  100% { background-position: -200% center; }
+}
+.skeleton-base {
+  background: linear-gradient(90deg,
+    var(--sl) 25%,
+    var(--sh) 45%,
+    var(--sl) 65%
+  );
+  background-size: 200% auto;
+  animation: skeletonShimmer 1.6s linear infinite;
+  border-radius: 8px;
+}
+body.dark .skeleton-base {
+  background: linear-gradient(90deg,
+    var(--sl) 25%,
+    var(--sm2) 45%,
+    var(--sl) 65%
+  );
+  background-size: 200% auto;
+}
 
-</style>
-</head>
+/* Skeleton FAQ item */
+.skel-faq {
+  background: var(--surf);
+  border-radius: 14px;
+  border: 1.5px solid var(--outv);
+  padding: 15px 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  animation: cardIn .3s ease both;
+}
+.skel-faq:nth-child(1) { animation-delay:.03s; }
+.skel-faq:nth-child(2) { animation-delay:.07s; }
+.skel-faq:nth-child(3) { animation-delay:.11s; }
+.skel-faq:nth-child(4) { animation-delay:.15s; }
+.skel-faq:nth-child(5) { animation-delay:.19s; }
+
+.skel-num {
+  width:24px; height:24px; border-radius:7px; flex-shrink:0;
+}
+.skel-lines { flex:1; display:flex; flex-direction:column; gap:7px; }
+.skel-line { height:12px; border-radius:6px; }
+.skel-line.w90 { width:90%; }
+.skel-line.w60 { width:60%; }
+.skel-line.w75 { width:75%; }
+.skel-line.w40 { width:40%; }
+.skel-badge { width:56px; height:20px; border-radius:10px; flex-shrink:0; }
+
+/* Skeleton team card */
+.skel-tcard {
+  background: var(--surf);
+  border-radius: 18px;
+  padding: 24px;
+  border: 1.5px solid var(--outv);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.skel-tch { display:flex; align-items:center; gap:12px; }
+.skel-ico { width:44px; height:44px; border-radius:12px; flex-shrink:0; }
+.skel-tlines { flex:1; display:flex; flex-direction:column; gap:7px; }
+
+/* ── Dark mode override for faq-a-inner (was hardcoded) ── */
+.faq-a-inner {
+  transition: background-color .35s ease, border-color .35s ease, color .35s ease;
+}
+
+
 <body>
 
 
@@ -2496,6 +2599,156 @@ document.addEventListener('DOMContentLoaded', () => {
     initCardShimmer();
     initCountUp();
   }
+})();
+</script>
+<!-- ══ SKELETON + GLASS NAV + DARK MODE TRANSITION ══ -->
+<script>
+(function() {
+
+  /* ─────────────────────────────────────────────
+     1. GLASSMORPHISM NAV — scroll-aware opacity
+  ───────────────────────────────────────────── */
+  const nav = document.querySelector('nav.topnav');
+  if (nav) {
+    let ticking = false;
+    window.addEventListener('scroll', () => {
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          nav.classList.toggle('scrolled', window.scrollY > 12);
+          ticking = false;
+        });
+        ticking = true;
+      }
+    }, { passive: true });
+  }
+
+  /* ─────────────────────────────────────────────
+     2. SKELETON LOADING — wrap buildFaqList & filterGroup
+  ───────────────────────────────────────────── */
+  function skelFaqHtml(count) {
+    const widths = [['w90','w60'],['w75','w40'],['w90','w60'],['w60','w75'],['w75','w40']];
+    return Array.from({length: count}, (_, i) => {
+      const [w1, w2] = widths[i % widths.length];
+      return `<div class="skel-faq">
+        <div class="skel-num skeleton-base"></div>
+        <div class="skel-lines">
+          <div class="skel-line ${w1} skeleton-base"></div>
+          <div class="skel-line ${w2} skeleton-base"></div>
+        </div>
+        <div class="skel-badge skeleton-base"></div>
+      </div>`;
+    }).join('');
+  }
+
+  function skelTeamHtml(count) {
+    return Array.from({length: count}, () => `
+      <div class="skel-tcard">
+        <div class="skel-tch">
+          <div class="skel-ico skeleton-base"></div>
+          <div class="skel-tlines">
+            <div class="skel-line w75 skeleton-base"></div>
+            <div class="skel-line w40 skeleton-base"></div>
+          </div>
+        </div>
+        <div class="skel-line w60 skeleton-base" style="height:10px"></div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:4px">
+          <div class="skel-line w40 skeleton-base" style="height:9px"></div>
+          <div class="skel-badge skeleton-base" style="width:30px;height:30px;border-radius:50%"></div>
+        </div>
+      </div>`).join('');
+  }
+
+  /* Patch showTeam to show skeleton before rendering */
+  const _origShowTeam = window.showTeam;
+  if (_origShowTeam) {
+    window.showTeam = function(tid) {
+      // Show skeleton in faq list area while rendering
+      const faqListEl = document.getElementById('team-faq-list');
+      if (faqListEl) {
+        faqListEl.innerHTML = `<div class="faq-list">${skelFaqHtml(6)}</div>`;
+      }
+      // Defer actual render by one frame so skeleton is visible
+      requestAnimationFrame(() => {
+        setTimeout(() => _origShowTeam(tid), 80);
+      });
+    };
+  }
+
+  /* Patch filterGroup for tab switch skeleton */
+  const _origFilterGroup = window.filterGroup;
+  if (_origFilterGroup) {
+    window.filterGroup = function(btn, tid, group) {
+      const listEl = document.getElementById('team-faq-list');
+      if (listEl) {
+        listEl.innerHTML = `<div class="faq-list">${skelFaqHtml(5)}</div>`;
+      }
+      requestAnimationFrame(() => {
+        setTimeout(() => _origFilterGroup(btn, tid, group), 60);
+      });
+    };
+  }
+
+  /* Patch buildHomeGrid to show skeleton before team cards */
+  const _origBuildHomeGrid = window.buildHomeGrid;
+  if (_origBuildHomeGrid) {
+    window.buildHomeGrid = function() {
+      const grid = document.getElementById('home-team-grid');
+      if (grid) grid.innerHTML = skelTeamHtml(6);
+      requestAnimationFrame(() => {
+        setTimeout(() => _origBuildHomeGrid(), 120);
+      });
+    };
+  }
+
+  /* ─────────────────────────────────────────────
+     3. DARK MODE TRANSITION — block flash & smooth toggle
+  ───────────────────────────────────────────── */
+  // Prevent transition on initial page load (only animate on user toggle)
+  document.documentElement.classList.add('no-transition');
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      document.documentElement.classList.remove('no-transition');
+    });
+  });
+
+  // Patch the dark mode toggle button to add a smooth overlay flash
+  const _origDmToggle = window.toggleDark;
+  const patchDmToggle = () => {
+    const dmBtn = document.querySelector('.dm-toggle');
+    if (!dmBtn) return;
+
+    dmBtn.addEventListener('click', (e) => {
+      // Create full-page flash overlay
+      const flash = document.createElement('div');
+      flash.style.cssText = `
+        position:fixed;inset:0;z-index:9999;pointer-events:none;
+        background:${document.body.classList.contains('dark') ? 'rgba(255,244,243,.08)' : 'rgba(26,15,14,.08)'};
+        animation:dmFlash .35s ease forwards;
+      `;
+      if (!document.getElementById('dm-flash-style')) {
+        const s = document.createElement('style');
+        s.id = 'dm-flash-style';
+        s.textContent = `
+          @keyframes dmFlash {
+            0%   { opacity:0; }
+            30%  { opacity:1; }
+            100% { opacity:0; }
+          }
+          .no-transition * { transition:none !important; }
+        `;
+        document.head.appendChild(s);
+      }
+      document.body.appendChild(flash);
+      setTimeout(() => flash.remove(), 360);
+    }, true); // capture phase so it fires before toggleDark
+  };
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', patchDmToggle);
+  } else {
+    patchDmToggle();
+  }
+
 })();
 </script>
 
