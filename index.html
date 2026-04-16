@@ -79,12 +79,36 @@ body.dark .updated-bar { background:var(--sl); border-color:var(--outv); }
   width:34px; height:34px; border-radius:50%; border:none;
   background:none; cursor:pointer;
   display:flex; align-items:center; justify-content:center;
-  color:var(--osv); transition:all .2s; flex-shrink:0;
+  color:var(--osv); transition:all .3s ease; flex-shrink:0;
 }
 .dm-toggle:hover { background:var(--sl); color:var(--primary); transform:rotate(20deg); }
+.dm-toggle.spinning .mi { animation:dmSpin .4s cubic-bezier(.34,1.56,.64,1); }
+@keyframes dmSpin {
+  0%   { transform:rotate(0deg) scale(1); }
+  40%  { transform:rotate(200deg) scale(1.3); }
+  100% { transform:rotate(360deg) scale(1); }
+}
 
 * { box-sizing:border-box; margin:0; padding:0; }
-body { font-family:'Kanit','Plus Jakarta Sans',sans-serif; background:var(--bg); color:var(--os); overflow-x:hidden; transition:background .3s, color .3s; }
+body {
+  font-family:'Kanit','Plus Jakarta Sans',sans-serif;
+  background:var(--bg); color:var(--os); overflow-x:hidden;
+  transition:background .4s ease, color .4s ease;
+}
+
+/* Smooth dark mode transitions for all key elements */
+.tcard, .faq-item, .rcard, .cl-card, aside.snav,
+.search-card, .suggest-drop, .sp-search-card, .sp-drop,
+.fw-panel, .rmodal, .login-card, .nav-dropdown-menu,
+.user-dropdown, .gtab, footer, .updated-bar,
+.fw-input, .fw-textarea, .fw-select, .rmodal textarea,
+.login-input, .search-inp, .sp-inp {
+  transition:
+    background .4s ease,
+    border-color .4s ease,
+    color .3s ease,
+    box-shadow .4s ease;
+}
 .mi { font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24; vertical-align:middle; line-height:1; }
 
 /* ── PAGE SYSTEM ── */
@@ -93,7 +117,53 @@ body { font-family:'Kanit','Plus Jakarta Sans',sans-serif; background:var(--bg);
 @keyframes pfi { from{opacity:0;transform:translateY(10px);} to{opacity:1;transform:none;} }
 
 /* ── NAV ── */
-nav.topnav { position:fixed; top:0; width:100%; z-index:200; background:rgba(255,244,243,.95); backdrop-filter:blur(16px); border-bottom:1px solid var(--outv); height:var(--nh); }
+/* ── NAV — Glassmorphism ── */
+nav.topnav {
+  position:fixed; top:0; width:100%; z-index:200;
+  height:var(--nh);
+
+  /* Glass effect */
+  background:rgba(255,244,243,.55);
+  backdrop-filter:blur(24px) saturate(180%);
+  -webkit-backdrop-filter:blur(24px) saturate(180%);
+
+  /* Subtle border */
+  border-bottom:1px solid rgba(172,44,0,.12);
+
+  /* Bottom glow line */
+  box-shadow:
+    0 1px 0 rgba(255,255,255,.6) inset,
+    0 4px 24px rgba(172,44,0,.06);
+
+  /* Smooth dark mode transition */
+  transition:
+    background .4s ease,
+    border-color .4s ease,
+    box-shadow .4s ease;
+}
+
+/* Scrolled state — slightly more opaque */
+nav.topnav.scrolled {
+  background:rgba(255,244,243,.82);
+  box-shadow:
+    0 1px 0 rgba(255,255,255,.5) inset,
+    0 8px 32px rgba(172,44,0,.1);
+}
+
+/* Dark glass */
+body.dark nav.topnav {
+  background:rgba(20,10,8,.45);
+  border-bottom-color:rgba(255,120,82,.1);
+  box-shadow:
+    0 1px 0 rgba(255,255,255,.04) inset,
+    0 4px 24px rgba(0,0,0,.3);
+}
+body.dark nav.topnav.scrolled {
+  background:rgba(20,10,8,.75);
+  box-shadow:
+    0 1px 0 rgba(255,255,255,.04) inset,
+    0 8px 32px rgba(0,0,0,.4);
+}
 .ni { display:flex; align-items:center; justify-content:space-between; padding:0 28px; height:100%; max-width:1400px; margin:0 auto; }
 .logo { font-family:'Plus Jakarta Sans',sans-serif; font-weight:900; font-size:1.25rem; color:var(--primary); cursor:pointer; transition:opacity .2s; user-select:none; }
 .logo:hover { opacity:.8; }
@@ -2140,6 +2210,15 @@ function toggleDark() {
   if (icon)    icon.textContent    = isDark ? 'light_mode' : 'dark_mode';
   if (udIcon)  udIcon.textContent  = isDark ? 'light_mode' : 'dark_mode';
   if (udLabel) udLabel.textContent = isDark ? 'Light Mode' : 'Dark Mode';
+
+  /* Spin the toggle button */
+  const btn = document.getElementById('dm-btn');
+  if (btn) {
+    btn.classList.remove('spinning');
+    void btn.offsetWidth; // reflow to restart animation
+    btn.classList.add('spinning');
+    btn.addEventListener('animationend', () => btn.classList.remove('spinning'), { once:true });
+  }
 }
 
 function initDarkMode() {
@@ -2156,6 +2235,14 @@ function initDarkMode() {
       if (udLabel) udLabel.textContent = 'Light Mode';
     }
   } catch(e) {}
+
+  /* Nav scroll state */
+  const nav = document.querySelector('nav.topnav');
+  if (nav) {
+    const onScroll = () => nav.classList.toggle('scrolled', window.scrollY > 10);
+    window.addEventListener('scroll', onScroll, { passive:true });
+    onScroll();
+  }
 }
 
 /* ── TILT ── */
