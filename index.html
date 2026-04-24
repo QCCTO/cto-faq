@@ -117,50 +117,62 @@ body.dark .amb-orb { background:radial-gradient(circle at 40% 40%, rgba(255,120,
 /* ── FLOATING SHAPES ── */
 .fl-shape {
   position:absolute;
-  opacity:.13;
+  opacity:.28;
   animation:shapeFloat ease-in-out infinite;
 }
-body.dark .fl-shape { opacity:.09; }
+body.dark .fl-shape { opacity:.18; }
 
 .sh-diamond {
-  width:14px; height:14px;
+  width:22px; height:22px;
   background:var(--primary);
   transform:rotate(45deg);
-  border-radius:2px;
+  border-radius:3px;
 }
 .sh-circle {
-  width:10px; height:10px;
-  background:rgba(255,120,82,.8);
+  width:16px; height:16px;
+  background:rgba(255,120,82,.85);
   border-radius:50%;
 }
 .sh-ring {
-  width:16px; height:16px;
-  border:2px solid var(--primary);
+  width:22px; height:22px;
+  border:2.5px solid var(--primary);
   border-radius:50%;
   background:transparent;
 }
+.sh-diamond-sm {
+  width:12px; height:12px;
+  background:rgba(255,120,82,.7);
+  transform:rotate(45deg);
+  border-radius:2px;
+}
 
-/* positions — hug left/right edges */
-.sh1 { left:3.5%;  top:18%;   animation-duration:9s;  animation-delay:0s; }
-.sh2 { left:5%;    top:42%;   animation-duration:13s; animation-delay:-3s; }
-.sh3 { left:2.5%;  top:65%;   animation-duration:11s; animation-delay:-7s; }
-.sh4 { right:3%;   top:25%;   animation-duration:14s; animation-delay:-2s; }
-.sh5 { right:5%;   top:55%;   animation-duration:10s; animation-delay:-5s; }
-.sh6 { right:2.5%; bottom:18%;animation-duration:12s; animation-delay:-9s; }
+/* ── ซ้าย: diamond / circle / ring / diamond-sm ── */
+.sh1 { left:3%;   top:15%;    animation-duration:9s;  animation-delay:0s;   }
+.sh2 { left:5.5%; top:40%;    animation-duration:13s; animation-delay:-3s;  }
+.sh3 { left:2.5%; top:63%;    animation-duration:11s; animation-delay:-7s;  }
+.sh7 { left:4.5%; bottom:12%; animation-duration:15s; animation-delay:-5s;  }
+
+/* ── ขวา: diamond / circle / ring / diamond-sm ── */
+.sh4 { right:3%;   top:15%;    animation-duration:10s; animation-delay:-2s;  }
+.sh5 { right:5.5%; top:40%;    animation-duration:14s; animation-delay:-5s;  }
+.sh6 { right:2.5%; top:63%;    animation-duration:12s; animation-delay:-9s;  }
+.sh8 { right:4.5%; bottom:12%; animation-duration:16s; animation-delay:-4s;  }
 
 @keyframes shapeFloat {
-  0%,100% { transform:translateY(0)   rotate(45deg); opacity:.13; }
-  50%      { transform:translateY(-22px) rotate(225deg); opacity:.22; }
+  0%,100% { transform:translateY(0)    rotate(45deg);  opacity:.28; }
+  50%      { transform:translateY(-26px) rotate(225deg); opacity:.42; }
 }
 .sh-circle, .sh-ring {
   animation-name:shapeFloatRound;
 }
 @keyframes shapeFloatRound {
-  0%,100% { transform:translateY(0)    scale(1);    opacity:.13; }
-  50%      { transform:translateY(-18px) scale(1.15); opacity:.2; }
+  0%,100% { transform:translateY(0)    scale(1);    opacity:.28; }
+  50%      { transform:translateY(-22px) scale(1.2);  opacity:.42; }
 }
-body.dark .fl-shape { opacity:.07; }
-body.dark .fl-shape:is(.sh-circle,.sh-ring) { opacity:.07; }
+.sh-diamond-sm {
+  animation-name:shapeFloat;
+}
+body.dark .fl-shape { opacity:.14; }
 
 /* ── GRAIN TEXTURE ── */
 body::after {
@@ -1217,13 +1229,16 @@ footer { background:rgba(255,244,243,.8); border-top:1px solid var(--outv); padd
   <div class="amb-orb orb2"></div>
   <div class="amb-orb orb3"></div>
   <div class="amb-orb orb4"></div>
-  <!-- Floating Shapes -->
-  <div class="fl-shape sh-diamond sh1"></div>
-  <div class="fl-shape sh-circle  sh2"></div>
-  <div class="fl-shape sh-diamond sh3"></div>
-  <div class="fl-shape sh-ring    sh4"></div>
-  <div class="fl-shape sh-circle  sh5"></div>
-  <div class="fl-shape sh-ring    sh6"></div>
+  <!-- Floating Shapes — Left (4 shapes) -->
+  <div class="fl-shape sh-diamond  sh1"></div>
+  <div class="fl-shape sh-circle   sh2"></div>
+  <div class="fl-shape sh-ring     sh3"></div>
+  <div class="fl-shape sh-diamond-sm sh7"></div>
+  <!-- Floating Shapes — Right (mirror) -->
+  <div class="fl-shape sh-diamond  sh4"></div>
+  <div class="fl-shape sh-circle   sh5"></div>
+  <div class="fl-shape sh-ring     sh6"></div>
+  <div class="fl-shape sh-diamond-sm sh8"></div>
 </div>
 
 
