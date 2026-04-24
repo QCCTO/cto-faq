@@ -91,6 +91,62 @@ body.dark .tico.sub, body.dark .tico.sub_ic, body.dark .tico.sub_fm { background
   color:var(--osv); transition:all .3s ease; flex-shrink:0;
 }
 .dm-toggle:hover { background:var(--sl); color:var(--primary); transform:rotate(20deg); }
+
+/* ── GRAIN TEXTURE ── */
+body::after {
+  content:''; position:fixed; inset:0; z-index:9998; pointer-events:none;
+  opacity:.022;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23g)'/%3E%3C/svg%3E");
+  background-size:200px 200px;
+}
+body.dark::after { opacity:.04; }
+
+/* ── DARK MODE CIRCULAR REVEAL ── */
+#dm-ripple {
+  position:fixed; z-index:9997; pointer-events:none; border-radius:50%;
+  width:0; height:0; transform:translate(-50%,-50%) scale(0);
+}
+
+/* ── AMBIENT BACKGROUND ── */
+body { transition:background-color .7s ease, color .3s; }
+body.amb-qc     { background-color:#fff4f3 !important; }
+body.amb-rp     { background-color:#f0f7ff !important; }
+body.amb-sm     { background-color:#f5f8ee !important; }
+body.amb-sub    { background-color:#f8f2fe !important; }
+body.amb-sub_ic { background-color:#f4f0ff !important; }
+body.amb-sub_fm { background-color:#edf5ff !important; }
+body.dark.amb-qc     { background-color:#1a0f0e !important; }
+body.dark.amb-rp     { background-color:#0b1520 !important; }
+body.dark.amb-sm     { background-color:#101500 !important; }
+body.dark.amb-sub    { background-color:#13091f !important; }
+body.dark.amb-sub_ic { background-color:#120820 !important; }
+body.dark.amb-sub_fm { background-color:#071322 !important; }
+
+/* ── SKELETON LOADING ── */
+@keyframes skshimmer { 0%{ background-position:200% center; } 100%{ background-position:-200% center; } }
+.sk { border-radius:8px; background:linear-gradient(90deg,var(--sm2) 25%,var(--sh) 50%,var(--sm2) 75%); background-size:400% 100%; animation:skshimmer 1.6s ease-in-out infinite; }
+.sk-tcard { background:var(--surf); border-radius:18px; padding:24px; border:1.5px solid var(--outv); overflow:hidden; }
+.sk-tcard .sk-ico { width:44px; height:44px; border-radius:12px; margin-bottom:14px; }
+.sk-tcard .sk-t1  { height:16px; width:55%; margin-bottom:8px; }
+.sk-tcard .sk-t2  { height:11px; width:80%; margin-bottom:16px; }
+.sk-tcard .sk-t3  { height:11px; width:35%; margin-bottom:18px; }
+.sk-tcard .sk-row { display:flex; justify-content:space-between; align-items:center; }
+.sk-tcard .sk-t4  { height:11px; width:50%; }
+.sk-tcard .sk-dot { width:28px; height:28px; border-radius:50%; }
+.sk-faq { background:var(--surf); border-radius:14px; padding:15px 16px; border:1.5px solid var(--outv); display:flex; align-items:center; gap:12px; }
+.sk-faq .sk-num  { width:24px; height:24px; border-radius:7px; flex-shrink:0; }
+.sk-faq .sk-body { flex:1; }
+.sk-faq .sk-q1   { height:13px; margin-bottom:6px; border-radius:6px; }
+.sk-faq .sk-q2   { height:11px; width:60%; border-radius:6px; }
+.sk-faq .sk-chev { width:20px; height:20px; border-radius:4px; flex-shrink:0; }
+
+
+
+/* ── CONTACT LIST SELECT ── */
+.cl-select { height:48px; padding:0 36px 0 14px; border-radius:12px; border:1.5px solid var(--outv); background:var(--surf) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24'%3E%3Cpath fill='%23ac2c00' d='M7 10l5 5 5-5z'/%3E%3C/svg%3E") no-repeat right 10px center; appearance:none; -webkit-appearance:none; font-family:inherit; font-size:.88rem; font-weight:500; color:var(--os); cursor:pointer; outline:none; min-width:140px; transition:border-color .2s, box-shadow .2s; }
+.cl-select:hover { border-color:var(--primary); }
+.cl-select:focus { border-color:var(--primary); box-shadow:0 0 0 3px rgba(172,44,0,.1); }
+body.dark .cl-select { color-scheme:dark; }
 .dm-toggle.spinning .mi { animation:dmSpin .4s cubic-bezier(.34,1.56,.64,1); }
 @keyframes dmSpin {
   0%   { transform:rotate(0deg) scale(1); }
@@ -204,11 +260,24 @@ aside.snav { width:220px; flex-shrink:0; background:var(--surf); border-right:1p
 .hmain { padding:calc(var(--nh) + 36px) 28px 56px; max-width:1400px; margin:0 auto; }
 .hero { position:relative; border-radius:24px; overflow:hidden; padding:64px 40px; text-align:center; margin-bottom:52px; background:var(--surf); box-shadow:0 6px 40px rgba(172,44,0,.08); }
 .hbg { position:absolute; inset:0; z-index:0; background:linear-gradient(135deg,rgba(172,44,0,.06),rgba(255,120,82,.08)); animation:hbp 8s ease-in-out infinite; }
-.hblob { position:absolute; border-radius:50%; filter:blur(60px); animation:bf 12s ease-in-out infinite; }
-.hb1 { width:360px; height:360px; background:rgba(255,120,82,.12); top:-90px; right:-70px; }
-.hb2 { width:260px; height:260px; background:rgba(172,44,0,.08); bottom:-70px; left:-50px; animation-delay:-4s; }
-@keyframes bf { 0%,100%{transform:translateY(0);} 50%{transform:translateY(-16px);} }
-@keyframes hbp { 0%,100%{opacity:1;} 50%{opacity:.7;} }
+.hblob { position:absolute; pointer-events:none; }
+.hb1 { width:380px; height:380px; top:-100px; right:-80px; filter:blur(52px); }
+.hb2 { width:280px; height:280px; bottom:-80px; left:-60px; filter:blur(46px); }
+.hblob svg { width:100%; height:100%; }
+.hblob svg path { animation:blobMorph1 16s ease-in-out infinite; }
+.hb2 svg path { animation:blobMorph2 12s ease-in-out infinite; }
+@keyframes blobMorph1 {
+  0%,100%{ d:path("M320,160 C320,248 248,320 160,320 C72,320 0,248 0,160 C0,72 72,0 160,0 C248,0 320,72 320,160 Z"); }
+  25%{     d:path("M310,145 C332,222 264,326 170,318 C76,310 -14,234 6,144 C26,54 102,-18 186,14 C270,46 288,68 310,145 Z"); }
+  50%{     d:path("M305,172 C317,256 240,336 155,325 C70,314 -18,244 10,157 C38,70 120,-7 200,24 C280,55 293,88 305,172 Z"); }
+  75%{     d:path("M315,155 C326,236 254,319 161,316 C68,313 -8,240 14,151 C36,62 110,-11 192,20 C274,51 304,74 315,155 Z"); }
+}
+@keyframes blobMorph2 {
+  0%,100%{ d:path("M230,115 C230,179 179,230 115,230 C51,230 0,179 0,115 C0,51 51,0 115,0 C179,0 230,51 230,115 Z"); }
+  40%{     d:path("M222,107 C238,164 190,239 126,228 C62,217 -10,163 10,100 C30,37 94,-16 154,18 C214,52 206,50 222,107 Z"); }
+  70%{     d:path("M218,124 C229,184 178,243 116,232 C54,221 -6,168 16,105 C38,42 100,-12 160,22 C220,56 207,64 218,124 Z"); }
+}
+@keyframes hbp { 0%,100%{opacity:1;} 50%{opacity:.75;} }
 .hcon { position:relative; z-index:1; }
 .hero h1 { font-family:'Plus Jakarta Sans','IBM Plex Sans Thai',sans-serif; font-size:clamp(2rem,5vw,4rem); font-weight:900; letter-spacing:-1.5px; line-height:1.1; color:var(--primary); margin-bottom:16px; }
 .hero h1 span { color:var(--os); }
@@ -1142,7 +1211,9 @@ footer { background:rgba(255,244,243,.8); border-top:1px solid var(--outv); padd
   <main class="hmain">
     <section class="hero">
       <canvas id="hero-particles" style="position:absolute;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;border-radius:24px;"></canvas>
-      <div class="hbg"></div><div class="hblob hb1"></div><div class="hblob hb2"></div>
+      <div class="hbg"></div>
+      <div class="hblob hb1"><svg viewBox="0 0 320 320" xmlns="http://www.w3.org/2000/svg"><path fill="rgba(255,120,82,.13)" d="M320,160 C320,248 248,320 160,320 C72,320 0,248 0,160 C0,72 72,0 160,0 C248,0 320,72 320,160 Z"/></svg></div>
+      <div class="hblob hb2"><svg viewBox="0 0 230 230" xmlns="http://www.w3.org/2000/svg"><path fill="rgba(172,44,0,.09)" d="M230,115 C230,179 179,230 115,230 C51,230 0,179 0,115 C0,51 51,0 115,0 C179,0 230,51 230,115 Z"/></svg></div>
       <div class="hcon">
         <h1 class="su">CTO SPX FAQ</h1>
         <p class="su2">ค้นหาคำถาม-คำตอบจากทีม Quality Control, Resource & Planning, Smart Map และ Subcon</p>
@@ -2262,8 +2333,105 @@ document.addEventListener('DOMContentLoaded', () => {
   buildFilters();
   ds('');
   handleDeepLink();
+
+  /* ── GLASSMORPHISM NAV ON SCROLL ── */
+  const nav = document.querySelector('nav.topnav');
+  if (nav) {
+    const onScroll = () => nav.classList.toggle('scrolled', window.scrollY > 10);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+  }
+
+  /* ── TYPEWRITER PLACEHOLDER ── */
+  (function() {
+    const inp = document.getElementById('hsi');
+    if (!inp) return;
+    const phrases = ['ค้นหา เช่น VPN, Inhouse, OT, Misroute...','SLA คืออะไร?','วิธีส่ง COD','ขั้นตอนการขอ OT','Misroute ต้องทำอย่างไร?','การ Verify พัสดุ','Fleet Management คืออะไร?','การ Reject งาน Subcon'];
+    let pi=0, ci=0, deleting=false;
+    function tick() {
+      if (document.activeElement === inp) { setTimeout(tick, 300); return; }
+      const target = phrases[pi];
+      if (!deleting) { ci++; inp.placeholder = target.slice(0,ci); if (ci>=target.length) { deleting=true; setTimeout(tick,2200); return; } setTimeout(tick,68); }
+      else { ci--; inp.placeholder = target.slice(0,ci); if (ci<=0) { deleting=false; pi=(pi+1)%phrases.length; setTimeout(tick,500); return; } setTimeout(tick,32); }
+    }
+    setTimeout(tick, 1800);
+  })();
+
+  /* ── DARK MODE CIRCULAR REVEAL ── */
+  (function() {
+    const ripple = document.createElement('div');
+    ripple.id = 'dm-ripple'; document.body.appendChild(ripple);
+    const origToggle = window.toggleDark;
+    window.toggleDark = function() {
+      const btn = document.getElementById('dm-btn');
+      const r = btn ? btn.getBoundingClientRect() : {left:window.innerWidth-40,top:30,width:34,height:34};
+      const cx = r.left + r.width/2, cy = r.top + r.height/2;
+      const maxR = Math.hypot(Math.max(cx,window.innerWidth-cx), Math.max(cy,window.innerHeight-cy)) * 2.2;
+      const goingDark = !document.body.classList.contains('dark');
+      ripple.style.cssText = `left:${cx}px;top:${cy}px;width:${maxR}px;height:${maxR}px;background:${goingDark?'#1a0f0e':'#fff4f3'};transform:translate(-50%,-50%) scale(0);transition:transform .58s cubic-bezier(.4,0,.2,1);`;
+      ripple.offsetHeight;
+      ripple.style.transform = 'translate(-50%,-50%) scale(1)';
+      setTimeout(() => { origToggle(); }, 280);
+      setTimeout(() => { ripple.style.transition='opacity .25s ease'; ripple.style.opacity='0'; setTimeout(()=>{ ripple.style.cssText=''; },260); }, 560);
+    };
+  })();
+
+  /* ── AMBIENT COLOR BACKGROUND ── */
+  (function() {
+    const ambs = ['amb-qc','amb-rp','amb-sm','amb-sub','amb-sub_ic','amb-sub_fm'];
+    function setAmb(tid) { ambs.forEach(c=>document.body.classList.remove(c)); if(tid) document.body.classList.add('amb-'+tid); }
+    const origShowTeam = window.showTeam;
+    window.showTeam = function(tid) { setAmb(tid); origShowTeam(tid); };
+    const origSp = window.sp;
+    window.sp = function(n) { if(n==='home'||n==='search'||n==='contact') setAmb(null); origSp(n); };
+  })();
+
+  /* ── SKELETON LOADING ── */
+  function skTcards(n=6) {
+    return Array.from({length:n}, ()=>`<div class="sk-tcard"><div style="display:flex;align-items:center;gap:12px;margin-bottom:14px;"><div class="sk sk-ico"></div><div style="flex:1"><div class="sk sk-t1"></div><div class="sk sk-t2"></div></div></div><div class="sk sk-t3"></div><div class="sk-row"><div class="sk sk-t4"></div><div class="sk sk-dot"></div></div></div>`).join('');
+  }
+  function skFaqs(n=6) {
+    const ws=['85%','70%','90%','65%','78%','55%'];
+    return Array.from({length:n},(_,i)=>`<div class="sk-faq"><div class="sk sk-num"></div><div class="sk-body"><div class="sk sk-q1" style="width:${ws[i%ws.length]}"></div><div class="sk sk-q2"></div></div><div class="sk sk-chev"></div></div>`).join('');
+  }
+  // Wrap buildHomeGrid with skeleton
+  const origBHG = window.buildHomeGrid;
+  window.buildHomeGrid = function() {
+    const grid = document.getElementById('home-team-grid');
+    if (grid) grid.innerHTML = skTcards(6);
+    requestAnimationFrame(() => { origBHG(); });
+  };
+  // Wrap showTeam with skeleton on faq-list
+  const origST = window.showTeam;
+  window.showTeam = function(tid) {
+    origST(tid);
+    const el = document.getElementById('team-faq-list');
+    if (el && el.children.length > 0) return;
+  };
+  // Wrap ds() with skeleton
+  const origDs = window.ds;
+  window.ds = function(q) {
+    const sr = document.getElementById('sr');
+    if (sr) sr.innerHTML = skFaqs(5);
+    requestAnimationFrame(() => { origDs(q); });
+  };
+
+
+
+  /* ── 3D TILT CARDS (delegated) ── */
+  document.addEventListener('mousemove', e => {
+    const c = e.target.closest('.tcard');
+    if (!c) return;
+    const r = c.getBoundingClientRect();
+    const x = ((e.clientX-r.left)/r.width-.5)*5;
+    const y = ((e.clientY-r.top)/r.height-.5)*5;
+    c.style.transform = `translateY(-4px) rotateX(${-y}deg) rotateY(${x}deg)`;
+  });
+  document.addEventListener('mouseleave', e => {
+    const c = e.target.closest?.('.tcard');
+    if (c) { c.style.transform=''; c.style.transition='all .4s ease'; setTimeout(()=>c.style.transition='',400); }
+  }, true);
   document.querySelectorAll('.tcard').forEach(c => {
-    c.addEventListener('mousemove', e => { const r=c.getBoundingClientRect(); const x=((e.clientX-r.left)/r.width-.5)*5; const y=((e.clientY-r.top)/r.height-.5)*5; c.style.transform=`translateY(-4px) rotateX(${-y}deg) rotateY(${x}deg)`; });
     c.addEventListener('mouseleave', () => { c.style.transform=''; c.style.transition='all .4s ease'; setTimeout(()=>c.style.transition='',400); });
   });
 
@@ -2402,7 +2570,7 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
           </div>
         </div>
-        <select id="cl-region-dd" onchange="clDropFilter()" style="height:52px;padding:0 14px;border-radius:14px;border:1.5px solid rgba(172,44,0,.2);background:#fff;font-family:inherit;font-size:.88rem;color:var(--os);cursor:pointer;outline:none;min-width:130px;">
+        <select id="cl-region-dd" onchange="clDropFilter()" class="cl-select">
           <option value="">ทุก Region</option>
           <option value="GBKK-E">GBKK-E</option>
           <option value="GBKK-N">GBKK-N</option>
@@ -2412,7 +2580,7 @@ document.addEventListener('DOMContentLoaded', () => {
           <option value="UPC2">UPC2</option>
           <option value="UPC3">UPC3</option>
         </select>
-        <select id="cl-area-dd" onchange="clDropFilter()" style="height:52px;padding:0 14px;border-radius:14px;border:1.5px solid rgba(172,44,0,.2);background:#fff;font-family:inherit;font-size:.88rem;color:var(--os);cursor:pointer;outline:none;min-width:130px;">
+        <select id="cl-area-dd" onchange="clDropFilter()" class="cl-select">
           <option value="">ทุก Area</option>
         </select>
       </div>
