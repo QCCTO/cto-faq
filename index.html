@@ -618,36 +618,6 @@ footer { background:rgba(255,244,243,.8); border-top:1px solid var(--outv); padd
 .cl-results { display:flex; flex-direction:column; gap:8px; }
 .cl-card { background:var(--surf); border-radius:14px; border:1.5px solid var(--outv); padding:16px 20px; transition:all .22s; }
 .cl-card:hover { box-shadow:0 6px 20px rgba(172,44,0,.1); border-color:rgba(172,44,0,.25); }
-.cl-select {
-  height:48px; padding:0 36px 0 14px; border-radius:12px;
-  border:1.5px solid var(--outv);
-  background:var(--surf) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24'%3E%3Cpath fill='%23ac2c00' d='M7 10l5 5 5-5z'/%3E%3C/svg%3E") no-repeat right 10px center;
-  appearance:none; -webkit-appearance:none;
-  font-family:inherit; font-size:.88rem; font-weight:500;
-  color:var(--os); cursor:pointer; outline:none; min-width:140px;
-  transition:border-color .2s, box-shadow .2s;
-}
-.cl-select:hover { border-color:var(--primary); }
-.cl-select:focus { border-color:var(--primary); box-shadow:0 0 0 3px rgba(172,44,0,.1); }
-body.dark .cl-select { color-scheme:dark; }
-
-/* ── STAT PILLS ── */
-.stat-pill {
-  display:flex; align-items:center; gap:14px;
-  background:var(--surf); border-radius:16px; padding:16px 20px;
-  border:1.5px solid var(--outv); transition:all .25s;
-}
-.stat-pill:hover { border-color:rgba(172,44,0,.3); box-shadow:0 4px 16px rgba(172,44,0,.08); transform:translateY(-2px); }
-.stat-num { font-size:1.5rem; font-weight:900; color:var(--os); line-height:1; margin-bottom:2px; }
-.stat-lbl { font-size:.75rem; color:var(--osv); font-weight:500; }
-/* ── QUICK TAGS ── */
-.qtag {
-  display:inline-flex; align-items:center; gap:6px;
-  padding:7px 14px; border-radius:20px; border:1.5px solid var(--outv);
-  background:var(--surf); font-size:.8rem; font-weight:500; color:var(--os);
-  cursor:pointer; transition:all .2s; white-space:nowrap;
-}
-.qtag:hover { background:rgba(172,44,0,.08); border-color:rgba(172,44,0,.3); color:var(--primary); transform:translateY(-1px); }
 .cl-name-wrap { display:flex; align-items:center; gap:10px; flex:1; min-width:0; }
 .cl-avatar { width:38px; height:38px; border-radius:9px; background:var(--sl); display:flex; align-items:center; justify-content:center; font-size:.88rem; font-weight:800; color:var(--primary); flex-shrink:0; }
 .cl-name { font-weight:700; font-size:.93rem; color:var(--os); }
@@ -1195,32 +1165,6 @@ body.dark .cl-select { color-scheme:dark; }
           <span style="color:var(--sec);font-size:.82rem;">พิมพ์ Keyword หรือคำถามที่สงสัยลงในช่องค้นหา</span>
         </div>
       </div>
-    </section>
-
-    <!-- ══ STATS BAR ══ -->
-    <section id="home-stats" style="margin-bottom:32px;">
-      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;">
-        <div class="stat-pill sc">
-          <span class="mi material-symbols-outlined" style="font-size:1.3rem;color:var(--primary);font-variation-settings:'FILL' 1">quiz</span>
-          <div><div id="stat-qa" class="stat-num">143</div><div class="stat-lbl">คำถาม-คำตอบ</div></div>
-        </div>
-        <div class="stat-pill sc">
-          <span class="mi material-symbols-outlined" style="font-size:1.3rem;color:var(--primary);font-variation-settings:'FILL' 1">groups</span>
-          <div><div class="stat-num">6</div><div class="stat-lbl">ทีม CTO</div></div>
-        </div>
-        <div class="stat-pill sc">
-          <span class="mi material-symbols-outlined" style="font-size:1.3rem;color:var(--primary);font-variation-settings:'FILL' 1">image</span>
-          <div><div class="stat-num">19</div><div class="stat-lbl">ข้อมีรูปประกอบ</div></div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ══ QUICK ACCESS TAGS ══ -->
-    <section id="home-quicktags" style="margin-bottom:40px;">
-      <div class="sh2" style="margin-bottom:12px;">
-        <div><h2 style="font-size:1rem;">🔥 หัวข้อยอดนิยม</h2></div>
-      </div>
-      <div style="display:flex;flex-wrap:wrap;gap:8px;" id="quick-tags"></div>
     </section>
 
     <section id="ts" style="margin-bottom:52px;">
@@ -2318,41 +2262,6 @@ document.addEventListener('DOMContentLoaded', () => {
   buildFilters();
   ds('');
   handleDeepLink();
-
-  /* ── QUICK TAGS ── */
-  (function buildQuickTags() {
-    const popular = [
-      {label:'VPN', tid:'qc'}, {label:'In house', tid:'qc'}, {label:'OT', tid:'rp'},
-      {label:'Working Shift', tid:'rp'}, {label:'ATTD D-1', tid:'rp'}, {label:'Hub Zone', tid:'sm'},
-      {label:'Driver Zone', tid:'sm'}, {label:'Misroute', tid:'qc'}, {label:'COD', tid:'rp'},
-      {label:'Fleet', tid:'sub_fm'}, {label:'Subcon Daily', tid:'sub'}, {label:'Verify', tid:'sm'},
-    ];
-    const container = document.getElementById('quick-tags');
-    if (!container) return;
-    const tid_color = {qc:'var(--primary)',rp:'var(--crp)',sm:'var(--csm)',sub:'var(--csub)',sub_ic:'var(--csub_ic)',sub_fm:'var(--csub_fm)'};
-    container.innerHTML = popular.map(t => {
-      const col = tid_color[t.tid] || 'var(--primary)';
-      return `<button class="qtag" onclick="document.getElementById('hsi').value='${t.label}';gs();" style="--qtc:${col}">
-        <span style="width:7px;height:7px;border-radius:50%;background:${col};display:inline-block;flex-shrink:0;"></span>
-        ${t.label}
-      </button>`;
-    }).join('');
-  })();
-
-  /* ── STAT COUNT-UP ── */
-  (function countUp() {
-    const el = document.getElementById('stat-qa');
-    if (!el) return;
-    const target = Object.values(DB).reduce((s, t) => s + t.qa.filter(q => q.q).length, 0);
-    el.textContent = '0';
-    let current = 0;
-    const step = Math.ceil(target / 40);
-    const timer = setInterval(() => {
-      current = Math.min(current + step, target);
-      el.textContent = current;
-      if (current >= target) clearInterval(timer);
-    }, 30);
-  })();
   document.querySelectorAll('.tcard').forEach(c => {
     c.addEventListener('mousemove', e => { const r=c.getBoundingClientRect(); const x=((e.clientX-r.left)/r.width-.5)*5; const y=((e.clientY-r.top)/r.height-.5)*5; c.style.transform=`translateY(-4px) rotateX(${-y}deg) rotateY(${x}deg)`; });
     c.addEventListener('mouseleave', () => { c.style.transform=''; c.style.transition='all .4s ease'; setTimeout(()=>c.style.transition='',400); });
@@ -2493,7 +2402,7 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
           </div>
         </div>
-        <select id="cl-region-dd" onchange="clDropFilter()" class="cl-select">
+        <select id="cl-region-dd" onchange="clDropFilter()" style="height:52px;padding:0 14px;border-radius:14px;border:1.5px solid rgba(172,44,0,.2);background:#fff;font-family:inherit;font-size:.88rem;color:var(--os);cursor:pointer;outline:none;min-width:130px;">
           <option value="">ทุก Region</option>
           <option value="GBKK-E">GBKK-E</option>
           <option value="GBKK-N">GBKK-N</option>
@@ -2503,7 +2412,7 @@ document.addEventListener('DOMContentLoaded', () => {
           <option value="UPC2">UPC2</option>
           <option value="UPC3">UPC3</option>
         </select>
-        <select id="cl-area-dd" onchange="clDropFilter()" class="cl-select">
+        <select id="cl-area-dd" onchange="clDropFilter()" style="height:52px;padding:0 14px;border-radius:14px;border:1.5px solid rgba(172,44,0,.2);background:#fff;font-family:inherit;font-size:.88rem;color:var(--os);cursor:pointer;outline:none;min-width:130px;">
           <option value="">ทุก Area</option>
         </select>
       </div>
