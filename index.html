@@ -92,43 +92,75 @@ body.dark .tico.sub, body.dark .tico.sub_ic, body.dark .tico.sub_fm { background
 }
 .dm-toggle:hover { background:var(--sl); color:var(--primary); transform:rotate(20deg); }
 
-/* ── DOT GRID PATTERN ── */
-#dot-grid {
-  position:fixed; inset:0; z-index:0; pointer-events:none;
-  background-image:radial-gradient(circle, rgba(172,44,0,.18) 1px, transparent 1px);
-  background-size:28px 28px;
-  -webkit-mask-image:
-    linear-gradient(to right,
-      rgba(0,0,0,.6) 0%,
-      rgba(0,0,0,.0) 18%,
-      transparent 40%,
-      transparent 60%,
-      rgba(0,0,0,.0) 82%,
-      rgba(0,0,0,.6) 100%),
-    linear-gradient(to bottom,
-      transparent 0%,
-      rgba(0,0,0,.8) 8%,
-      rgba(0,0,0,.8) 92%,
-      transparent 100%);
-  -webkit-mask-composite: destination-in;
-  mask-image:
-    linear-gradient(to right,
-      rgba(0,0,0,.6) 0%,
-      rgba(0,0,0,.0) 18%,
-      transparent 40%,
-      transparent 60%,
-      rgba(0,0,0,.0) 82%,
-      rgba(0,0,0,.6) 100%),
-    linear-gradient(to bottom,
-      transparent 0%,
-      rgba(0,0,0,.8) 8%,
-      rgba(0,0,0,.8) 92%,
-      transparent 100%);
-  mask-composite: intersect;
+/* ── AMBIENT ORBS ── */
+#bg-deco { position:fixed; inset:0; z-index:0; pointer-events:none; overflow:hidden; }
+
+.amb-orb {
+  position:absolute; border-radius:50%;
+  background:radial-gradient(circle at 40% 40%, rgba(255,120,82,.18), rgba(172,44,0,.04) 70%, transparent);
+  filter:blur(60px);
+  animation:orbFloat linear infinite;
 }
-body.dark #dot-grid {
-  background-image:radial-gradient(circle, rgba(255,120,82,.14) 1px, transparent 1px);
+.orb1 { width:320px; height:320px; left:-80px;  top:10%;  animation-duration:22s; animation-delay:0s; }
+.orb2 { width:220px; height:220px; right:-60px; top:35%;  animation-duration:18s; animation-delay:-6s; }
+.orb3 { width:260px; height:260px; left:-70px;  bottom:20%; animation-duration:26s; animation-delay:-11s; }
+.orb4 { width:180px; height:180px; right:-40px; bottom:10%; animation-duration:20s; animation-delay:-4s; }
+body.dark .amb-orb { background:radial-gradient(circle at 40% 40%, rgba(255,120,82,.1), rgba(172,44,0,.03) 70%, transparent); }
+
+@keyframes orbFloat {
+  0%,100% { transform:translateY(0px) scale(1); }
+  30%      { transform:translateY(-28px) scale(1.04); }
+  60%      { transform:translateY(14px) scale(.97); }
+  80%      { transform:translateY(-10px) scale(1.02); }
 }
+
+/* ── FLOATING SHAPES ── */
+.fl-shape {
+  position:absolute;
+  opacity:.13;
+  animation:shapeFloat ease-in-out infinite;
+}
+body.dark .fl-shape { opacity:.09; }
+
+.sh-diamond {
+  width:14px; height:14px;
+  background:var(--primary);
+  transform:rotate(45deg);
+  border-radius:2px;
+}
+.sh-circle {
+  width:10px; height:10px;
+  background:rgba(255,120,82,.8);
+  border-radius:50%;
+}
+.sh-ring {
+  width:16px; height:16px;
+  border:2px solid var(--primary);
+  border-radius:50%;
+  background:transparent;
+}
+
+/* positions — hug left/right edges */
+.sh1 { left:3.5%;  top:18%;   animation-duration:9s;  animation-delay:0s; }
+.sh2 { left:5%;    top:42%;   animation-duration:13s; animation-delay:-3s; }
+.sh3 { left:2.5%;  top:65%;   animation-duration:11s; animation-delay:-7s; }
+.sh4 { right:3%;   top:25%;   animation-duration:14s; animation-delay:-2s; }
+.sh5 { right:5%;   top:55%;   animation-duration:10s; animation-delay:-5s; }
+.sh6 { right:2.5%; bottom:18%;animation-duration:12s; animation-delay:-9s; }
+
+@keyframes shapeFloat {
+  0%,100% { transform:translateY(0)   rotate(45deg); opacity:.13; }
+  50%      { transform:translateY(-22px) rotate(225deg); opacity:.22; }
+}
+.sh-circle, .sh-ring {
+  animation-name:shapeFloatRound;
+}
+@keyframes shapeFloatRound {
+  0%,100% { transform:translateY(0)    scale(1);    opacity:.13; }
+  50%      { transform:translateY(-18px) scale(1.15); opacity:.2; }
+}
+body.dark .fl-shape { opacity:.07; }
+body.dark .fl-shape:is(.sh-circle,.sh-ring) { opacity:.07; }
 
 /* ── GRAIN TEXTURE ── */
 body::after {
@@ -1178,7 +1210,21 @@ footer { background:rgba(255,244,243,.8); border-top:1px solid var(--outv); padd
 </style>
 </head>
 <body>
-<div id="dot-grid" aria-hidden="true"></div>
+<!-- ══ AMBIENT ORBS + FLOATING SHAPES ══ -->
+<div id="bg-deco" aria-hidden="true">
+  <!-- Ambient Orbs -->
+  <div class="amb-orb orb1"></div>
+  <div class="amb-orb orb2"></div>
+  <div class="amb-orb orb3"></div>
+  <div class="amb-orb orb4"></div>
+  <!-- Floating Shapes -->
+  <div class="fl-shape sh-diamond sh1"></div>
+  <div class="fl-shape sh-circle  sh2"></div>
+  <div class="fl-shape sh-diamond sh3"></div>
+  <div class="fl-shape sh-ring    sh4"></div>
+  <div class="fl-shape sh-circle  sh5"></div>
+  <div class="fl-shape sh-ring    sh6"></div>
+</div>
 
 
 <!-- ── LOGIN PAGE ── -->
