@@ -92,89 +92,10 @@ body.dark .tico.sub, body.dark .tico.sub_ic, body.dark .tico.sub_fm { background
 }
 .dm-toggle:hover { background:var(--sl); color:var(--primary); transform:rotate(20deg); }
 
-/* ── AMBIENT ORBS ── */
-#bg-deco { position:fixed; inset:0; z-index:0; pointer-events:none; overflow:hidden; }
+/* ── HALFTONE WAVE ── */
+#htwave { opacity:1; }
+body.dark #htwave { opacity:.75; }
 
-.amb-orb {
-  position:absolute; border-radius:50%;
-  background:radial-gradient(circle at 40% 40%, rgba(255,120,82,.18), rgba(172,44,0,.04) 70%, transparent);
-  filter:blur(60px);
-  animation:orbFloat linear infinite;
-}
-.orb1 { width:320px; height:320px; left:-80px;  top:10%;  animation-duration:22s; animation-delay:0s; }
-.orb2 { width:220px; height:220px; right:-60px; top:35%;  animation-duration:18s; animation-delay:-6s; }
-.orb3 { width:260px; height:260px; left:-70px;  bottom:20%; animation-duration:26s; animation-delay:-11s; }
-.orb4 { width:180px; height:180px; right:-40px; bottom:10%; animation-duration:20s; animation-delay:-4s; }
-body.dark .amb-orb { background:radial-gradient(circle at 40% 40%, rgba(255,120,82,.1), rgba(172,44,0,.03) 70%, transparent); }
-
-@keyframes orbFloat {
-  0%,100% { transform:translateY(0px) scale(1); }
-  30%      { transform:translateY(-28px) scale(1.04); }
-  60%      { transform:translateY(14px) scale(.97); }
-  80%      { transform:translateY(-10px) scale(1.02); }
-}
-
-/* ── FLOATING SHAPES ── */
-.fl-shape {
-  position:absolute;
-  opacity:.28;
-  animation:shapeFloat ease-in-out infinite;
-}
-body.dark .fl-shape { opacity:.18; }
-
-.sh-diamond {
-  width:22px; height:22px;
-  background:var(--primary);
-  transform:rotate(45deg);
-  border-radius:3px;
-}
-.sh-circle {
-  width:16px; height:16px;
-  background:rgba(255,120,82,.85);
-  border-radius:50%;
-}
-.sh-ring {
-  width:22px; height:22px;
-  border:2.5px solid var(--primary);
-  border-radius:50%;
-  background:transparent;
-}
-.sh-diamond-sm {
-  width:12px; height:12px;
-  background:rgba(255,120,82,.7);
-  transform:rotate(45deg);
-  border-radius:2px;
-}
-
-/* ── ซ้าย: diamond / circle / ring / diamond-sm ── */
-.sh1 { left:3%;   top:15%;    animation-duration:9s;  animation-delay:0s;   }
-.sh2 { left:5.5%; top:40%;    animation-duration:13s; animation-delay:-3s;  }
-.sh3 { left:2.5%; top:63%;    animation-duration:11s; animation-delay:-7s;  }
-.sh7 { left:4.5%; bottom:12%; animation-duration:15s; animation-delay:-5s;  }
-
-/* ── ขวา: diamond / circle / ring / diamond-sm ── */
-.sh4 { right:3%;   top:15%;    animation-duration:10s; animation-delay:-2s;  }
-.sh5 { right:5.5%; top:40%;    animation-duration:14s; animation-delay:-5s;  }
-.sh6 { right:2.5%; top:63%;    animation-duration:12s; animation-delay:-9s;  }
-.sh8 { right:4.5%; bottom:12%; animation-duration:16s; animation-delay:-4s;  }
-
-@keyframes shapeFloat {
-  0%,100% { transform:translateY(0)    rotate(45deg);  opacity:.28; }
-  50%      { transform:translateY(-26px) rotate(225deg); opacity:.42; }
-}
-.sh-circle, .sh-ring {
-  animation-name:shapeFloatRound;
-}
-@keyframes shapeFloatRound {
-  0%,100% { transform:translateY(0)    scale(1);    opacity:.28; }
-  50%      { transform:translateY(-22px) scale(1.2);  opacity:.42; }
-}
-.sh-diamond-sm {
-  animation-name:shapeFloat;
-}
-body.dark .fl-shape { opacity:.14; }
-
-/* ── GRAIN TEXTURE ── */
 body::after {
   content:''; position:fixed; inset:0; z-index:9998; pointer-events:none;
   opacity:.022;
@@ -1222,25 +1143,8 @@ footer { background:rgba(255,244,243,.8); border-top:1px solid var(--outv); padd
 </style>
 </head>
 <body>
-<!-- ══ AMBIENT ORBS + FLOATING SHAPES ══ -->
-<div id="bg-deco" aria-hidden="true">
-  <!-- Ambient Orbs -->
-  <div class="amb-orb orb1"></div>
-  <div class="amb-orb orb2"></div>
-  <div class="amb-orb orb3"></div>
-  <div class="amb-orb orb4"></div>
-  <!-- Floating Shapes — Left (4 shapes) -->
-  <div class="fl-shape sh-diamond  sh1"></div>
-  <div class="fl-shape sh-circle   sh2"></div>
-  <div class="fl-shape sh-ring     sh3"></div>
-  <div class="fl-shape sh-diamond-sm sh7"></div>
-  <!-- Floating Shapes — Right (mirror) -->
-  <div class="fl-shape sh-diamond  sh4"></div>
-  <div class="fl-shape sh-circle   sh5"></div>
-  <div class="fl-shape sh-ring     sh6"></div>
-  <div class="fl-shape sh-diamond-sm sh8"></div>
-</div>
-
+<!-- ══ HALFTONE WAVE BG ══ -->
+<canvas id="htwave" aria-hidden="true" style="position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;"></canvas>
 
 <!-- ── LOGIN PAGE ── -->
 <div id="login-page" class="active">
@@ -2868,5 +2772,72 @@ document.addEventListener('DOMContentLoaded', () => {
 })();
 </script>
 
+<script>
+/* ══ HALFTONE WAVE BACKGROUND ══ */
+(function(){
+  const cv = document.getElementById('htwave');
+  if (!cv) return;
+
+  function render() {
+    const dpr = window.devicePixelRatio || 1;
+    const W = window.innerWidth, H = window.innerHeight;
+    cv.width  = W * dpr;
+    cv.height = H * dpr;
+    const ctx = cv.getContext('2d');
+    ctx.scale(dpr, dpr);
+    ctx.clearRect(0, 0, W, H);
+
+    const isDark = document.body.classList.contains('dark');
+    const gap = 8;
+    const cx = W / 2, cy = H / 2;
+
+    for (let x = 0; x <= W; x += gap) {
+      for (let y = 0; y <= H; y += gap) {
+        /* horizontal distance from center → side weight 0–1 */
+        const dx = Math.abs(x - cx) / (W / 2);
+        const dy = (y - cy) / (H / 2);
+
+        /* wave: sine of radial distance, stretched horizontally */
+        const dist  = Math.sqrt(dx * dx + dy * dy * 0.4);
+        const wave  = Math.sin(dist * 12) * 0.5 + 0.5;   /* 0..1 */
+
+        /* side fade: only show on left/right margins */
+        const sideFade = Math.pow(dx, 1.2);
+
+        const r  = (wave * 1.8 + 0.3) * sideFade + 0.12;
+        const op = (wave * 0.5 + 0.06) * sideFade + 0.02;
+
+        if (r < 0.1 || op < 0.01) continue;
+
+        ctx.beginPath();
+        ctx.arc(x, y, r, 0, Math.PI * 2);
+        ctx.fillStyle = isDark
+          ? `rgba(255,120,82,${op * 0.75})`
+          : `rgba(172,44,0,${op})`;
+        ctx.fill();
+      }
+    }
+
+    /* fade out center horizontally */
+    const grd = ctx.createLinearGradient(0, 0, W, 0);
+    const bg  = isDark ? '20,10,8' : '255,250,249';
+    grd.addColorStop(0,    `rgba(${bg},0)`);
+    grd.addColorStop(0.18, `rgba(${bg},0.92)`);
+    grd.addColorStop(0.82, `rgba(${bg},0.92)`);
+    grd.addColorStop(1,    `rgba(${bg},0)`);
+    ctx.fillStyle = grd;
+    ctx.fillRect(0, 0, W, H);
+  }
+
+  /* re-render on resize + dark mode toggle */
+  window.addEventListener('resize', render);
+  const observer = new MutationObserver(render);
+  observer.observe(document.body, { attributeFilter: ['class'] });
+
+  /* wait for fonts/layout then render */
+  if (document.readyState === 'complete') render();
+  else window.addEventListener('load', render);
+})();
+</script>
 </body>
 </html>
