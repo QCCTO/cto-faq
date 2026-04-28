@@ -1071,6 +1071,7 @@ body.dark .cl-select { color-scheme:dark; }
 </style>
 </head>
 <body>
+<canvas id="htwave" aria-hidden="true" style="position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;"></canvas>
 
 
 <!-- ── LOGIN PAGE ── -->
@@ -2607,5 +2608,45 @@ document.addEventListener('DOMContentLoaded', () => {
 })();
 </script>
 
+<script>
+/* ══ HALFTONE WAVE BG — margin only ══ */
+(function(){
+  const cv = document.getElementById('htwave');
+  if (!cv) return;
+  function draw() {
+    const dpr = window.devicePixelRatio || 1;
+    const W = window.innerWidth, H = window.innerHeight;
+    cv.width = W * dpr; cv.height = H * dpr;
+    const ctx = cv.getContext('2d');
+    ctx.scale(dpr, dpr);
+    ctx.clearRect(0, 0, W, H);
+    const isDark = document.body.classList.contains('dark');
+    const gap = 10, margin = W * 0.16;
+    for (let x = 0; x <= W; x += gap) {
+      const inMargin = Math.min(x, W - x);
+      if (inMargin > margin) continue;
+      const t = 1 - inMargin / margin;
+      for (let y = 0; y <= H; y += gap) {
+        const dx = Math.abs(x - W/2) / (W/2);
+        const dy = (y - H/2) / (H/2);
+        const dist = Math.sqrt(dx*dx + dy*dy*0.4);
+        const wave = Math.sin(dist * 11) * 0.5 + 0.5;
+        const edgeFade = Math.pow(t, 1.4);
+        const r  = (wave * 2.8 + 0.6) * edgeFade;
+        const op = (wave * 0.55 + 0.15) * edgeFade;
+        if (r < 0.1 || op < 0.01) continue;
+        ctx.beginPath();
+        ctx.arc(x, y, r, 0, Math.PI*2);
+        ctx.fillStyle = isDark ? `rgba(255,120,82,${op})` : `rgba(172,44,0,${op*1.2})`;
+        ctx.fill();
+      }
+    }
+  }
+  window.addEventListener('resize', draw);
+  new MutationObserver(draw).observe(document.body, { attributeFilter: ['class'] });
+  if (document.readyState === 'complete') draw();
+  else window.addEventListener('load', draw);
+})();
+</script>
 </body>
 </html>
