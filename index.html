@@ -618,6 +618,18 @@ footer { background:rgba(255,244,243,.8); border-top:1px solid var(--outv); padd
 .cl-results { display:flex; flex-direction:column; gap:8px; }
 .cl-card { background:var(--surf); border-radius:14px; border:1.5px solid var(--outv); padding:16px 20px; transition:all .22s; }
 .cl-card:hover { box-shadow:0 6px 20px rgba(172,44,0,.1); border-color:rgba(172,44,0,.25); }
+.cl-select {
+  height:48px; padding:0 36px 0 14px; border-radius:12px;
+  border:1.5px solid var(--outv);
+  background:var(--surf) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24'%3E%3Cpath fill='%23ac2c00' d='M7 10l5 5 5-5z'/%3E%3C/svg%3E") no-repeat right 10px center;
+  appearance:none; -webkit-appearance:none;
+  font-family:inherit; font-size:.88rem; font-weight:500;
+  color:var(--os); cursor:pointer; outline:none; min-width:140px;
+  transition:border-color .2s, box-shadow .2s;
+}
+.cl-select:hover { border-color:var(--primary); }
+.cl-select:focus { border-color:var(--primary); box-shadow:0 0 0 3px rgba(172,44,0,.1); }
+body.dark .cl-select { color-scheme:dark; }
 .cl-name-wrap { display:flex; align-items:center; gap:10px; flex:1; min-width:0; }
 .cl-avatar { width:38px; height:38px; border-radius:9px; background:var(--sl); display:flex; align-items:center; justify-content:center; font-size:.88rem; font-weight:800; color:var(--primary); flex-shrink:0; }
 .cl-name { font-weight:700; font-size:.93rem; color:var(--os); }
@@ -1059,7 +1071,6 @@ footer { background:rgba(255,244,243,.8); border-top:1px solid var(--outv); padd
 </style>
 </head>
 <body>
-<canvas id="htwave" aria-hidden="true" style="position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;"></canvas>
 
 
 <!-- ── LOGIN PAGE ── -->
@@ -2403,7 +2414,7 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
           </div>
         </div>
-        <select id="cl-region-dd" onchange="clDropFilter()" style="height:52px;padding:0 14px;border-radius:14px;border:1.5px solid rgba(172,44,0,.2);background:#fff;font-family:inherit;font-size:.88rem;color:var(--os);cursor:pointer;outline:none;min-width:130px;">
+        <select id="cl-region-dd" onchange="clDropFilter()" class="cl-select">
           <option value="">ทุก Region</option>
           <option value="GBKK-E">GBKK-E</option>
           <option value="GBKK-N">GBKK-N</option>
@@ -2413,7 +2424,7 @@ document.addEventListener('DOMContentLoaded', () => {
           <option value="UPC2">UPC2</option>
           <option value="UPC3">UPC3</option>
         </select>
-        <select id="cl-area-dd" onchange="clDropFilter()" style="height:52px;padding:0 14px;border-radius:14px;border:1.5px solid rgba(172,44,0,.2);background:#fff;font-family:inherit;font-size:.88rem;color:var(--os);cursor:pointer;outline:none;min-width:130px;">
+        <select id="cl-area-dd" onchange="clDropFilter()" class="cl-select">
           <option value="">ทุก Area</option>
         </select>
       </div>
@@ -2596,66 +2607,5 @@ document.addEventListener('DOMContentLoaded', () => {
 })();
 </script>
 
-<script>
-/* ══ HALFTONE WAVE BG — margin only, won't cover text ══ */
-(function(){
-  const cv = document.getElementById('htwave');
-  if (!cv) return;
-
-  function draw() {
-    const dpr = window.devicePixelRatio || 1;
-    const W = window.innerWidth, H = window.innerHeight;
-    cv.width  = W * dpr;
-    cv.height = H * dpr;
-    const ctx = cv.getContext('2d');
-    ctx.scale(dpr, dpr);
-    ctx.clearRect(0, 0, W, H);
-
-    const isDark = document.body.classList.contains('dark');
-    const gap    = 10;          // dot spacing
-    const margin = W * 0.16;    // show only within 16% from each edge
-
-    for (let x = 0; x <= W; x += gap) {
-      /* only draw in left or right margin bands */
-      const fromLeft  = x;
-      const fromRight = W - x;
-      const inMargin  = Math.min(fromLeft, fromRight);
-      if (inMargin > margin) continue;
-
-      /* how far into the margin (0=edge, 1=inner boundary) */
-      const t = 1 - inMargin / margin;   /* 1 at edge, 0 at boundary */
-
-      for (let y = 0; y <= H; y += gap) {
-        const dx = Math.abs(x - W / 2) / (W / 2);
-        const dy = (y - H / 2) / (H / 2);
-        const dist = Math.sqrt(dx * dx + dy * dy * 0.4);
-        const wave = Math.sin(dist * 11) * 0.5 + 0.5;   /* 0..1 */
-
-        /* edge fade: strong at edge, zero at inner boundary */
-        const edgeFade = Math.pow(t, 1.4);
-
-        const r  = (wave * 2.8 + 0.6) * edgeFade;
-        const op = (wave * 0.55 + 0.15) * edgeFade;
-
-        if (r < 0.1 || op < 0.01) continue;
-
-        ctx.beginPath();
-        ctx.arc(x, y, r, 0, Math.PI * 2);
-        ctx.fillStyle = isDark
-          ? `rgba(255,120,82,${op})`
-          : `rgba(172,44,0,${op * 1.2})`;
-        ctx.fill();
-      }
-    }
-  }
-
-  window.addEventListener('resize', draw);
-  const obs = new MutationObserver(draw);
-  obs.observe(document.body, { attributeFilter: ['class'] });
-
-  if (document.readyState === 'complete') draw();
-  else window.addEventListener('load', draw);
-})();
-</script>
 </body>
 </html>
