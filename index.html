@@ -202,8 +202,19 @@ aside.snav { width:220px; flex-shrink:0; background:var(--surf); border-right:1p
 
 /* ── HOME ── */
 .hmain { padding:calc(var(--nh) + 36px) 28px 56px; max-width:1400px; margin:0 auto; }
-.hero { position:relative; border-radius:24px; overflow:hidden; padding:64px 40px; text-align:center; margin-bottom:52px; background:var(--surf); box-shadow:0 6px 40px rgba(172,44,0,.08); }
+.hero { position:relative; border-radius:24px; padding:64px 40px; text-align:center; margin-bottom:52px; background:var(--surf); box-shadow:0 6px 40px rgba(172,44,0,.08); }
+.hero-bg-clip { position:absolute; inset:0; border-radius:24px; overflow:hidden; pointer-events:none; z-index:0; }
 .hbg { position:absolute; inset:0; z-index:0; background:linear-gradient(135deg,rgba(172,44,0,.06),rgba(255,120,82,.08)); animation:hbp 8s ease-in-out infinite; }
+
+/* ── SCROLLBAR THEMING ── */
+::-webkit-scrollbar { width:5px; height:5px; }
+::-webkit-scrollbar-track { background:transparent; }
+::-webkit-scrollbar-thumb { background:rgba(172,44,0,.3); border-radius:99px; }
+::-webkit-scrollbar-thumb:hover { background:rgba(172,44,0,.5); }
+body.dark ::-webkit-scrollbar-thumb { background:rgba(255,120,82,.22); }
+body.dark ::-webkit-scrollbar-thumb:hover { background:rgba(255,120,82,.42); }
+* { scrollbar-width:thin; scrollbar-color:rgba(172,44,0,.3) transparent; }
+body.dark * { scrollbar-color:rgba(255,120,82,.22) transparent; }
 .hblob { position:absolute; border-radius:50%; filter:blur(60px); animation:bf 12s ease-in-out infinite; }
 .hb1 { width:360px; height:360px; background:rgba(255,120,82,.12); top:-90px; right:-70px; }
 .hb2 { width:260px; height:260px; background:rgba(172,44,0,.08); bottom:-70px; left:-50px; animation-delay:-4s; }
@@ -221,8 +232,8 @@ aside.snav { width:220px; flex-shrink:0; background:var(--surf); border-right:1p
 
 /* ── SEARCH CARD (unified) ── */
 .search-container { position:relative; max-width:640px; margin:0 auto; z-index:10; }
-.search-card { background:var(--surf); border-radius:24px; border:1.5px solid rgba(172,44,0,.2); box-shadow:0 6px 28px rgba(172,44,0,.1); transition:border-radius .2s, border-color .2s, box-shadow .2s; overflow:hidden; }
-.search-card.has-drop { border-radius:18px; border-color:var(--primary); box-shadow:0 6px 36px rgba(172,44,0,.2), 0 0 0 3px rgba(172,44,0,.06); }
+.search-card { background:var(--surf); border-radius:24px; border:1.5px solid rgba(172,44,0,.2); box-shadow:0 6px 28px rgba(172,44,0,.1); transition:border-radius .2s, border-color .2s, box-shadow .2s; }
+.search-card.has-drop { border-radius:18px 18px 0 0; border-color:var(--primary); box-shadow:0 6px 36px rgba(172,44,0,.2), 0 0 0 3px rgba(172,44,0,.06); }
 .search-box { display:flex; align-items:center; background:transparent; }
 .search-ico { padding:0 14px 0 20px; color:var(--primary); font-size:1.35rem; flex-shrink:0; }
 .search-inp { flex:1; padding:16px 0; font-size:1rem; font-family:inherit; border:none; outline:none; background:transparent; color:var(--os); }
@@ -232,7 +243,7 @@ aside.snav { width:220px; flex-shrink:0; background:var(--surf); border-right:1p
 .search-inp-clear.visible { display:flex; }
 .search-go { background:var(--primary); color:#fff; padding:9px 20px; border-radius:18px; border:none; font-weight:700; font-size:.85rem; cursor:pointer; transition:all .2s; font-family:inherit; margin:8px 10px 8px 0; white-space:nowrap; flex-shrink:0; }
 .search-go:hover { background:var(--pd); }
-.suggest-drop { display:none; border-top:1px solid rgba(172,44,0,.1); background:var(--surf); overflow:hidden; max-height:340px; overflow-y:auto; }
+.suggest-drop { display:none; position:absolute; left:0; right:0; top:100%; border:1.5px solid var(--primary); border-top:1px solid rgba(172,44,0,.12); background:var(--surf); max-height:340px; overflow-y:auto; border-radius:0 0 18px 18px; box-shadow:0 12px 36px rgba(172,44,0,.15); z-index:50; }
 .suggest-drop.open { display:block; }
 .suggest-item { display:flex; align-items:center; gap:10px; padding:9px 18px; cursor:pointer; transition:background .12s; }
 .suggest-item:hover,.suggest-item.focused { background:var(--sl); }
@@ -1154,8 +1165,10 @@ body.dark .cl-select { color-scheme:dark; }
 <div class="page active" id="page-home">
   <main class="hmain">
     <section class="hero">
-      <canvas id="hero-particles" style="position:absolute;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;border-radius:24px;"></canvas>
-      <div class="hbg"></div><div class="hblob hb1"></div><div class="hblob hb2"></div>
+      <div class="hero-bg-clip">
+        <canvas id="hero-particles" style="position:absolute;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;"></canvas>
+        <div class="hbg"></div><div class="hblob hb1"></div><div class="hblob hb2"></div>
+      </div>
       <div class="hcon">
         <h1 class="su">CTO SPX FAQ</h1>
         <p class="su2">ค้นหาคำถาม-คำตอบจากทีม Quality Control, Resource & Planning, Smart Map และ Subcon</p>
