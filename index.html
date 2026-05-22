@@ -183,8 +183,8 @@ body.dark nav.topnav.scrolled {
 .ibtn { width:34px; height:34px; border-radius:50%; border:none; background:none; cursor:pointer; display:flex; align-items:center; justify-content:center; color:var(--osv); transition:all .2s; }
 .ibtn:hover { background:var(--sl); color:var(--primary); }
 .ndot { position:relative; }
-.ndot::after { content:''; position:absolute; top:5px; right:5px; width:7px; height:7px; border-radius:50%; background:var(--primary); }
-
+.ndot::after { content:''; position:absolute; top:5px; right:5px; width:7px; height:7px; border-radius:50%; background:var(--primary); animation:pls 2s infinite; }
+@keyframes pls { 0%,100%{transform:scale(1);opacity:1;} 50%{transform:scale(1.4);opacity:.7;} }
 
 /* ── SIDEBAR LAYOUT ── */
 .lws { display:flex; padding-top:var(--nh); min-height:100vh; }
@@ -204,7 +204,7 @@ aside.snav { width:220px; flex-shrink:0; background:var(--surf); border-right:1p
 .hmain { padding:calc(var(--nh) + 36px) 28px 56px; max-width:1400px; margin:0 auto; }
 .hero { position:relative; border-radius:24px; padding:64px 40px; text-align:center; margin-bottom:52px; background:var(--surf); box-shadow:0 6px 40px rgba(172,44,0,.08); }
 .hero-bg-clip { position:absolute; inset:0; border-radius:24px; overflow:hidden; pointer-events:none; z-index:0; }
-.hbg { position:absolute; inset:0; z-index:0; background:linear-gradient(135deg,rgba(172,44,0,.06),rgba(255,120,82,.08)); }
+.hbg { position:absolute; inset:0; z-index:0; background:linear-gradient(135deg,rgba(172,44,0,.06),rgba(255,120,82,.08)); animation:hbp 8s ease-in-out infinite; }
 
 /* ── SCROLLBAR THEMING ── */
 ::-webkit-scrollbar { width:5px; height:5px; }
@@ -215,10 +215,11 @@ body.dark ::-webkit-scrollbar-thumb { background:rgba(255,120,82,.22); }
 body.dark ::-webkit-scrollbar-thumb:hover { background:rgba(255,120,82,.42); }
 * { scrollbar-width:thin; scrollbar-color:rgba(172,44,0,.3) transparent; }
 body.dark * { scrollbar-color:rgba(255,120,82,.22) transparent; }
-.hblob { position:absolute; border-radius:50%; filter:blur(60px); animation:bf 24s ease-in-out infinite; }
+.hblob { position:absolute; border-radius:50%; filter:blur(60px); animation:bf 12s ease-in-out infinite; }
 .hb1 { width:360px; height:360px; background:rgba(255,120,82,.12); top:-90px; right:-70px; }
-.hb2 { width:260px; height:260px; background:rgba(172,44,0,.08); bottom:-70px; left:-50px; animation-delay:-10s; }
-@keyframes bf { 0%,100%{transform:translateY(0);} 50%{transform:translateY(-8px);} }
+.hb2 { width:260px; height:260px; background:rgba(172,44,0,.08); bottom:-70px; left:-50px; animation-delay:-4s; }
+@keyframes bf { 0%,100%{transform:translateY(0);} 50%{transform:translateY(-16px);} }
+@keyframes hbp { 0%,100%{opacity:1;} 50%{opacity:.7;} }
 .hcon { position:relative; z-index:1; }
 .hero h1 { font-family:'Plus Jakarta Sans','IBM Plex Sans Thai',sans-serif; font-size:clamp(2rem,5vw,4rem); font-weight:900; letter-spacing:-1.5px; line-height:1.1; color:var(--primary); margin-bottom:16px; }
 .hero h1 span { color:var(--os); }
@@ -560,7 +561,7 @@ footer { background:rgba(255,244,243,.8); border-top:1px solid var(--outv); padd
 .fw-fab:hover { transform:scale(1.08) translateY(-2px); box-shadow:0 10px 32px rgba(172,44,0,.45); }
 .fw-fab .mi { font-size:1.4rem; transition:transform .3s; }
 .fw-fab.open .mi { transform:rotate(45deg); }
-.fw-pulse { position:absolute; top:-3px; right:-3px; width:10px; height:10px; border-radius:50%; background:#ff7852; border:2px solid var(--surf); }
+.fw-pulse { position:absolute; top:-3px; right:-3px; width:14px; height:14px; border-radius:50%; background:#ff7852; border:2px solid #fff; animation:pls 2s infinite; }
 
 .fw-panel {
   position:fixed; bottom:92px; right:28px; z-index:400;
@@ -1031,79 +1032,8 @@ body.dark .cl-select { color-scheme:dark; }
   to   { opacity:1; transform:none; }
 }
 
-/* ── MOOD POLL ── */
-.mood-poll-card { background:var(--surf); border-radius:20px; border:1.5px solid var(--outv); padding:28px 32px; box-shadow:0 6px 28px rgba(172,44,0,.07); }
-.mood-emojis { display:flex; gap:14px; flex-wrap:wrap; justify-content:center; margin-bottom:16px; }
-.mood-btn {
-  display:flex; flex-direction:column; align-items:center; gap:6px;
-  padding:16px 20px; border-radius:16px; border:2px solid var(--outv);
-  background:var(--bg); cursor:pointer; font-size:2rem; transition:all .25s cubic-bezier(.34,1.4,.64,1);
-  font-family:inherit; min-width:80px;
-}
-.mood-btn span { font-size:.72rem; font-weight:600; color:var(--osv); }
-.mood-btn:hover { border-color:var(--primary); transform:scale(1.12) translateY(-3px); background:var(--sl); }
-.mood-btn.voted { border-color:var(--primary); background:rgba(172,44,0,.08); box-shadow:0 6px 20px rgba(172,44,0,.15); }
-.mood-result { font-size:1.05rem; font-weight:700; color:var(--primary); text-align:center; margin-bottom:16px; animation:pfi .3s ease; }
-.mood-bars { display:flex; flex-direction:column; gap:8px; }
-.mood-bar-row { display:flex; align-items:center; gap:10px; }
-.mood-bar-label { width:80px; font-size:.8rem; color:var(--osv); text-align:right; flex-shrink:0; }
-.mood-bar-track { flex:1; height:10px; background:var(--sl); border-radius:99px; overflow:hidden; }
-.mood-bar-fill { height:100%; background:var(--primary); border-radius:99px; transition:width 1s cubic-bezier(.34,1,.64,1); }
-.mood-bar-pct { width:36px; font-size:.72rem; font-weight:700; color:var(--primary); }
-
-/* ── SNAKE GAME MODAL ── */
-.snake-overlay {
-  display:none; position:fixed; inset:0; background:rgba(0,0,0,.75); z-index:9999;
-  align-items:center; justify-content:center; backdrop-filter:blur(8px);
-}
-.snake-overlay.open { display:flex; animation:pfi .2s ease; }
-.snake-modal {
-  background:var(--surf); border-radius:24px; padding:28px; max-width:400px; width:90%;
-  box-shadow:0 20px 60px rgba(0,0,0,.3); position:relative;
-}
-.snake-modal h2 { font-family:'Plus Jakarta Sans',sans-serif; font-weight:900; font-size:1.4rem; color:var(--primary); margin-bottom:4px; }
-.snake-modal p { font-size:.8rem; color:var(--osv); margin-bottom:16px; }
-#snake-canvas { border-radius:12px; border:2px solid var(--outv); display:block; margin:0 auto; background:#1a0f0e; }
-.snake-ctrl { display:flex; flex-direction:column; align-items:center; gap:4px; margin-top:14px; }
-.snake-ctrl-row { display:flex; gap:4px; }
-.snake-btn {
-  width:44px; height:44px; border-radius:10px; border:1.5px solid var(--outv);
-  background:var(--bg); color:var(--os); font-size:1.1rem; cursor:pointer;
-  display:flex; align-items:center; justify-content:center; transition:all .15s;
-  font-family:inherit;
-}
-.snake-btn:hover, .snake-btn:active { background:var(--primary); color:#fff; border-color:var(--primary); transform:scale(1.05); }
-.snake-stats { display:flex; justify-content:space-between; margin-top:12px; font-size:.8rem; color:var(--osv); }
-.snake-stats b { color:var(--primary); }
-.snake-close {
-  position:absolute; top:14px; right:14px; width:30px; height:30px; border-radius:50%;
-  border:none; background:var(--sl); cursor:pointer; display:flex; align-items:center; justify-content:center;
-  color:var(--osv); font-size:1rem; transition:all .2s;
-}
-.snake-close:hover { background:var(--primary); color:#fff; }
-
-/* ── KONAMI TOAST ── */
-.konami-toast {
-  position:fixed; bottom:80px; left:50%; transform:translateX(-50%) translateY(20px);
-  background:var(--primary); color:#fff; padding:12px 24px; border-radius:16px;
-  font-weight:700; font-size:.9rem; z-index:9998; opacity:0;
-  transition:all .4s cubic-bezier(.34,1.4,.64,1); white-space:nowrap;
-  box-shadow:0 8px 24px rgba(172,44,0,.4);
-}
-.konami-toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
-
-/* ── IDLE MOTIVATOR ── */
-.idle-bubble {
-  position:fixed; bottom:90px; right:20px; max-width:220px;
-  background:var(--surf); border:1.5px solid var(--outv);
-  border-radius:18px; padding:14px 16px; box-shadow:0 8px 28px rgba(0,0,0,.1);
-  font-size:.82rem; color:var(--os); z-index:500; opacity:0; pointer-events:none;
-  transition:all .4s cubic-bezier(.34,1.4,.64,1); transform:translateY(10px);
-}
-.idle-bubble.show { opacity:1; transform:translateY(0); pointer-events:auto; }
-.idle-bubble-close { position:absolute; top:8px; right:8px; background:none; border:none; cursor:pointer; color:var(--osv); font-size:.8rem; }
-
-
+/* ── Reduced motion: respect user preference ── */
+@media (prefers-reduced-motion:reduce) {
   *, *::before, *::after {
     animation-duration:.01ms !important;
     transition-duration:.01ms !important;
@@ -1268,24 +1198,6 @@ body.dark .cl-select { color-scheme:dark; }
         <div><h2>6 ทีม CTO</h2><p>คลิกเพื่อดูคำถาม-คำตอบของแต่ละทีม</p></div>
       </div>
       <div class="tgrid" id="home-team-grid"></div>
-    </section>
-
-    <!-- ── MOOD POLL ── -->
-    <section id="mood-section" style="margin-bottom:48px;">
-      <div class="sh2">
-        <div><h2>😄 วันนี้เป็นยังไงบ้าง?</h2><p>โหวตอารมณ์แล้ว Hub ทั่วประเทศจะเห็นผล</p></div>
-      </div>
-      <div class="mood-poll-card">
-        <div class="mood-emojis" id="mood-emojis">
-          <button class="mood-btn" onclick="voteMood('🔥')" title="ร้อนแรงมาก">🔥<span>ร้อนแรง</span></button>
-          <button class="mood-btn" onclick="voteMood('💪')" title="พร้อมลุย">💪<span>พร้อมลุย</span></button>
-          <button class="mood-btn" onclick="voteMood('😐')" title="งานเยอะ">😐<span>งานเยอะ</span></button>
-          <button class="mood-btn" onclick="voteMood('😴')" title="ง่วงนอน">😴<span>ง่วงนอน</span></button>
-          <button class="mood-btn" onclick="voteMood('🙏')" title="ขอลาก่อน">🙏<span>ขอลาก่อน</span></button>
-        </div>
-        <div class="mood-result" id="mood-result" style="display:none;"></div>
-        <div class="mood-bars" id="mood-bars"></div>
-      </div>
     </section>
   </main>
   <footer><div><div class="fbrand">CTO FAQ</div><div class="fcopy">© 2026 CTO FAQ SPX. Internal Use Only.</div></div></footer>
@@ -2709,272 +2621,45 @@ document.addEventListener('DOMContentLoaded', () => {
 })();
 </script>
 
-<!-- ── SNAKE GAME MODAL ── -->
-<div class="snake-overlay" id="snake-overlay" onclick="if(event.target===this)closeSnake()">
-  <div class="snake-modal">
-    <button class="snake-close" onclick="closeSnake()"><span class="mi material-symbols-outlined" style="font-size:1rem">close</span></button>
-    <h2>🐍 Snake</h2>
-    <p>กด ↑↓←→ หรือปุ่มด้านล่าง เพื่อเล่น | P = หยุดชั่วคราว</p>
-    <canvas id="snake-canvas" width="300" height="300"></canvas>
-    <div class="snake-stats">
-      <div>คะแนน: <b id="snk-score">0</b></div>
-      <div>สูงสุด: <b id="snk-hi">0</b></div>
-      <div id="snk-status" style="color:var(--primary);font-weight:700;">กด Enter เพื่อเริ่ม</div>
-    </div>
-    <div class="snake-ctrl">
-      <div class="snake-ctrl-row"><button class="snake-btn" onclick="snkDir(0,-1)">▲</button></div>
-      <div class="snake-ctrl-row">
-        <button class="snake-btn" onclick="snkDir(-1,0)">◀</button>
-        <button class="snake-btn" onclick="snkDir(0,1)">▼</button>
-        <button class="snake-btn" onclick="snkDir(1,0)">▶</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- ── KONAMI TOAST ── -->
-<div class="konami-toast" id="konami-toast">🎮 Easter Egg Unlocked! กด Enter เพื่อเล่น Snake</div>
-
-<!-- ── IDLE BUBBLE ── -->
-<div class="idle-bubble" id="idle-bubble">
-  <button class="idle-bubble-close" onclick="dismissIdle()">✕</button>
-  <div id="idle-msg"></div>
-</div>
-
 <script>
-/* ═══════════════════════════════════════
-   FUN ZONE — Trivia, Mood Poll, Snake, Idle
-   ═══════════════════════════════════════ */
-
-/* ── MOOD POLL ── */
-const MOOD_LABELS = {'🔥':'ร้อนแรง','💪':'พร้อมลุย','😐':'งานเยอะ','😴':'ง่วงนอน','🙏':'ขอลาก่อน'};
-let moodVotes = JSON.parse(localStorage.getItem('spx_mood_votes') || '{"🔥":12,"💪":28,"😐":18,"😴":9,"🙏":5}');
-let myMood = localStorage.getItem('spx_my_mood');
-let moodDate = localStorage.getItem('spx_mood_date');
-const todayStr = new Date().toDateString();
-if (moodDate !== todayStr) { myMood = null; moodDate = todayStr; localStorage.setItem('spx_mood_date', todayStr); }
-
-function voteMood(emoji) {
-  if (myMood) { showMoodResult(emoji); return; }
-  myMood = emoji;
-  moodVotes[emoji] = (moodVotes[emoji]||0) + 1;
-  localStorage.setItem('spx_mood_votes', JSON.stringify(moodVotes));
-  localStorage.setItem('spx_my_mood', emoji);
-  document.querySelectorAll('.mood-btn').forEach(b => {
-    if (b.title.startsWith(emoji)) b.classList.add('voted');
-  });
-  showMoodResult(emoji);
-}
-
-function showMoodResult(emoji) {
-  const msgs = {
-    '🔥':'ไฟแรงมาก! SPX ต้องการคนแบบนี้ 🚀',
-    '💪':'พร้อมลุยแล้ว! ส่งพัสดุให้ทั่วไทยเลย 🛵',
-    '😐':'งานเยอะแต่ไหวนะ! ทีละ Hub ไปเลย 📦',
-    '😴':'ง่วงก็ยังมา! ขอบคุณนะ ☕',
-    '🙏':'โอเค เจอกันพรุ่งนี้ 👋'
-  };
-  document.getElementById('mood-result').textContent = msgs[emoji] || '👍';
-  document.getElementById('mood-result').style.display = 'block';
-  renderMoodBars();
-}
-
-function renderMoodBars() {
-  const total = Object.values(moodVotes).reduce((a,b)=>a+b,0) || 1;
-  const bars = document.getElementById('mood-bars');
-  bars.innerHTML = Object.entries(MOOD_LABELS).map(([emoji, label]) => {
-    const votes = moodVotes[emoji]||0;
-    const pct = Math.round(votes / total * 100);
-    return `<div class="mood-bar-row">
-      <div class="mood-bar-label">${emoji} ${label}</div>
-      <div class="mood-bar-track"><div class="mood-bar-fill" style="width:0%" data-pct="${pct}%"></div></div>
-      <div class="mood-bar-pct">${pct}%</div>
-    </div>`;
-  }).join('');
-  setTimeout(() => {
-    bars.querySelectorAll('.mood-bar-fill').forEach(el => {
-      el.style.width = el.dataset.pct;
-    });
-  }, 50);
-}
-
-/* ── SNAKE GAME ── */
-let snkGame = null;
-function openSnake() {
-  document.getElementById('snake-overlay').classList.add('open');
-  if (!snkGame) snkGame = new SnakeGame();
-  snkGame.focus();
-}
-function closeSnake() {
-  document.getElementById('snake-overlay').classList.remove('open');
-  if (snkGame) snkGame.pause();
-}
-function snkDir(dx, dy) { if (snkGame) snkGame.setDir(dx, dy); }
-
-class SnakeGame {
-  constructor() {
-    this.canvas = document.getElementById('snake-canvas');
-    this.ctx = this.canvas.getContext('2d');
-    this.CELL = 15; this.COLS = 20; this.ROWS = 20;
-    this.canvas.width = this.COLS * this.CELL;
-    this.canvas.height = this.ROWS * this.CELL;
-    this.hi = parseInt(localStorage.getItem('spx_snake_hi')||'0');
-    document.getElementById('snk-hi').textContent = this.hi;
-    this.reset();
-    this.keyHandler = e => this.onKey(e);
-    window.addEventListener('keydown', this.keyHandler);
-    this.drawIdle();
-  }
-  reset() {
-    this.snake = [{x:10,y:10},{x:9,y:10},{x:8,y:10}];
-    this.dir = {x:1,y:0}; this.nextDir = {x:1,y:0};
-    this.food = this.spawnFood();
-    this.score = 0; this.running = false; this.dead = false; this.paused = false;
-    this.interval = null;
-    document.getElementById('snk-score').textContent = 0;
-    document.getElementById('snk-status').textContent = 'กด Enter เพื่อเริ่ม';
-  }
-  focus() { this.canvas.focus(); }
-  spawnFood() {
-    let pos;
-    do { pos = {x:Math.floor(Math.random()*this.COLS), y:Math.floor(Math.random()*this.ROWS)}; }
-    while (this.snake.some(s=>s.x===pos.x&&s.y===pos.y));
-    return pos;
-  }
-  setDir(dx, dy) {
-    if (dx !== 0 && this.dir.x !== 0) return;
-    if (dy !== 0 && this.dir.y !== 0) return;
-    this.nextDir = {x:dx, y:dy};
-    if (!this.running && !this.dead) this.start();
-  }
-  onKey(e) {
-    const map = {'ArrowUp':[0,-1],'ArrowDown':[0,1],'ArrowLeft':[-1,0],'ArrowRight':[1,0]};
-    if (map[e.key]) { e.preventDefault(); const [dx,dy]=map[e.key]; this.setDir(dx,dy); }
-    if (e.key==='Enter') { if(this.dead) this.reset(); else if(!this.running) this.start(); }
-    if (e.key==='p'||e.key==='P') this.pause();
-  }
-  start() {
-    this.running = true; this.paused = false;
-    document.getElementById('snk-status').textContent = '▶ เล่นอยู่';
-    this.interval = setInterval(()=>this.tick(), 130);
-  }
-  pause() {
-    if (!this.running) return;
-    this.paused = !this.paused;
-    if (this.paused) { clearInterval(this.interval); this.interval=null; document.getElementById('snk-status').textContent = '⏸ หยุดชั่วคราว'; }
-    else this.start();
-  }
-  tick() {
-    this.dir = {...this.nextDir};
-    const head = {x:this.snake[0].x+this.dir.x, y:this.snake[0].y+this.dir.y};
-    if (head.x<0||head.x>=this.COLS||head.y<0||head.y>=this.ROWS||this.snake.some(s=>s.x===head.x&&s.y===head.y)) {
-      this.die(); return;
-    }
-    this.snake.unshift(head);
-    if (head.x===this.food.x && head.y===this.food.y) {
-      this.score += 10; document.getElementById('snk-score').textContent = this.score;
-      this.food = this.spawnFood();
-    } else { this.snake.pop(); }
-    this.draw();
-  }
-  die() {
-    clearInterval(this.interval); this.running=false; this.dead=true;
-    if (this.score > this.hi) { this.hi=this.score; localStorage.setItem('spx_snake_hi',this.hi); document.getElementById('snk-hi').textContent=this.hi; }
-    document.getElementById('snk-status').textContent = `💀 Game Over! Enter = เริ่มใหม่`;
-    this.draw();
-  }
-  drawIdle() {
-    const c=this.ctx, W=this.canvas.width, H=this.canvas.height;
-    c.fillStyle='#1a0f0e'; c.fillRect(0,0,W,H);
-    c.fillStyle='rgba(172,44,0,.4)'; c.font='bold 14px "Plus Jakarta Sans",sans-serif';
-    c.textAlign='center'; c.fillText('🐍 กด Enter เพื่อเริ่ม',W/2,H/2);
-  }
-  draw() {
-    const c=this.ctx, CS=this.CELL, W=this.canvas.width, H=this.canvas.height;
-    c.fillStyle='#1a0f0e'; c.fillRect(0,0,W,H);
-    // Grid dots
-    c.fillStyle='rgba(172,44,0,.08)';
-    for(let x=0;x<this.COLS;x++) for(let y=0;y<this.ROWS;y++){c.beginPath();c.arc(x*CS+CS/2,y*CS+CS/2,1,0,Math.PI*2);c.fill();}
-    // Food
-    c.font = `${CS-2}px serif`;
-    c.textAlign='center'; c.textBaseline='middle';
-    c.fillText('📦', this.food.x*CS+CS/2, this.food.y*CS+CS/2+1);
-    // Snake
-    this.snake.forEach((s,i) => {
-      const alpha = 1 - i/this.snake.length*.5;
-      c.fillStyle = i===0 ? '#ff7852' : `rgba(172,44,0,${alpha})`;
-      c.beginPath();
-      c.roundRect(s.x*CS+1, s.y*CS+1, CS-2, CS-2, 4);
-      c.fill();
-    });
-    if (this.dead) {
-      c.fillStyle='rgba(0,0,0,.6)'; c.fillRect(0,0,W,H);
-      c.fillStyle='#ff7852'; c.font='bold 16px "Plus Jakarta Sans",sans-serif';
-      c.textAlign='center'; c.textBaseline='middle';
-      c.fillText(`Score: ${this.score}`, W/2, H/2-12);
-      c.fillStyle='rgba(255,120,82,.7)'; c.font='12px sans-serif';
-      c.fillText('Enter = เริ่มใหม่', W/2, H/2+12);
-    }
-  }
-  destroy() { window.removeEventListener('keydown', this.keyHandler); clearInterval(this.interval); }
-}
-
-/* ── KONAMI CODE → OPEN SNAKE ── */
+/* ══ HALFTONE WAVE BG — margin only ══ */
 (function(){
-  const KONAMI = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'];
-  let seq = [];
-  window.addEventListener('keydown', e => {
-    seq.push(e.key); seq = seq.slice(-KONAMI.length);
-    if (seq.join(',') === KONAMI.join(',')) {
-      const toast = document.getElementById('konami-toast');
-      toast.classList.add('show');
-      setTimeout(()=>toast.classList.remove('show'), 3500);
-      setTimeout(()=>openSnake(), 500);
+  const cv = document.getElementById('htwave');
+  if (!cv) return;
+  function draw() {
+    const dpr = window.devicePixelRatio || 1;
+    const W = window.innerWidth, H = window.innerHeight;
+    cv.width = W * dpr; cv.height = H * dpr;
+    const ctx = cv.getContext('2d');
+    ctx.scale(dpr, dpr);
+    ctx.clearRect(0, 0, W, H);
+    const isDark = document.body.classList.contains('dark');
+    const gap = 10, margin = W * 0.16;
+    for (let x = 0; x <= W; x += gap) {
+      const inMargin = Math.min(x, W - x);
+      if (inMargin > margin) continue;
+      const t = 1 - inMargin / margin;
+      for (let y = 0; y <= H; y += gap) {
+        const dx = Math.abs(x - W/2) / (W/2);
+        const dy = (y - H/2) / (H/2);
+        const dist = Math.sqrt(dx*dx + dy*dy*0.4);
+        const wave = Math.sin(dist * 11) * 0.5 + 0.5;
+        const edgeFade = Math.pow(t, 1.4);
+        const r  = (wave * 2.8 + 0.6) * edgeFade;
+        const op = (wave * 0.55 + 0.15) * edgeFade;
+        if (r < 0.1 || op < 0.01) continue;
+        ctx.beginPath();
+        ctx.arc(x, y, r, 0, Math.PI*2);
+        ctx.fillStyle = isDark ? `rgba(255,120,82,${op})` : `rgba(172,44,0,${op*1.2})`;
+        ctx.fill();
+      }
     }
-  });
-  // Also: click logo 5 times fast
-  let logoClicks = 0, logoTimer;
-  document.querySelector('.logo').addEventListener('click', () => {
-    logoClicks++;
-    clearTimeout(logoTimer);
-    logoTimer = setTimeout(()=>logoClicks=0, 1500);
-    if (logoClicks >= 5) { logoClicks=0; openSnake(); }
-  });
-})();
-
-/* ── IDLE MOTIVATOR ── */
-(function(){
-  const MSGS = [
-    '☕ พักดื่มน้ำก่อนนะ — ทำงานมาได้ระยะหนึ่งแล้ว!',
-    '📦 วันนี้พัสดุออกไปกี่ชิ้นแล้วเอ่ย?',
-    '💡 เคยลอง Trivia ด้านล่างยัง? สนุกดีนะ',
-    '🐍 psst... ลอง Konami Code ดูสิ ↑↑↓↓←→←→BA',
-    '🌟 Hub ที่ดีที่สุดเกิดจากทีมที่ดีที่สุด!',
-    '🚚 SPX ขับเคลื่อนด้วยคนอย่างคุณ ขอบคุณนะ 🙏',
-  ];
-  let idleTimer, bubbleTimer;
-  function showIdle() {
-    const msg = MSGS[Math.floor(Math.random()*MSGS.length)];
-    document.getElementById('idle-msg').textContent = msg;
-    document.getElementById('idle-bubble').classList.add('show');
-    bubbleTimer = setTimeout(dismissIdle, 8000);
   }
-  function resetIdle() { clearTimeout(idleTimer); idleTimer = setTimeout(showIdle, 90000); }
-  window.dismissIdle = function() {
-    document.getElementById('idle-bubble').classList.remove('show');
-    clearTimeout(bubbleTimer); resetIdle();
-  };
-  ['mousemove','keydown','click','scroll'].forEach(ev => window.addEventListener(ev, resetIdle, {passive:true}));
-  resetIdle();
+  window.addEventListener('resize', draw);
+  new MutationObserver(draw).observe(document.body, { attributeFilter: ['class'] });
+  if (document.readyState === 'complete') draw();
+  else window.addEventListener('load', draw);
 })();
-
-/* ── INIT ── */
-document.addEventListener('DOMContentLoaded', () => {
-  if (myMood) { renderMoodBars(); document.getElementById('mood-result').style.display='block'; document.getElementById('mood-result').textContent='โหวตแล้ววันนี้ ✅ ขอบคุณ!'; }
-});
-if (document.readyState !== 'loading') {
-  if (myMood) { renderMoodBars(); }
-}
 </script>
 </body>
 </html>
